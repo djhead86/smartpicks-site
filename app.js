@@ -61,6 +61,10 @@ function renderPicks(picks) {
     let html = "";
 
     picks.forEach(p => {
+        const prob = p.prob ? (p.prob * 100).toFixed(1) : "--";
+        const ev = p.ev ? (p.ev * 100).toFixed(2) : "0.00";
+        const kelly = p.kelly ? (p.kelly * 100).toFixed(2) : "0.00";
+
         html += `
             <div class="pick-card">
                 <h3>${p.match}</h3>
@@ -68,10 +72,10 @@ function renderPicks(picks) {
                 <p><strong>Team:</strong> ${p.team}</p>
                 <p><strong>Market:</strong> ${p.market}</p>
                 <p><strong>Price:</strong> ${p.price}</p>
-                <p><strong>Probability:</strong> ${(p.prob * 100).toFixed(1)}%</p>
-                <p><strong>EV:</strong> ${(p.ev * 100).toFixed(2)}%</p>
-                <p><strong>Kelly %:</strong> ${(p.kelly * 100).toFixed(2)}%</p>
-                <p><em>${p.why}</em></p>
+                <p><strong>Probability:</strong> ${prob}%</p>
+                <p><strong>EV:</strong> ${ev}%</p>
+                <p><strong>Kelly %:</strong> ${kelly}%</p>
+                <p><em>${p.why || ""}</em></p>
             </div>
         `;
     });
