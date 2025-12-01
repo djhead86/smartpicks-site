@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2025-12-01T19:53:49.086453Z"
+    "generated_at": "2025-12-01T21:38:11.266792Z"
   },
   "summary": {
     "total_bets": 18,
@@ -8,7 +8,7 @@
     "win_rate": 0.0,
     "roi": -0.15117891816920942,
     "net_profit": -1.09,
-    "generated_at": "2025-12-01T19:53:49.064559+00:00"
+    "generated_at": "2025-12-01T21:38:11.237566+00:00"
   },
   "picks": [
     {
@@ -90,55 +90,55 @@
       "rank": 6
     },
     {
-      "sport": "basketball_nba",
-      "match": "Washington Wizards @ Milwaukee Bucks",
-      "team": "Washington Wizards",
+      "sport": "soccer_epl",
+      "match": "Newcastle United @ Tottenham Hotspur",
+      "team": "Newcastle United",
       "market": "spread",
-      "price": -108,
-      "prob": 0.5132307692307693,
-      "ev": -0.6000000000000005,
+      "price": -145,
+      "prob": 0.5918367346938775,
+      "ev": 0.0,
       "kelly": 0.0,
-      "event_time": "2025-12-02T00:00:00+00:00",
-      "explanation": "We like **Washington Wizards (SPREAD -108)** in Washington Wizards @ Milwaukee Bucks.\nModel-adjusted probability: 0.513 vs implied 0.519, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
+      "event_time": "2025-12-02T20:15:00+00:00",
+      "explanation": "We like **Newcastle United (SPREAD -145)** in Newcastle United @ Tottenham Hotspur.\nModel-adjusted probability: 0.592 vs implied 0.592, edge \u2248 **0.0%** after modest fatigue/injury adjustments.",
       "rank": 7
     },
     {
-      "sport": "basketball_nba",
-      "match": "Washington Wizards @ Milwaukee Bucks",
-      "team": "Washington Wizards",
+      "sport": "soccer_epl",
+      "match": "Newcastle United @ Tottenham Hotspur",
+      "team": "Newcastle United",
       "market": "h2h",
-      "price": 320,
-      "prob": 0.23209523809523808,
-      "ev": -0.6000000000000005,
+      "price": -145,
+      "prob": 0.5918367346938775,
+      "ev": 0.0,
       "kelly": 0.0,
-      "event_time": "2025-12-02T00:00:00+00:00",
-      "explanation": "We like **Washington Wizards (H2H 320)** in Washington Wizards @ Milwaukee Bucks.\nModel-adjusted probability: 0.232 vs implied 0.238, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
+      "event_time": "2025-12-02T20:15:00+00:00",
+      "explanation": "We like **Newcastle United (H2H -145)** in Newcastle United @ Tottenham Hotspur.\nModel-adjusted probability: 0.592 vs implied 0.592, edge \u2248 **0.0%** after modest fatigue/injury adjustments.",
       "rank": 8
     },
     {
       "sport": "basketball_nba",
-      "match": "Miami Heat @ Los Angeles Clippers",
-      "team": "Miami Heat",
+      "match": "Washington Wizards @ Milwaukee Bucks",
+      "team": "Washington Wizards",
       "market": "spread",
-      "price": -108,
-      "prob": 0.5132307692307693,
+      "price": -115,
+      "prob": 0.5288837209302325,
       "ev": -0.6000000000000005,
       "kelly": 0.0,
-      "event_time": "2025-12-02T00:30:00+00:00",
-      "explanation": "We like **Miami Heat (SPREAD -108)** in Miami Heat @ Los Angeles Clippers.\nModel-adjusted probability: 0.513 vs implied 0.519, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
+      "event_time": "2025-12-02T00:00:00+00:00",
+      "explanation": "We like **Washington Wizards (SPREAD -115)** in Washington Wizards @ Milwaukee Bucks.\nModel-adjusted probability: 0.529 vs implied 0.535, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
       "rank": 9
     },
     {
       "sport": "basketball_nba",
-      "match": "Miami Heat @ Los Angeles Clippers",
-      "team": "Miami Heat",
+      "match": "Washington Wizards @ Milwaukee Bucks",
+      "team": "Washington Wizards",
       "market": "h2h",
-      "price": -258,
-      "prob": 0.7146703910614525,
+      "price": 330,
+      "prob": 0.2265581395348837,
       "ev": -0.6000000000000005,
       "kelly": 0.0,
-      "event_time": "2025-12-02T00:30:00+00:00",
-      "explanation": "We like **Miami Heat (H2H -258)** in Miami Heat @ Los Angeles Clippers.\nModel-adjusted probability: 0.715 vs implied 0.721, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
+      "event_time": "2025-12-02T00:00:00+00:00",
+      "explanation": "We like **Washington Wizards (H2H 330)** in Washington Wizards @ Milwaukee Bucks.\nModel-adjusted probability: 0.227 vs implied 0.233, edge \u2248 **-0.6%** after modest fatigue/injury adjustments.",
       "rank": 10
     }
   ],
