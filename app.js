@@ -1,24 +1,29 @@
-// ---------------------------
-// CONFIDENCE METER FUNCTIONS
-// ---------------------------
+///////////////////////////////////////////////////////////////////////////////
+// SmartPicksGPT – Fully Regenerated Application Script
+// Dynamic Rendering • Confidence Meter • Search • Clean Dashboard Logic
+///////////////////////////////////////////////////////////////////////////////
 
-// Convert American odds → implied probability
+
+// ---------------------------------------------------------------------------
+//  CONFIDENCE METER LOGIC
+// ---------------------------------------------------------------------------
+
+// Convert American odds to implied probability
 function impliedProbability(odds) {
   const o = Number(odds);
   if (isNaN(o)) return null;
-
   if (o < 0) return Math.abs(o) / (Math.abs(o) + 100);
   return 100 / (o + 100);
 }
 
-// Compute confidence 0–100 based on price movement (simple version)
+// Compute a 0–100 confidence score
 function computeConfidence(pick) {
-  const latestProb = impliedProbability(pick.price);
-  if (!latestProb) return 50;
-  return Math.round(latestProb * 100);
+  const prob = impliedProbability(pick.price);
+  if (prob == null) return 50;
+  return Math.round(prob * 100);
 }
 
-// Choose theme based on confidence level
+// Map score to a visual style + text label
 function getConfidenceTheme(score) {
   if (score < 40) return { theme: "low", label: "Cooling Off" };
   if (score < 70) return { theme: "neutral", label: "Neutral Trend" };
@@ -26,19 +31,18 @@ function getConfidenceTheme(score) {
   return { theme: "hyper", label: "Sharp Action" };
 }
 
-// Build the confidence meter UI block
+// Build and append the confidence meter into a card
 function attachConfidenceMeter(card, pick) {
   const score = computeConfidence(pick);
   const { theme, label } = getConfidenceTheme(score);
+  const angle = (score / 100) * 180;
 
   const wrapper = document.createElement("div");
   wrapper.className = `confidence-wrapper meter-${theme}`;
 
-  const angle = (score / 100) * 180;
-
   wrapper.innerHTML = `
     <div class="confidence-meter">
-      <div class="confidence-arc" style="--confidence-angle: ${angle}deg"></div>
+      <div class="confidence-arc" style="--confidence-angle:${angle}deg"></div>
       <div class="confidence-center">
         <span class="confidence-value">${score}%</span>
       </div>
@@ -49,57 +53,117 @@ function attachConfidenceMeter(card, pick) {
   card.appendChild(wrapper);
 }
 
-// ---------------------------
-// RENDER PICKS INTO DASHBOARD UI
-// ---------------------------
+
+// ---------------------------------------------------------------------------
+//  CARD COMPONENT BUILDER
+// ---------------------------------------------------------------------------
+
+function createPickCard(pick) {
+  const card = document.createElement("article");
+  card.className = "pick-card";
+
+  // Determine EV styling class
+  let evClass = "ev-neutral";
+  if (pick.ev > 0.05) evClass = "ev-strong-positive";
+  else if (pick.ev > 0) evClass = "ev-mild-positive";
+  else if (pick.ev < 0) evClass = "ev-negative";
+
+  // Build card inner HTML
+  card.innerHTML = `
+    <div class="pick-header">
+      <div>
+        <div class="pick-title">#${pick.rank} – ${pick.team}</div>
+        <div class="pick-meta">
+          ${pick.match}<br>
+          <span class="pick-badge">${pick.market}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pick-footer">
+      <div><strong>Odds:</strong> ${pick.price}</div>
+      <div class="pick-ev-pill ${evClass}">
+        <span>${pick.ev >= 0 ? "Positive EV" : "Negative EV"}</span>
+        <strong>${(pick.ev * 100).toFixed(2)}%</strong>
+      </div>
+    </div>
+
+    <div class="pick-reason">
+      ${pick.reason}
+    </div>
+  `;
+
+  // Add confidence meter section
+  attachConfidenceMeter(card, pick);
+
+  return card;
+}
+
+
+// ---------------------------------------------------------------------------
+//  RENDER ALL PICKS
+// ---------------------------------------------------------------------------
+
+function renderPicks(picks) {
+  const container = document.getElementById("picks-container");
+  container.innerHTML = "";
+
+  picks.forEach(pick => {
+    const card = createPickCard(pick);
+    container.appendChild(card);
+  });
+
+  // Update “X picks loaded” label
+  const label = document.getElementById("picks-count-label");
+  if (label) label.textContent = `${picks.length} picks loaded`;
+}
+
+
+// ---------------------------------------------------------------------------
+//  SEARCH / FILTER
+// ---------------------------------------------------------------------------
+
+function setupSearch(picks) {
+  const input = document.getElementById("picks-search");
+  if (!input) return;
+
+  input.addEventListener("input", () => {
+    const q = input.value.toLowerCase();
+
+    const filtered = picks.filter(p =>
+      p.team.toLowerCase().includes(q) ||
+      p.match.toLowerCase().includes(q) ||
+      p.market.toLowerCase().includes(q)
+    );
+
+    renderPicks(filtered);
+  });
+}
+
+
+// ---------------------------------------------------------------------------
+//  LAST UPDATED TIME
+// ---------------------------------------------------------------------------
+
+function updateLastUpdated() {
+  const el = document.getElementById("last-updated-value");
+  if (!el) return;
+  el.textContent = new Date().toISOString();
+}
+
+
+// ---------------------------------------------------------------------------
+//  MAIN INITIALIZATION
+// ---------------------------------------------------------------------------
 
 fetch("data.json")
   .then(r => r.json())
-  .then(data => {
-
-    
-// Find the real container used by your dashboard
-    const container = 
-      document.getElementById("picks-grid") || 
-      document.getElementById("picks-list") || 
-      document.getElementById("picks") || 
-      document.getElementById("tab-picks");
-    console.log("Container found:", container);
-
-    data.forEach(pick => {
-
-      // Create unified SmartPicks dashboard card
-      const card = document.createElement("div");
-      card.className = "pick-card";
-
-      const evClass =
-        pick.ev > 0.05 ? "ev-strong-positive" :
-        pick.ev > 0     ? "ev-mild-positive" :
-        pick.ev === 0   ? "ev-neutral" :
-                          "ev-negative";
-
-      card.innerHTML = `
-        <div class="pick-header">
-          <div class="pick-title">#${pick.rank}: ${pick.team}</div>
-          <div class="pick-badge">${pick.market}</div>
-        </div>
-
-        <div class="pick-meta"><strong>Match:</strong> ${pick.match}</div>
-        <div class="pick-odds"><strong>Price:</strong> ${pick.price}</div>
-
-        <div class="pick-footer">
-          <div class="pick-ev-pill ${evClass}">
-            <span>EV</span> ${pick.ev}
-          </div>
-        </div>
-
-        <div class="pick-meta">${pick.reason}</div>
-      `;
-
-      // ⭐ Add the confidence meter ⭐
-      attachConfidenceMeter(card, pick);
-
-      container.appendChild(card);
-    });
+  .then(picks => {
+    renderPicks(picks);    // Build cards dynamically
+    setupSearch(picks);    // Activate search
+    updateLastUpdated();   // Timestamp
+  })
+  .catch(err => {
+    console.error("Failed to load picks:", err);
   });
 
