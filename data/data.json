@@ -8,12 +8,12 @@
       "price": "-114",
       "prob": "0.6841",
       "ev": "0.1514",
-      "adj_ev": "0.0201",
+      "adj_ev": "0.0221",
       "kelly": "0.0032",
       "recommended_stake": "0.64",
       "expected_profit": "0.1606",
       "event_time": "2025-12-02 02:10:00",
-      "explanation": "We like Utah Jazz 12.5 (SPREAD -114) in Houston Rockets @ Utah Jazz with a model probability of 68.4% vs an implied 53.3%, giving an edge of about 15.1%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Utah Jazz 12.5 (SPREAD -114)** in Houston Rockets @ Utah Jazz with a model probability of 68.4% vs an implied 53.3%, giving an edge of about **15.1%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "basketball_nba",
@@ -23,12 +23,12 @@
       "price": "-106",
       "prob": "0.6659",
       "ev": "0.1513",
-      "adj_ev": "0.0201",
+      "adj_ev": "0.0221",
       "kelly": "0.0031",
       "recommended_stake": "0.62",
       "expected_profit": "0.1721",
       "event_time": "2025-12-02 02:10:00",
-      "explanation": "We like Dallas Mavericks 11.0 (SPREAD -106) in Dallas Mavericks @ Denver Nuggets with a model probability of 66.6% vs an implied 51.5%, giving an edge of about 15.1%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Dallas Mavericks 11.0 (SPREAD -106)** in Dallas Mavericks @ Denver Nuggets with a model probability of 66.6% vs an implied 51.5%, giving an edge of about **15.1%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "basketball_nba",
@@ -38,12 +38,27 @@
       "price": "-122",
       "prob": "0.6973",
       "ev": "0.1477",
-      "adj_ev": "0.0198",
+      "adj_ev": "0.0218",
       "kelly": "0.0033",
       "recommended_stake": "0.65",
       "expected_profit": "0.1437",
       "event_time": "2025-12-02 00:00:00",
-      "explanation": "We like Washington Wizards 9.5 (SPREAD -122) in Milwaukee Bucks @ Washington Wizards with a model probability of 69.7% vs an implied 55.0%, giving an edge of about 14.8%. This edge is derived from calibrated power ratings, factoring in significant opponent injury/fatigue concerns and home-ice/home-court advantage, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Washington Wizards 9.5 (SPREAD -122)** in Milwaukee Bucks @ Washington Wizards with a model probability of 69.7% vs an implied 55.0%, giving an edge of about **14.8%**. This edge is strongly influenced by significant opponent injury/fatigue concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
+    },
+    {
+      "sport": "basketball_nba",
+      "match": "Cleveland Cavaliers @ Indiana Pacers",
+      "team": "Indiana Pacers 6.5",
+      "market": "spread",
+      "price": "-108",
+      "prob": "0.6350",
+      "ev": "0.1158",
+      "adj_ev": "0.0186",
+      "kelly": "0.0024",
+      "recommended_stake": "0.48",
+      "expected_profit": "0.0989",
+      "event_time": "2025-12-02 00:10:00",
+      "explanation": "We like **Indiana Pacers 6.5 (SPREAD -108)** in Cleveland Cavaliers @ Indiana Pacers with a model probability of 63.5% vs an implied 51.9%, giving an edge of about **11.6%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "basketball_nba",
@@ -58,7 +73,22 @@
       "recommended_stake": "0.44",
       "expected_profit": "2.2299",
       "event_time": "2025-12-02 02:10:00",
-      "explanation": "We like Utah Jazz (H2H +480) in Houston Rockets @ Utah Jazz with a model probability of 35.5% vs an implied 17.2%, giving an edge of about 18.3%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Utah Jazz (H2H +480)** in Houston Rockets @ Utah Jazz with a model probability of 35.5% vs an implied 17.2%, giving an edge of about **18.3%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
+    },
+    {
+      "sport": "basketball_nba",
+      "match": "Atlanta Hawks @ Detroit Pistons",
+      "team": "Atlanta Hawks 9.5",
+      "market": "spread",
+      "price": "-114",
+      "prob": "0.6425",
+      "ev": "0.1098",
+      "adj_ev": "0.0180",
+      "kelly": "0.0024",
+      "recommended_stake": "0.47",
+      "expected_profit": "0.0845",
+      "event_time": "2025-12-02 00:10:00",
+      "explanation": "We like **Atlanta Hawks 9.5 (SPREAD -114)** in Atlanta Hawks @ Detroit Pistons with a model probability of 64.3% vs an implied 53.3%, giving an edge of about **11.0%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "basketball_nba",
@@ -73,7 +103,7 @@
       "recommended_stake": "0.47",
       "expected_profit": "1.0084",
       "event_time": "2025-12-02 00:00:00",
-      "explanation": "We like Washington Wizards (H2H +300) in Milwaukee Bucks @ Washington Wizards with a model probability of 42.8% vs an implied 25.0%, giving an edge of about 17.8%. This edge is derived from calibrated power ratings, factoring in significant opponent injury/fatigue concerns and home-ice/home-court advantage, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Washington Wizards (H2H +300)** in Milwaukee Bucks @ Washington Wizards with a model probability of 42.8% vs an implied 25.0%, giving an edge of about **17.8%**. This edge is strongly influenced by significant opponent injury/fatigue concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "basketball_nba",
@@ -88,37 +118,7 @@
       "recommended_stake": "0.43",
       "expected_profit": "1.6777",
       "event_time": "2025-12-02 02:10:00",
-      "explanation": "We like Dallas Mavericks (H2H +420) in Dallas Mavericks @ Denver Nuggets with a model probability of 36.9% vs an implied 19.2%, giving an edge of about 17.7%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
-    },
-    {
-      "sport": "basketball_nba",
-      "match": "Cleveland Cavaliers @ Indiana Pacers",
-      "team": "Indiana Pacers 6.5",
-      "market": "spread",
-      "price": "-108",
-      "prob": "0.6350",
-      "ev": "0.1158",
-      "adj_ev": "0.0166",
-      "kelly": "0.0024",
-      "recommended_stake": "0.48",
-      "expected_profit": "0.0989",
-      "event_time": "2025-12-02 00:10:00",
-      "explanation": "We like Indiana Pacers 6.5 (SPREAD -108) in Cleveland Cavaliers @ Indiana Pacers with a model probability of 63.5% vs an implied 51.9%, giving an edge of about 11.6%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, and is applied using a conservative Kelly stake to balance upside with risk."
-    },
-    {
-      "sport": "basketball_nba",
-      "match": "Atlanta Hawks @ Detroit Pistons",
-      "team": "Atlanta Hawks 9.5",
-      "market": "spread",
-      "price": "-114",
-      "prob": "0.6425",
-      "ev": "0.1098",
-      "adj_ev": "0.0160",
-      "kelly": "0.0024",
-      "recommended_stake": "0.47",
-      "expected_profit": "0.0845",
-      "event_time": "2025-12-02 00:10:00",
-      "explanation": "We like Atlanta Hawks 9.5 (SPREAD -114) in Atlanta Hawks @ Detroit Pistons with a model probability of 64.3% vs an implied 53.3%, giving an edge of about 11.0%. This edge is derived from calibrated power ratings, factoring in self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **Dallas Mavericks (H2H +420)** in Dallas Mavericks @ Denver Nuggets with a model probability of 36.9% vs an implied 19.2%, giving an edge of about **17.7%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
       "sport": "americanfootball_nfl",
@@ -128,27 +128,27 @@
       "price": "-120",
       "prob": "0.6402",
       "ev": "0.0948",
-      "adj_ev": "0.0145",
+      "adj_ev": "0.0165",
       "kelly": "0.0021",
       "recommended_stake": "0.41",
       "expected_profit": "0.0600",
       "event_time": "2025-12-02 01:15:00",
-      "explanation": "We like New York Giants 7.5 (SPREAD -120) in New York Giants @ New England Patriots with a model probability of 64.0% vs an implied 54.5%, giving an edge of about 9.5%. This edge is derived from calibrated power ratings, factoring in road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
+      "explanation": "We like **New York Giants 7.5 (SPREAD -120)** in New York Giants @ New England Patriots with a model probability of 64.0% vs an implied 54.5%, giving an edge of about **9.5%**. This edge is strongly influenced by road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
-      "sport": "americanfootball_nfl",
-      "match": "New York Giants @ New England Patriots",
-      "team": "New York Giants",
-      "market": "h2h",
-      "price": "+285",
-      "prob": "0.4039",
-      "ev": "0.1442",
-      "adj_ev": "0.0144",
-      "kelly": "0.0019",
+      "sport": "basketball_nba",
+      "match": "Chicago Bulls @ Orlando Magic",
+      "team": "Chicago Bulls 8.5",
+      "market": "spread",
+      "price": "-110",
+      "prob": "0.6176",
+      "ev": "0.0938",
+      "adj_ev": "0.0164",
+      "kelly": "0.0020",
       "recommended_stake": "0.39",
-      "expected_profit": "0.6127",
-      "event_time": "2025-12-02 01:15:00",
-      "explanation": "We like New York Giants (H2H +285) in New York Giants @ New England Patriots with a model probability of 40.4% vs an implied 26.0%, giving an edge of about 14.4%. This edge is derived from calibrated power ratings, factoring in road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
+      "expected_profit": "0.0638",
+      "event_time": "2025-12-02 00:40:00",
+      "explanation": "We like **Chicago Bulls 8.5 (SPREAD -110)** in Chicago Bulls @ Orlando Magic with a model probability of 61.8% vs an implied 52.4%, giving an edge of about **9.4%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     }
   ],
   "daily_summary": {
@@ -455,6 +455,28 @@
       "winner": "",
       "score": "",
       "explanation": "We like New York Giants 7.5 (SPREAD -120) in New York Giants @ New England Patriots with a model probability of 64.0% vs an implied 54.5%, giving an edge of about 9.5%. This edge is derived from calibrated power ratings, factoring in road performance adjusted for travel/fatigue, and is applied using a conservative Kelly stake to balance upside with risk."
+    },
+    {
+      "date": "2025-12-01",
+      "sport": "basketball_nba",
+      "match": "Chicago Bulls @ Orlando Magic",
+      "team": "Chicago Bulls 8.5",
+      "market": "spread",
+      "price": "-110",
+      "event_time": "2025-12-02 00:40:00",
+      "prob": "0.6176",
+      "ev": "0.0938",
+      "adj_ev": "0.0164",
+      "kelly": "0.0020",
+      "stake": "0.39",
+      "expected_profit": "0.0638",
+      "explanation": "We like **Chicago Bulls 8.5 (SPREAD -110)** in Chicago Bulls @ Orlando Magic with a model probability of 61.8% vs an implied 52.4%, giving an edge of about **9.4%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet.",
+      "result": "PENDING",
+      "actual_profit": "0.00",
+      "bankroll": "198.91",
+      "resolved_time": "",
+      "winner": "",
+      "score": ""
     }
   ]
 }
