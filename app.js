@@ -2,7 +2,7 @@ fetch('data/data.json')
   .then(r => r.json())
   .then(json => {
 
-    // Your picks are inside json.top10
+    // top10 is the array of picks
     const data = json.top10;
 
     const container = document.getElementById('picks');
@@ -24,13 +24,14 @@ fetch('data/data.json')
         <p><strong>Price:</strong> ${pick.price}</p>
         <p><strong>EV:</strong> ${pick.ev}</p>
 
-        <p><strong>Explanation:</strong> ${pick.explanation || "No explanation available"}</p>
+        <p class="explanation">
+          <strong>Explanation:</strong> ${pick.explanation || "No explanation available"}
+        </p>
       `;
 
       container.appendChild(el);
     });
   })
   .catch(err => {
-    console.error("Failed to load JSON:", err);
+    console.error("Failed to load data.json:", err);
   });
-
