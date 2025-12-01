@@ -1,7 +1,9 @@
-async function loadJSON(path) {
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`Failed to load ${path}`);
-  return res.json();
+async function loadData() {
+    const daily = await fetch("data/daily_summary.json").then(r => r.json());
+    const performance = await fetch("data/performance.json").then(r => r.json());
+    const picks = await fetch("data/top10.json").then(r => r.json());
+
+    return { daily, performance, picks };
 }
 
 function formatCurrencyUnits(x) {
