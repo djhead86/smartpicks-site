@@ -14,11 +14,11 @@ async function loadSmartPicks() {
         const data = await response.json();
         console.log("Loaded SmartPicks data:", data);
 
-        // REMOVE broken functions
+        // ❌ REMOVE THESE — they break your dashboard
         // renderDailySummary(data.daily_summary);
         // renderPerformance(data.performance);
 
-        // USE the functions you actually have
+        // ✅ USE ONLY WHAT EXISTS
         renderPicks(data);
         renderSystemPerformance(data);
 
