@@ -1,73 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>SmartPicksGPT — Tactical Betting Dashboard</title>
-
-    <link rel="stylesheet" href="style.css?v=1.02">
-
-    <!-- Industrial cyber font -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>SmartPicksGPT – Betting Analytics Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-
-<header class="top-bar">
+  <!-- Top Bar / Header -->
+  <header class="top-bar">
     <div class="brand">
-        <span class="brand-text">SMARTPICKSGPT</span>
-        <span class="ver">v2.7</span>
-    </div>
-    <div id="last-updated" class="header-meta"></div>
-</header>
-
-<nav class="nav-tabs">
-    <button class="tab active" data-tab="picks">TOP PICKS</button>
-    <button class="tab" data-tab="history">HISTORY</button>
-    <button class="tab" data-tab="summary">SUMMARY</button>
-</nav>
-
-<main>
-    <section id="picks" class="tab-content active"></section>
-    <section id="history" class="tab-content"></section>
-<section id="summary" class="tab-content">
-
-  <h2 class="summary-title">Performance Metrics</h2>
-
-  <div class="chart-row">
-
-    <!-- ROI Gauge -->
-    <div class="gauge-card">
-      <h3>All-Time ROI</h3>
-      <div class="gauge">
-         <div class="gauge-fill" id="roi-fill"></div>
-         <div class="gauge-cover" id="roi-text">0%</div>
+      <span class="logo-dot"></span>
+      <div class="brand-text-group">
+        <span class="brand-title">SmartPicksGPT</span>
+        <span class="brand-subtitle">Value Betting Intelligence</span>
       </div>
     </div>
 
-    <!-- Win/Loss Donut -->
-    <div class="chart-card">
-      <h3>Win / Loss</h3>
-      <canvas id="winLossChart"></canvas>
+    <div class="top-bar-right">
+      <div class="meta">
+        <span id="last-updated-label">Last update:</span>
+        <span id="last-updated-value">–</span>
+      </div>
+      <button id="theme-toggle" class="icon-button" aria-label="Toggle dark mode">
+        🌙
+      </button>
     </div>
+  </header>
 
-    <!-- Bankroll Sparkline -->
-    <div class="chart-card">
-      <h3>Bankroll Over Time</h3>
-      <canvas id="bankrollChart"></canvas>
-    </div>
+  <!-- Sticky Tabs -->
+  <nav class="tabs">
+    <button class="tab-button active" data-tab="summary">Summary</button>
+    <button class="tab-button" data-tab="picks">Today's Picks</button>
+    <button class="tab-button" data-tab="history">History</button>
+  </nav>
 
-  </div>
+  <main class="main">
+    <!-- SUMMARY TAB -->
+    <section id="tab-summary" class="tab-content active">
+      <div class="summary-grid">
+        <div class="summary-card" id="card-total-bets">
+          <span class="summary-label">Total Bets</span>
+          <span class="summary-value" id="summary-total-bets">–</span>
+          <span class="summary-subvalue" id="summary-total-bets-sub">All time</span>
+        </div>
+        <div class="summary-card" id="card-win-rate">
+          <span class="summary-label">Win Rate</span>
+          <span class="summary-value" id="summary-win-rate">–</span>
+          <span class="summary-subvalue">Settled bets</span>
+        </div>
+        <div class="summary-card" id="card-roi">
+          <span class="summary-label">ROI</span>
+          <span class="summary-value" id="summary-roi">–</span>
+          <span class="summary-subvalue">Return on investment</span>
+        </div>
+        <div class="summary-card" id="card-bankroll">
+          <span class="summary-label">Bankroll Change</span>
+          <span class="summary-value" id="summary-bankroll">–</span>
+          <span class="summary-subvalue">Net profit / loss</span>
+        </div>
+      </div>
 
-  <!-- Summary cards will be injected here -->
-  <div id="summary-cards"></div>
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Performance Over Time</h2>
+          <span class="panel-tag">Cumulative PnL</span>
+        </div>
+        <div class="panel-body">
+          <canvas id="chart-performance" height="100"></canvas>
+          <p id="chart-performance-empty" class="empty-message">
+            Not enough history to draw a performance chart yet.
+          </p>
+        </div>
+      </div>
 
-</section>
+      <div class="panel">
+        <div class="panel-header">
+          <h2>EV Distribution</h2>
+          <span class="panel-tag">Today's Picks</span>
+        </div>
+        <div class="panel-body">
+          <canvas id="chart-ev" height="80"></canvas>
+          <p id="chart-ev-empty" class="empty-message">
+            Add some picks to see the expected value distribution.
+          </p>
+        </div>
+      </div>
+    </section>
 
-</main>
+    <!-- PICKS TAB -->
+    <section id="tab-picks" class="tab-content">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <h2>Today's Top Value Bets</h2>
+          <span id="picks-count-label" class="toolbar-subtitle">0 picks loaded</span>
+        </div>
+        <div class="toolbar-right">
+          <input
+            type="search"
+            id="picks-search"
+            placeholder="Filter by team, matchup, market..."
+            aria-label="Search picks"
+          />
+        </div>
+      </div>
 
-<script src="app.js?v=2.70"></script>
-<script src="tabs.js?v=1.01"></script>
+      <div id="picks-container" class="card-grid">
+        <!-- Pick cards rendered by app.js -->
+      </div>
 
+      <p id="picks-empty" class="empty-message">
+        No picks available. Run SmartPicksGPT to generate today's edges.
+      </p>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section id="tab-history" class="tab-content">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <h2>Bet History</h2>
+          <span id="history-count-label" class="toolbar-subtitle">0 settled bets</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Sport</th>
+                <th>Match</th>
+                <th>Pick</th>
+                <th>Market</th>
+                <th>Odds</th>
+                <th>Result</th>
+                <th>PnL</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <!-- History rows rendered by app.js -->
+            </tbody>
+          </table>
+
+          <p id="history-empty" class="empty-message">
+            No settled bets yet. Once results come in, you'll see them here.
+          </p>
+
+          <div class="pagination" id="history-pagination">
+            <button id="history-prev" class="pager-button">Prev</button>
+            <span id="history-page-info" class="pager-info">Page 1 / 1</span>
+            <button id="history-next" class="pager-button">Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      SmartPicksGPT is a personal analytics tool. Nothing here constitutes financial or betting advice.
+      Always gamble responsibly.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
 
