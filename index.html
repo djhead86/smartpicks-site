@@ -1,578 +1,204 @@
-/* SmartPicksGPT Cyberpunk Dashboard */
-
-/* ---------- RESET ---------- */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Roboto", sans-serif;
-  background: radial-gradient(circle at top, #050812 0%, #020308 40%, #000000 100%);
-  color: #f5f7ff;
-  overflow-x: hidden;
-}
-
-/* ---------- BACKGROUND FX ---------- */
-
-.bg-orbit {
-  position: fixed;
-  border-radius: 999px;
-  filter: blur(60px);
-  opacity: 0.25;
-  z-index: -2;
-  pointer-events: none;
-}
-
-.bg-orbit-1 {
-  width: 420px;
-  height: 420px;
-  top: -120px;
-  left: -80px;
-  background: radial-gradient(circle, #30d5ff 0%, transparent 70%);
-}
-
-.bg-orbit-2 {
-  width: 520px;
-  height: 520px;
-  bottom: -160px;
-  right: -120px;
-  background: radial-gradient(circle, #ff2ee6 0%, transparent 70%);
-}
-
-.bg-scanline {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0.04) 1px,
-    transparent 3px,
-    transparent 4px
-  );
-  mix-blend-mode: soft-light;
-  opacity: 0.2;
-  z-index: -1;
-}
-
-/* ---------- TYPOGRAPHY ---------- */
-
-.mono {
-  font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, Consolas, monospace;
-}
-
-/* ---------- LAYOUT ---------- */
-
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 28px;
-  border-bottom: 1px solid rgba(120, 140, 255, 0.5);
-  background: linear-gradient(
-      to right,
-      rgba(4, 12, 32, 0.95),
-      rgba(8, 6, 36, 0.9)
-    ),
-    radial-gradient(circle at top left, rgba(48, 213, 255, 0.14), transparent),
-    radial-gradient(circle at bottom right, rgba(255, 46, 230, 0.16), transparent);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand-glow {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: radial-gradient(circle, #30d5ff 0%, #725bff 60%, transparent 80%);
-  box-shadow:
-    0 0 12px rgba(48, 213, 255, 0.9),
-    0 0 32px rgba(114, 91, 255, 0.9);
-}
-
-.brand-text {
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-size: 0.95rem;
-}
-
-.brand-tag {
-  font-size: 0.75rem;
-  opacity: 0.7;
-  padding: 3px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(110, 196, 255, 0.4);
-  background: linear-gradient(
-    to right,
-    rgba(48, 213, 255, 0.15),
-    rgba(255, 46, 230, 0.05)
-  );
-}
-
-.header-meta {
-  font-size: 0.8rem;
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-
-#last-updated-label {
-  opacity: 0.6;
-}
-
-/* Main layout grid */
-
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
-  gap: 18px;
-  padding: 18px 22px 32px;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* ---------- PANELS ---------- */
-
-.panel {
-  border-radius: 16px;
-  border: 1px solid rgba(109, 148, 255, 0.45);
-  background: linear-gradient(
-      135deg,
-      rgba(5, 8, 26, 0.96),
-      rgba(7, 4, 22, 0.96)
-    ),
-    radial-gradient(circle at top left, rgba(48, 213, 255, 0.12), transparent),
-    radial-gradient(circle at bottom right, rgba(255, 46, 230, 0.14), transparent);
-  box-shadow:
-    0 0 0 1px rgba(12, 18, 64, 0.9),
-    0 18px 40px rgba(0, 0, 0, 0.8);
-  padding: 16px 18px 18px;
-  position: relative;
-  overflow: hidden;
-}
-
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(79, 209, 255, 0.2),
-    rgba(255, 46, 230, 0.18)
-  );
-  opacity: 0;
-  mix-blend-mode: soft-light;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.panel:hover::before {
-  opacity: 0.18;
-}
-
-.panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.panel-header h2 {
-  font-size: 0.95rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.92;
-}
-
-.panel-subtitle {
-  font-size: 0.75rem;
-  opacity: 0.7;
-  margin-left: 6px;
-}
-
-/* Pills */
-
-.pill {
-  font-size: 0.7rem;
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.pill-live {
-  border-color: rgba(69, 255, 163, 0.7);
-  color: #dfffee;
-  background: radial-gradient(circle, rgba(69, 255, 163, 0.24), transparent);
-}
-
-.pill-muted {
-  border-color: rgba(150, 160, 210, 0.8);
-  color: #d2d6ff;
-  background: radial-gradient(circle, rgba(132, 139, 199, 0.2), transparent);
-}
-
-.pill-bright {
-  border-color: rgba(255, 154, 255, 0.9);
-  color: #ffe4ff;
-  background: radial-gradient(circle, rgba(255, 80, 230, 0.28), transparent);
-}
-
-/* Status message */
-
-.status-message {
-  font-size: 0.8rem;
-  margin-bottom: 12px;
-  opacity: 0.8;
-}
-
-.status-error {
-  color: #ff6b8b;
-}
-
-/* ---------- KPI GRID ---------- */
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.kpi-card {
-  border-radius: 12px;
-  border: 1px solid rgba(94, 135, 255, 0.5);
-  background: radial-gradient(circle at top, rgba(45, 104, 255, 0.18), transparent 70%);
-  padding: 8px 10px;
-  min-height: 56px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.kpi-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-}
-
-.kpi-value {
-  font-size: 1rem;
-  margin-top: 4px;
-}
-
-.kpi-profit {
-  color: #57ffb8;
-}
-
-/* ---------- PERFORMANCE GRID ---------- */
-
-.perf-grid {
-  margin-top: 4px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.perf-item {
-  border-radius: 10px;
-  border: 1px solid rgba(120, 118, 255, 0.5);
-  padding: 7px 9px;
-  background: linear-gradient(
-    135deg,
-    rgba(18, 19, 64, 0.85),
-    rgba(31, 16, 74, 0.9)
-  );
-}
-
-.perf-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-}
-
-.perf-value {
-  font-size: 0.95rem;
-  margin-top: 3px;
-}
-
-.perf-win {
-  color: #62ffb5;
-}
-
-.perf-loss {
-  color: #ff6b8b;
-}
-
-/* ---------- TOP PICKS ---------- */
-
-.top-picks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 360px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.pick-card {
-  position: relative;
-  border-radius: 12px;
-  border: 1px solid rgba(120, 160, 255, 0.6);
-  padding: 8px 10px 9px 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(10, 12, 36, 0.9),
-    rgba(34, 12, 48, 0.92)
-  );
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 8px;
-  row-gap: 4px;
-}
-
-.pick-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid rgba(48, 213, 255, 0.18);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.pick-card:hover::before {
-  opacity: 1;
-}
-
-.pick-rank {
-  align-self: start;
-  padding: 2px 6px;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  border: 1px solid rgba(255, 157, 255, 0.7);
-  background: radial-gradient(circle, rgba(255, 157, 255, 0.35), transparent);
-}
-
-.pick-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pick-match {
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.pick-meta-row,
-.pick-metrics-row {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 14px;
-  font-size: 0.75rem;
-  margin-top: 2px;
-}
-
-.pick-team {
-  font-weight: 600;
-}
-
-.pick-market {
-  padding: 2px 7px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 222, 139, 0.7);
-  background: radial-gradient(circle, rgba(255, 222, 139, 0.24), transparent);
-  font-size: 0.7rem;
-}
-
-.pick-sport {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-}
-
-.pick-odds {
-  margin-left: auto;
-  font-size: 0.8rem;
-}
-
-.pick-ev {
-  color: #57ffb8;
-}
-
-.pick-prob {
-  opacity: 0.85;
-}
-
-.pick-time {
-  margin-left: auto;
-}
-
-/* ---------- HISTORY TABLE ---------- */
-
-.table-wrapper {
-  margin-top: 6px;
-  border-radius: 10px;
-  border: 1px solid rgba(104, 136, 255, 0.7);
-  overflow: hidden;
-  background: radial-gradient(circle at top, rgba(47, 69, 154, 0.35), transparent 75%);
-  max-height: 320px;
-}
-
-.history-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.75rem;
-}
-
-.history-table thead {
-  background: linear-gradient(
-    to right,
-    rgba(17, 25, 80, 0.9),
-    rgba(46, 11, 68, 0.9)
-  );
-}
-
-.history-table th,
-.history-table td {
-  padding: 6px 8px;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.history-table th {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.7rem;
-  border-bottom: 1px solid rgba(129, 158, 255, 0.8);
-}
-
-.history-table tbody tr:nth-child(even) {
-  background: rgba(3, 5, 26, 0.9);
-}
-
-.history-table tbody tr:nth-child(odd) {
-  background: rgba(5, 8, 30, 0.95);
-}
-
-.history-table tbody tr:hover {
-  background: rgba(44, 13, 78, 0.9);
-}
-
-.empty-row {
-  text-align: center;
-  opacity: 0.8;
-}
-
-/* Result pills */
-
-.result-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  border: 1px solid transparent;
-}
-
-.result-win {
-  border-color: rgba(87, 255, 184, 0.8);
-  background: radial-gradient(circle, rgba(87, 255, 184, 0.24), transparent);
-  color: #dfffee;
-}
-
-.result-loss {
-  border-color: rgba(255, 86, 135, 0.9);
-  background: radial-gradient(circle, rgba(255, 86, 135, 0.24), transparent);
-  color: #ffe6f1;
-}
-
-.result-push,
-.result-pending {
-  border-color: rgba(158, 170, 210, 0.9);
-  background: radial-gradient(circle, rgba(158, 170, 210, 0.2), transparent);
-  color: #e4e7ff;
-}
-
-/* ---------- EMPTY STATE ---------- */
-
-.empty-state {
-  font-size: 0.8rem;
-  opacity: 0.8;
-  padding: 6px 4px;
-}
-
-/* ---------- FOOTER ---------- */
-
-.footer {
-  padding: 10px 22px 18px;
-  font-size: 0.7rem;
-  opacity: 0.6;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media (max-width: 960px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 720px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .kpi-grid,
-  .perf-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .kpi-grid,
-  .perf-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .layout {
-    padding-inline: 12px;
-  }
-
-  .top-bar {
-    padding-inline: 16px;
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SmartPicksGPT Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Background FX -->
+  <div class="bg-orbit bg-orbit-1"></div>
+  <div class="bg-orbit bg-orbit-2"></div>
+  <div class="bg-scanline"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-glow"></div>
+      <div>
+        <div class="brand-row">
+          <span class="brand-text mono">SMARTPICKSGPT</span>
+          <span class="brand-tag mono">AUTOBET INSIGHT NODE</span>
+        </div>
+        <div class="brand-sub mono">
+          Edge-ranked bets • 24h window • Sim bankroll
+        </div>
+      </div>
+    </div>
+
+    <div class="header-meta mono">
+      <span id="last-updated-label">Last updated:</span>
+      <span id="last-updated">—</span>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="layout">
+    <!-- Left Column -->
+    <section class="column">
+      <!-- Overview / KPIs -->
+      <section class="panel" id="panel-overview">
+        <div class="panel-header">
+          <div class="panel-header-main">
+            <h2 class="mono">OVERVIEW</h2>
+            <span class="panel-subtitle">Bankroll & long-term performance</span>
+          </div>
+          <div class="pill pill-live mono">LIVE MODEL</div>
+        </div>
+
+        <div id="overview-status" class="status-message status-muted">
+          Loading performance data…
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label mono">Current Bankroll</div>
+            <div class="kpi-value kpi-profit mono" id="kpi-bankroll">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label mono">Total Profit</div>
+            <div class="kpi-value kpi-profit mono" id="kpi-total-profit">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label mono">Lifetime ROI</div>
+            <div class="kpi-value mono" id="kpi-roi">—</div>
+          </div>
+        </div>
+
+        <div class="perf-grid">
+          <div class="perf-item">
+            <div class="perf-label mono">Total Bets</div>
+            <div class="perf-value mono" id="perf-total-bets">—</div>
+          </div>
+          <div class="perf-item">
+            <div class="perf-label mono">Wins / Losses / Pushes</div>
+            <div class="perf-value mono">
+              <span id="perf-wins" class="perf-win">—</span>
+              <span>/</span>
+              <span id="perf-losses" class="perf-loss">—</span>
+              <span>/</span>
+              <span id="perf-pushes">—</span>
+            </div>
+          </div>
+          <div class="perf-item">
+            <div class="perf-label mono">Total Staked</div>
+            <div class="perf-value mono" id="perf-total-staked">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top Picks -->
+      <section class="panel" id="panel-top-picks">
+        <div class="panel-header">
+          <div class="panel-header-main">
+            <h2 class="mono">TOP EDGED BETS (NEXT 24H)</h2>
+            <span class="panel-subtitle">Sorted by adjusted EV and kelly stake</span>
+          </div>
+          <div class="pill pill-bright mono">MODEL OUTPUT</div>
+        </div>
+
+        <div id="top-picks-status" class="status-message status-muted">
+          Loading today’s picks…
+        </div>
+
+        <div id="top-picks-list" class="top-picks-list">
+          <!-- Filled by app.js -->
+        </div>
+      </section>
+    </section>
+
+    <!-- Right Column -->
+    <section class="column">
+      <!-- Today Summary -->
+      <section class="panel" id="panel-daily">
+        <div class="panel-header">
+          <div class="panel-header-main">
+            <h2 class="mono">TODAY’S SESSION</h2>
+            <span class="panel-subtitle">Single-day P/L snapshot</span>
+          </div>
+          <div class="pill pill-muted mono" id="daily-date-pill">—</div>
+        </div>
+
+        <div id="daily-status" class="status-message status-muted">
+          Awaiting daily summary…
+        </div>
+
+        <div class="kpi-grid daily-grid">
+          <div class="kpi-card">
+            <div class="kpi-label mono">Bets placed</div>
+            <div class="kpi-value mono" id="daily-bets">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label mono">Staked</div>
+            <div class="kpi-value mono" id="daily-staked">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label mono">Profit</div>
+            <div class="kpi-value mono kpi-profit" id="daily-profit">—</div>
+          </div>
+        </div>
+
+        <div class="perf-grid">
+          <div class="perf-item">
+            <div class="perf-label mono">Daily ROI</div>
+            <div class="perf-value mono" id="daily-roi">—</div>
+          </div>
+          <div class="perf-item">
+            <div class="perf-label mono">Bankroll (end of day)</div>
+            <div class="perf-value mono" id="daily-bankroll">—</div>
+          </div>
+          <div class="perf-item">
+            <div class="perf-label mono">Mode</div>
+            <div class="perf-value mono">Simulation (flat stakes)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- History -->
+      <section class="panel" id="panel-history">
+        <div class="panel-header">
+          <div class="panel-header-main">
+            <h2 class="mono">BET HISTORY</h2>
+            <span class="panel-subtitle">Recent graded & pending tickets</span>
+          </div>
+          <div class="pill pill-muted mono">LATEST 50</div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th class="mono">Date</th>
+                <th class="mono">Sport</th>
+                <th class="mono">Match</th>
+                <th class="mono">Side</th>
+                <th class="mono">Type</th>
+                <th class="mono">Odds</th>
+                <th class="mono">Stake</th>
+                <th class="mono">EV</th>
+                <th class="mono">Result</th>
+                <th class="mono">P/L</th>
+                <th class="mono">BR</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <tr>
+                <td colspan="11" class="empty-row">
+                  <span class="mono empty-state">Loading history…</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer mono">
+    SmartPicksGPT • Data from The Odds API • Displaying only model-positive edges within the next 24 hours.
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
