@@ -1,7 +1,8 @@
 {
   "total_settled": 0,
-  "units_wagered": 0,
-  "actual_profit": 0,
-  "roi": 0,
-  "bankroll": 200
+  "units_wagered": 0.0,
+  "expected_profit": 0.0,
+  "actual_profit": 0.0,
+  "roi": 0.0,
+  "bankroll": 200.0
 }

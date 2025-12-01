@@ -1,9 +1,11 @@
 {
   "date": "2025-11-30",
-  "total_bets": 0,
+  "total_bets": 13,
   "record": "0-0-0",
-  "units_wagered": 0,
-  "actual_profit": 0,
-  "daily_roi": 0,
-  "bankroll_end": 200
+  "units_wagered": 13.0,
+  "expected_profit": 0.0,
+  "actual_profit": 0.0,
+  "daily_roi": 0.0,
+  "bankroll_start": 200.0,
+  "bankroll_end": 200.0
 }
