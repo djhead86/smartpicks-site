@@ -26,23 +26,24 @@ async function loadSmartPicks() {
 // ----------------------------
 // RENDER DAILY SUMMARY
 // ----------------------------
-function renderDailySummary(ds) {
-    if (!ds) {
-        summaryBox.innerHTML = "<p>No summary available.</p>";
-        return;
-    }
+function renderDailySummary(summary) {
+    if (!summary) summary = {};
 
-    summaryBox.innerHTML = `
-        <p><strong>Date:</strong> ${ds.date}</p>
-        <p><strong>Total Bets:</strong> ${ds.total_bets}</p>
-        <p><strong>Record:</strong> ${ds.record}</p>
-        <p><strong>Win %:</strong> ${(ds.win_pct * 100).toFixed(1)}%</p>
-        <p><strong>Units Wagered:</strong> ${ds.units_wagered}</p>
-        <p><strong>Expected Profit:</strong> ${ds.expected_profit.toFixed(2)}</p>
-        <p><strong>Actual Profit:</strong> ${ds.actual_profit.toFixed(2)}</p>
-        <p><strong>ROI:</strong> ${(ds.roi_pct * 100).toFixed(1)}%</p>
-        <p><strong>Bankroll:</strong> ${ds.bankroll.toFixed(2)}</p>
-    `;
+    const totalBets = Number(summary.total_bets || 0);
+    const wins = Number(summary.wins || 0);
+    const losses = Number(summary.losses || 0);
+    const pushes = Number(summary.pushes || 0);
+    const winRate = Number(summary.win_rate || 0);
+    const bankroll = Number(summary.bankroll || 0);
+    const roi = Number(summary.roi || 0);
+
+    document.getElementById("total-bets").innerHTML = totalBets.toFixed(0);
+    document.getElementById("wins").innerHTML = wins.toFixed(0);
+    document.getElementById("losses").innerHTML = losses.toFixed(0);
+    document.getElementById("pushes").innerHTML = pushes.toFixed(0);
+    document.getElementById("win-rate").innerHTML = winRate.toFixed(2) + "%";
+    document.getElementById("bankroll").innerHTML = "$" + bankroll.toFixed(2);
+    document.getElementById("roi").innerHTML = roi.toFixed(2) + "%";
 }
 
 // ----------------------------
