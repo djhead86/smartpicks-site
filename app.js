@@ -7,19 +7,15 @@ const picksBox = document.getElementById("picks-container");
 const summaryBox = document.getElementById("daily-summary-box");
 const perfBox = document.getElementById("performance-box");
 
-// MAIN LOADER
 async function loadSmartPicks() {
     try {
         const response = await fetch(DATA_URL);
-        if (!response.ok) throw new Error("Failed to load data.json");
-
         const data = await response.json();
-        console.log("Loaded SmartPicks data:", data);
 
-        // Match your JSON structure exactly:
         renderDailySummary(data.daily_summary);
         renderPicks(data.top10);
         renderPerformance(data.performance);
+        renderHistory(data.history);
 
     } catch (err) {
         console.error(err);
