@@ -65,3 +65,13 @@ h1 {
     border-radius: 8px;
     background: #fff;
 }
+
+.explanation {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #ccc;
+  color: #333;
+  font-style: italic;
+  opacity: 0.9;
+}
+
