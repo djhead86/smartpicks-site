@@ -140,12 +140,41 @@ function loadData() {
         allHistory = [];
         summaryData = null;
         metaData = null;
-      } else if (json && typeof json === "object") {
-        allPicks = Array.isArray(json.picks) ? json.picks : [];
+    } else if (json && typeof json === "object") {
+  // Support Ultra Dashboard new format
+      if (Array.isArray(json.picks)) {
+        allPicks = json.picks;
         filteredPicks = [...allPicks];
-        allHistory = Array.isArray(json.history) ? json.history : [];
+        allHistory = json.history || [];
         summaryData = json.summary || null;
         metaData = json.meta || null;
+
+  // Support YOUR current SmartPicks format
+  } else if (Array.isArray(json.top10)) {
+    allPicks = json.top10;
+    filteredPicks = [...allPicks];
+    allHistory = Array.isArray(json.history) ? json.history : [];
+    summaryData = {
+      total_bets: json.performance?.total_bets ?? json.daily_summary?.num_bets,
+      settled_bets: json.history?.filter(h => h.result !== "PENDING").length ?? 0,
+      roi: (json.performance?.roi_pct ?? json.daily_summary?.roi_pct) / 100,
+      win_rate: json.performance
+        ? json.performance.wins / json.performance.total_bets
+        : null,
+      net_profit: json.performance?.total_profit ?? json.daily_summary?.profit,
+      generated_at: json.daily_summary?.date ?? null
+    };
+    metaData = { generated_at: json.daily_summary?.date ?? null };
+
+  } else {
+    allPicks = [];
+    filteredPicks = [];
+    allHistory = [];
+    summaryData = null;
+    metaData = null;
+  }
+}
+
       } else {
         allPicks = [];
         filteredPicks = [];
