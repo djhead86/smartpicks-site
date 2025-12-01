@@ -1,93 +1,82 @@
 console.log("SmartPicksGPT frontend initialized.");
 
+// Paths
 const DATA_URL = "data/data.json";
-const AUTO_REFRESH_MS = 2 * 60 * 60 * 1000; // 2 hours
 
-// DOM
-const picksGrid        = document.getElementById("picks-grid");
-const todayBets        = document.getElementById("today-bets");
-const todayRecord      = document.getElementById("today-record");
-const todayUnits       = document.getElementById("today-units");
-const todayProfit      = document.getElementById("today-profit");
-const overallBankroll  = document.getElementById("overall-bankroll");
-const overallPL        = document.getElementById("overall-pl");
-const overallLastDay   = document.getElementById("overall-lastday");
-const bankrollSummary  = document.getElementById("bankroll-summary");
-const lastUpdated      = document.getElementById("last-updated");
+// DOM references
+const picksGrid = document.getElementById("picks-grid");
 
-let bankrollChartInstance   = null;
-let roiChartInstance        = null;
-let sportWinChartInstance   = null;
-let confidenceChartInstance = null;
+const todayBets     = document.getElementById("today-bets");
+const todayRecord   = document.getElementById("today-record");
+const todayUnits    = document.getElementById("today-units");
+const todayProfit   = document.getElementById("today-profit");
 
+const overallBankroll = document.getElementById("overall-bankroll");
+const overallPL       = document.getElementById("overall-pl");
+const overallLastDay  = document.getElementById("overall-lastday");
+
+const bankrollSummary = document.getElementById("bankroll-summary");
+const lastUpdated     = document.getElementById("last-updated");
+
+let chartInstance = null;
+
+// Main loader
 async function loadSmartPicks() {
     try {
-        const res = await fetch(DATA_URL + "?cachebust=" + Date.now());
-        if (!res.ok) throw new Error("Failed to load data.json: " + res.status);
-        const data = await res.json();
+        const response = await fetch(DATA_URL);
+        if (!response.ok) throw new Error("Failed to load data.json");
+
+        const data = await response.json();
         console.log("Loaded SmartPicks data:", data);
 
-        const daily = data.daily_summary;
-        const perf  = data.performance;
-        const picks = data.top10;
+        renderTodayStats(data.daily_summary);
+        renderOverallStats(data.performance);
+        renderPicks(data.top10);
 
-        renderTodayStats(daily);
-        renderOverallStats(perf);
-        renderBankrollSummary(perf);
-        renderPicks(picks);
-        renderBankrollChart(perf);
-        renderRoiChart(perf);
-        renderSportWinChart(perf);
-        renderConfidenceChart(picks);
+        renderBankrollChart(data.performance);
+        renderBankrollSummary(data.performance);
 
         lastUpdated.innerText = "Last update: " + new Date().toLocaleString();
 
-    } catch (e) {
-        console.error(e);
-        if (picksGrid) {
-            picksGrid.innerHTML = "<p>❌ Failed to load SmartPicks data.</p>";
-        }
+    } catch (err) {
+        console.error(err);
+        picksGrid.innerHTML = `<div class="error">❌ Failed to load SmartPicks data.</div>`;
     }
 }
 
-// ---------------- TODAY / OVERALL ----------------
-
+// ---------------------------
+// TODAY STATS
+// ---------------------------
 function renderTodayStats(s) {
     if (!s) return;
-    todayBets.textContent   = s.total_bets;
-    todayRecord.textContent = `${s.record} (${s.win_pct.toFixed(1)}%)`;
-    todayUnits.textContent  = s.units_wagered.toFixed(2) + "u";
-    todayProfit.textContent = s.actual_profit.toFixed(2) + "u";
+
+    todayBets.innerText   = s.total_bets;
+    todayRecord.innerText = s.record + ` (${s.win_pct.toFixed(1)}%)`;
+    todayUnits.innerText  = s.units_wagered.toFixed(2) + "u";
+    todayProfit.innerText = s.actual_profit.toFixed(2) + "u";
 }
 
+// ---------------------------
+// OVERALL STATS
+// ---------------------------
 function renderOverallStats(p) {
     if (!p) return;
-    overallBankroll.textContent = p.current_bankroll.toFixed(2) + "u";
-    overallPL.textContent       = p.actual_profit.toFixed(2) + "u";
 
-    // last day change = last ROI entry if available
-    if (p.roi_history && p.roi_history.length) {
-        const last = p.roi_history[p.roi_history.length - 1];
-        overallLastDay.textContent = last.toFixed(2) + "%";
-    } else {
-        overallLastDay.textContent = "--";
-    }
+    overallBankroll.innerText = p.current_bankroll.toFixed(2) + "u";
+    overallPL.innerText       = p.actual_profit.toFixed(2) + "u";
+
+    overallLastDay.innerText = p.bankroll_history.length
+        ? p.bankroll_history[p.bankroll_history.length - 1]
+        : "--";
 }
 
-function renderBankrollSummary(p) {
-    bankrollSummary.innerHTML = `
-        <p><strong>Total Bets:</strong> ${p.total_bets}</p>
-        <p><strong>P/L:</strong> ${p.actual_profit.toFixed(2)}u</p>
-        <p><strong>ROI:</strong> ${p.roi_pct.toFixed(2)}%</p>
-        <p><strong>Bankroll:</strong> ${p.current_bankroll.toFixed(2)}u</p>
-    `;
-}
-
-// ---------------- PICKS GRID ----------------
-
+// ---------------------------
+// PICKS GRID
+// ---------------------------
 function renderPicks(picks) {
-    picksGrid.innerHTML = "";
-    if (!picks || !picks.length) {
+    picksGrid.innerHTML = ""; // clear old picks
+
+    if (!picks || picks.length === 0) {
         picksGrid.innerHTML = "<p>No picks today.</p>";
         return;
     }
@@ -107,105 +96,50 @@ function renderPicks(picks) {
             <div class="pick-kelly">Kelly: ${p.kelly.toFixed(3)}</div>
             <div class="pick-why">${p.why}</div>
         `;
+
         picksGrid.appendChild(card);
     });
 }
 
-// ---------------- CHARTS ----------------
+// ---------------------------
+// BANKROLL SUMMARY
+// ---------------------------
+function renderBankrollSummary(p) {
+    bankrollSummary.innerHTML = `
+        <p><strong>Total Bets:</strong> ${p.total_bets}</p>
+        <p><strong>P/L:</strong> ${p.actual_profit.toFixed(2)}u</p>
+        <p><strong>ROI:</strong> ${p.roi_pct.toFixed(2)}%</p>
+        <p><strong>Bankroll:</strong> ${p.current_bankroll.toFixed(2)}u</p>
+    `;
+}
 
+// ---------------------------
+// BANKROLL CHART
+// ---------------------------
 function renderBankrollChart(perf) {
     const ctx = document.getElementById("bankrollChart").getContext("2d");
-    if (bankrollChartInstance) bankrollChartInstance.destroy();
 
-    const labels = perf.bankroll_history.map((_, i) => i + 1);
-    bankrollChartInstance = new Chart(ctx, {
+    const x = perf.bankroll_history.map((_, i) => i + 1);
+    const y = perf.bankroll_history;
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
         type: "line",
         data: {
-            labels,
-            datasets: [{
-                label: "Bankroll (units)",
-                data: perf.bankroll_history,
-                borderWidth: 2,
-                tension: 0.2
-            }]
-        },
-        options: { responsive: true }
-    });
-}
-
-function renderRoiChart(perf) {
-    const ctx = document.getElementById("roiChart").getContext("2d");
-    if (roiChartInstance) roiChartInstance.destroy();
-
-    const labels = perf.roi_history.map((_, i) => i + 1);
-    roiChartInstance = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels,
-            datasets: [{
-                label: "ROI (%)",
-                data: perf.roi_history,
-                borderWidth: 2,
-                tension: 0.2
-            }]
-        },
-        options: { responsive: true }
-    });
-}
-
-function renderSportWinChart(perf) {
-    const ctx = document.getElementById("sportWinChart").getContext("2d");
-    if (sportWinChartInstance) sportWinChartInstance.destroy();
-
-    const statsObj = perf.win_pct_by_sport || {};
-    const labels = Object.keys(statsObj);
-    const values = labels.map(k => statsObj[k].win_pct);
-
-    sportWinChartInstance = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels,
-            datasets: [{
-                label: "Win % by Sport",
-                data: values,
-                borderWidth: 1
-            }]
+            labels: x,
+            datasets: [
+                {
+                    label: "Bankroll (units)",
+                    data: y,
+                    borderColor: "#4CAF50",
+                    backgroundColor: "rgba(76, 175, 80, 0.2)",
+                    borderWidth: 2,
+                    tension: 0.2
+                }
+            ]
         },
         options: {
             responsive: true,
-            scales: { y: { beginAtZero: true, max: 100 } }
-        }
-    });
-}
-
-function renderConfidenceChart(picks) {
-    const ctx = document.getElementById("confidenceChart").getContext("2d");
-    if (confidenceChartInstance) confidenceChartInstance.destroy();
-
-    if (!picks || !picks.length) return;
-
-    const labels = picks.map((_, i) => "#" + (i + 1));
-    const probs  = picks.map(p => p.prob * 100);
-
-    confidenceChartInstance = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels,
-            datasets: [{
-                label: "Model Probability (%)",
-                data: probs,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: { y: { beginAtZero: true, max: 100 } }
-        }
-    });
-}
-
-// Start + auto-refresh
-document.addEventListener("DOMContentLoaded", () => {
-    loadSmartPicks();
-    setInterval(loadSmartPicks, AUTO_REFRESH_MS);
-});
+            scales: {
+                y: { begi
