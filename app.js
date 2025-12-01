@@ -57,7 +57,14 @@ fetch("data.json")
   .then(r => r.json())
   .then(data => {
 
-    const container = document.getElementById("picks");
+    
+// Find the real container used by your dashboard
+    const container = 
+      document.getElementById("picks-grid") || 
+      document.getElementById("picks-list") || 
+      document.getElementById("picks") || 
+      document.getElementById("tab-picks");
+    console.log("Container found:", container);
 
     data.forEach(pick => {
 
