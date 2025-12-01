@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SmartPicksGPT Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartPicksGPT — Cyberbet Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 
+<<<<<<< HEAD
   <style>
     body {
       background: #111;
@@ -107,8 +109,15 @@
       color: #555;
     }
   </style>
+=======
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+>>>>>>> 594e831 (Update UI: cyberpunk dashboard + bet type support)
 </head>
+<body class="sp-body">
+  <div class="sp-noise"></div>
 
+<<<<<<< HEAD
 <body>
 
 <header>SmartPicksGPT Dashboard</header>
@@ -169,5 +178,201 @@
 </footer>
 
 <script src="app.js"></script>
+=======
+  <header class="sp-top-bar">
+    <div class="sp-brand">
+      <div class="sp-logo-dot"></div>
+      <div class="sp-brand-text">
+        <div class="sp-title">SmartPicksGPT</div>
+        <div class="sp-subtitle">Neon Edge Betting Intel</div>
+      </div>
+    </div>
+    <div class="sp-top-meta">
+      <div class="sp-meta-item">
+        <span class="sp-label">Last update</span>
+        <span id="last-updated" class="sp-value">--</span>
+      </div>
+      <div class="sp-meta-item">
+        <span class="sp-label">Bankroll</span>
+        <span id="header-bankroll" class="sp-value">$--</span>
+      </div>
+      <div class="sp-meta-item">
+        <span class="sp-label">Lifetime ROI</span>
+        <span id="header-roi" class="sp-value">--%</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="sp-main">
+    <!-- Summary / KPI row -->
+    <section class="sp-grid sp-grid-3">
+      <div class="sp-card sp-card-kpi">
+        <div class="sp-card-header">
+          <span>Today’s Flow</span>
+          <span class="sp-pill">Energy</span>
+        </div>
+        <div class="sp-kpi-grid">
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Bets Today</span>
+            <span id="kpi-bets-today" class="sp-kpi-value">0</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Staked</span>
+            <span id="kpi-staked-today" class="sp-kpi-value">$0.00</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">P/L</span>
+            <span id="kpi-profit-today" class="sp-kpi-value sp-kpi-pl">0.00</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">ROI</span>
+            <span id="kpi-roi-today" class="sp-kpi-value">0.00%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-card sp-card-kpi">
+        <div class="sp-card-header">
+          <span>Lifetime Performance</span>
+          <span class="sp-pill sp-pill-secondary">Track Record</span>
+        </div>
+        <div class="sp-kpi-grid">
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Total Bets</span>
+            <span id="kpi-total-bets" class="sp-kpi-value">0</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Wins</span>
+            <span id="kpi-wins" class="sp-kpi-value">0</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Losses</span>
+            <span id="kpi-losses" class="sp-kpi-value">0</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Pushes</span>
+            <span id="kpi-pushes" class="sp-kpi-value">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-card sp-card-kpi">
+        <div class="sp-card-header">
+          <span>Signal Quality</span>
+          <span class="sp-pill sp-pill-tertiary">Calibration</span>
+        </div>
+        <div class="sp-kpi-grid">
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Current Bankroll</span>
+            <span id="kpi-bankroll" class="sp-kpi-value">$0.00</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Total Staked</span>
+            <span id="kpi-total-staked" class="sp-kpi-value">$0.00</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">Total P/L</span>
+            <span id="kpi-total-profit" class="sp-kpi-value sp-kpi-pl">0.00</span>
+          </div>
+          <div class="sp-kpi">
+            <span class="sp-kpi-label">ROI</span>
+            <span id="kpi-roi-lifetime" class="sp-kpi-value">0.00%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts row -->
+    <section class="sp-grid sp-grid-2 sp-mt-lg">
+      <div class="sp-card">
+        <div class="sp-card-header">
+          <span>Bankroll Timeline</span>
+          <span class="sp-card-subtitle">How the stack evolves over time</span>
+        </div>
+        <div class="sp-card-body">
+          <canvas id="bankrollChart" height="160"></canvas>
+        </div>
+      </div>
+
+      <div class="sp-card">
+        <div class="sp-card-header">
+          <span>ROI Drift</span>
+          <span class="sp-card-subtitle">Rolling ROI of resolved bets</span>
+        </div>
+        <div class="sp-card-body">
+          <canvas id="roiChart" height="160"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top picks -->
+    <section class="sp-card sp-mt-lg">
+      <div class="sp-card-header">
+        <span>Top Smart Picks (Next 24 Hours)</span>
+        <span class="sp-card-subtitle">Neon-highlighted edges by expected value</span>
+      </div>
+      <div class="sp-card-body">
+        <div class="sp-table-wrapper">
+          <table class="sp-table">
+            <thead>
+              <tr>
+                <th>Sport</th>
+                <th>Match</th>
+                <th>Bet</th>
+                <th>Type</th>
+                <th>Odds</th>
+                <th>Edge (EV%)</th>
+                <th>Stake</th>
+                <th>Start</th>
+              </tr>
+            </thead>
+            <tbody id="top-picks-body">
+              <!-- Filled by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="sp-card sp-mt-lg">
+      <div class="sp-card-header">
+        <span>Bet History</span>
+        <span class="sp-card-subtitle">All recorded signals & outcomes</span>
+      </div>
+      <div class="sp-card-body">
+        <div class="sp-table-wrapper sp-table-history">
+          <table class="sp-table sp-table-sm">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Sport</th>
+                <th>Match</th>
+                <th>Bet</th>
+                <th>Type</th>
+                <th>Odds</th>
+                <th>Stake</th>
+                <th>Result</th>
+                <th>P/L</th>
+                <th>Bankroll</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <!-- Filled by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sp-footer">
+    <span>SmartPicksGPT &mdash; experimental betting heuristics engine</span>
+    <span class="sp-footer-hint">For entertainment only. Don’t bet what you can’t afford to lose.</span>
+  </footer>
+
+  <script src="app.js"></script>
+>>>>>>> 594e831 (Update UI: cyberpunk dashboard + bet type support)
 </body>
 </html>
+
