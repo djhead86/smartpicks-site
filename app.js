@@ -1,4 +1,4 @@
-// app.js (Patched to use the absolute data path for maximum reliability)
+// app.js (The most robust patch to handle various JSON structures)
 
 async function fetchAndRenderPicks() {
     const picksContainer = document.getElementById('picks');
@@ -8,23 +8,46 @@ async function fetchAndRenderPicks() {
     picksContainer.innerHTML = ''; 
 
     try {
-        // --- MODIFICATION: Using /smartpicks-site/data/data.json for robustness ---
-        const response = await fetch('/smartpicks-site/data/data.json'); 
+        // Keeping the 'smartpicks-site/data/data.json' path that successfully reached the file
+        const response = await fetch('smartpicks-site/data/data.json'); 
         
         if (!response.ok) {
-            // Note: The error message will now show the correct path if it still fails
-            throw new Error(`HTTP error! Status: ${response.status} for /smartpicks-site/data/data.json`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        // ... (rest of the code remains the same)
-        const data = await response.json();
 
+        const rawData = await response.json();
+
+        // --- ROBUST DATA PROCESSING LOGIC START ---
+        let dataArray = rawData;
+        
+        // 1. If it's an Object (not an Array), we must convert it.
+        if (typeof rawData === 'object' && rawData !== null && !Array.isArray(rawData)) {
+            // Check for a common wrapper key (e.g., 'picks' or 'data')
+            if (rawData.picks && Array.isArray(rawData.picks)) {
+                // Case: JSON is { "picks": [...] }
+                dataArray = rawData.picks;
+            } else if (rawData.data && Array.isArray(rawData.data)) {
+                // Case: JSON is { "data": [...] }
+                dataArray = rawData.data;
+            } else {
+                // Default: Extract all values from the object (as in the last patch)
+                // Case: JSON is { "key1": {...}, "key2": {...} }
+                dataArray = Object.values(rawData);
+            }
+        }
+        
+        const data = dataArray;
+        // --- ROBUST DATA PROCESSING LOGIC END ---
+
+        // 2. Success State: Hide loading and render data
         loadingMessage.style.display = 'none';
 
-        if (data.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
              picksContainer.innerHTML = '<p class="info-message">No value picks found for today. Check back tomorrow!</p>';
              return;
         }
-        // ... (data rendering loop remains the same)
+
+        // The forEach loop now has a guaranteed array to work with
         data.forEach(pick => {
             const el = document.createElement('div');
             el.className = 'pick';
