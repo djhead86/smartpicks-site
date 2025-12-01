@@ -2,6 +2,7 @@ console.log("SmartPicksGPT frontend initialized.");
 
 const DATA_URL = "data/data.json";
 
+// DOM references
 const picksBox = document.getElementById("picks-container");
 const summaryBox = document.getElementById("daily-summary-box");
 const perfBox = document.getElementById("performance-box");
@@ -15,10 +16,10 @@ async function loadSmartPicks() {
         const data = await response.json();
         console.log("Loaded SmartPicks data:", data);
 
-        // data is a FLAT ARRAY
-        renderDailySummary(data);
-        renderPicks(data);
-        renderPerformance(data);
+        // Match your JSON structure exactly:
+        renderDailySummary(data.daily_summary);
+        renderPicks(data.top10);
+        renderPerformance(data.performance);
 
     } catch (err) {
         console.error(err);
@@ -27,36 +28,50 @@ async function loadSmartPicks() {
 }
 
 // ----------------------------
-// RENDERERS
+// RENDER DAILY SUMMARY
 // ----------------------------
-
-// DAILY SUMMARY
-function renderDailySummary(data) {
-    const wins = data.filter(b => b.outcome === "win").length;
-    const losses = data.filter(b => b.outcome === "loss").length;
-    const pending = data.filter(b => b.outcome === "pending").length;
+function renderDailySummary(ds) {
+    if (!ds) {
+        summaryBox.innerHTML = "<p>No summary available.</p>";
+        return;
+    }
 
     summaryBox.innerHTML = `
-        <p><strong>Total Bets:</strong> ${data.length}</p>
-        <p><strong>Wins:</strong> ${wins}</p>
-        <p><strong>Losses:</strong> ${losses}</p>
-        <p><strong>Pending:</strong> ${pending}</p>
+        <p><strong>Date:</strong> ${ds.date}</p>
+        <p><strong>Total Bets:</strong> ${ds.total_bets}</p>
+        <p><strong>Record:</strong> ${ds.record}</p>
+        <p><strong>Win %:</strong> ${(ds.win_pct * 100).toFixed(1)}%</p>
+        <p><strong>Units Wagered:</strong> ${ds.units_wagered}</p>
+        <p><strong>Expected Profit:</strong> ${ds.expected_profit.toFixed(2)}</p>
+        <p><strong>Actual Profit:</strong> ${ds.actual_profit.toFixed(2)}</p>
+        <p><strong>ROI:</strong> ${(ds.roi_pct * 100).toFixed(1)}%</p>
+        <p><strong>Bankroll:</strong> ${ds.bankroll.toFixed(2)}</p>
     `;
 }
 
-// TOP PICKS
-function renderPicks(data) {
+// ----------------------------
+// RENDER TOP 10 PICKS
+// ----------------------------
+function renderPicks(picks) {
+    if (!picks || picks.length === 0) {
+        picksBox.innerHTML = "<p>No picks available.</p>";
+        return;
+    }
+
     let html = "";
 
-    data.forEach(p => {
+    picks.forEach(p => {
         html += `
             <div class="pick-card">
-                <h3>${p.sport} · ${p.team}</h3>
-                <p><strong>Event:</strong> ${p.event}</p>
+                <h3>${p.match}</h3>
+                <p><strong>Sport:</strong> ${p.sport}</p>
+                <p><strong>Team:</strong> ${p.team}</p>
                 <p><strong>Market:</strong> ${p.market}</p>
-                <p><strong>Odds:</strong> ${p.odds}</p>
-                <p><strong>EV:</strong> ${(p.ev * 100).toFixed(1)}%</p>
-                <p><strong>Confidence:</strong> ${(p.confidence * 100).toFixed(1)}%</p>
+                <p><strong>Price:</strong> ${p.price}</p>
+                <p><strong>Probability:</strong> ${(p.prob * 100).toFixed(1)}%</p>
+                <p><strong>EV:</strong> ${(p.ev * 100).toFixed(2)}%</p>
+                <p><strong>Kelly %:</strong> ${(p.kelly * 100).toFixed(2)}%</p>
+                <p><em>${p.why}</em></p>
             </div>
         `;
     });
@@ -64,19 +79,26 @@ function renderPicks(data) {
     picksBox.innerHTML = html;
 }
 
-// SYSTEM PERFORMANCE
-function renderPerformance(data) {
-    const wins = data.filter(b => b.outcome === "win").length;
-    const losses = data.filter(b => b.outcome === "loss").length;
-
-    const winRate = wins + losses === 0 ? 0 : (wins / (wins + losses)) * 100;
+// ----------------------------
+// RENDER PERFORMANCE
+// ----------------------------
+function renderPerformance(p) {
+    if (!p) {
+        perfBox.innerHTML = "<p>No performance data.</p>";
+        return;
+    }
 
     perfBox.innerHTML = `
-        <p><strong>Win Rate:</strong> ${winRate.toFixed(1)}%</p>
-        <p><strong>Total Wins:</strong> ${wins}</p>
-        <p><strong>Total Losses:</strong> ${losses}</p>
+        <p><strong>Total Bets:</strong> ${p.total_bets}</p>
+        <p><strong>Wins:</strong> ${p.wins}</p>
+        <p><strong>Losses:</strong> ${p.losses}</p>
+        <p><strong>Pushes:</strong> ${p.pushes}</p>
+        <p><strong>Units Wagered:</strong> ${p.units_wagered}</p>
+        <p><strong>Expected Profit:</strong> ${p.expected_profit.toFixed(2)}</p>
+        <p><strong>Actual Profit:</strong> ${p.actual_profit.toFixed(2)}</p>
+        <p><strong>ROI:</strong> ${(p.roi_pct * 100).toFixed(1)}%</p>
+        <p><strong>Current Bankroll:</strong> ${p.current_bankroll.toFixed(2)}</p>
     `;
 }
 
-// KICKSTART
 loadSmartPicks();
