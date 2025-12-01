@@ -29,9 +29,37 @@ async function loadSmartPicks() {
 // ---------------------------
 // RENDER: Daily Summary
 // ---------------------------
-function renderDailySummary(s) {
-    if (!s) {
-        dailyBox.innerHTML = "<p>No summary available.</p>";
+function renderTodayStats(s) {
+    if (!s) return;
+
+    todayBets.innerText   = s.total_bets;
+    todayRecord.innerText = s.record + ` (${s.win_pct.toFixed(1)}%)`;
+    todayUnits.innerText  = s.units_wagered.toFixed(2) + "u";
+    todayProfit.innerText = s.actual_profit.toFixed(2) + "u";
+}
+
+// ---------------------------
+// OVERALL STATS
+// ---------------------------
+function renderOverallStats(p) {
+    if (!p) return;
+
+    overallBankroll.innerText = p.current_bankroll.toFixed(2) + "u";
+    overallPL.innerText       = p.actual_profit.toFixed(2) + "u";
+
+    overallLastDay.innerText = p.bankroll_history.length
+        ? p.bankroll_history[p.bankroll_history.length - 1].toFixed(2)
+        : "--";
+}
+
+// ---------------------------
+// PICKS GRID
+// ---------------------------
+function renderPicks(picks) {
+    picksGrid.innerHTML = ""; // clear old picks
+
+    if (!picks || picks.length === 0) {
+        picksGrid.innerHTML = "<p>No picks today.</p>";
         return;
     }
 
@@ -90,31 +118,42 @@ function renderPicks(picks) {
         `;
     });
 
-    html += `</tbody></table>`;
-    picksContainer.innerHTML = html;
+    chartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: x,
+            datasets: [
+                {
+                    label: "Bankroll (units)",
+                    data: y,
+                    borderColor: "#4CAF50",
+                    backgroundColor: "rgba(76, 175, 80, 0.2)",
+                    borderWidth: 2,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: "Units"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Bet Number"
+                    }
+                }
+            }
+        }
+    });
 }
 
-// ---------------------------
-// RENDER: Performance
-// ---------------------------
-function renderPerformance(p) {
-    if (!p) {
-        perfBox.innerHTML = "<p>No performance data.</p>";
-        return;
-    }
-
-    perfBox.innerHTML = `
-        <p><strong>Total Bets:</strong> ${p.total_bets}</p>
-        <p><strong>Wins:</strong> ${p.wins}</p>
-        <p><strong>Losses:</strong> ${p.losses}</p>
-        <p><strong>Pushes:</strong> ${p.pushes}</p>
-        <p><strong>Units Wagered:</strong> ${p.units_wagered.toFixed(2)}u</p>
-        <p><strong>Expected Profit:</strong> ${p.expected_profit.toFixed(2)}u</p>
-        <p><strong>Actual Profit:</strong> ${p.actual_profit.toFixed(2)}u</p>
-        <p><strong>ROI:</strong> ${p.roi_pct.toFixed(2)}%</p>
-        <p><strong>Current Bankroll:</strong> ${p.current_bankroll.toFixed(2)}u</p>
-    `;
-}
-
-// Start
+// Start the dashboard
 loadSmartPicks();
+
