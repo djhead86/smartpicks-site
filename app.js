@@ -1,121 +1,152 @@
 console.log("SmartPicksGPT frontend initialized.");
 
-// Paths
 const DATA_URL = "data/data.json";
 
-// DOM references
-const picksContainer = document.getElementById("picks-container");
-const dailyBox = document.getElementById("daily-summary-box");
-const perfBox = document.getElementById("performance-box");
+// DOM references (matching your HTML)
+const picksGrid = document.getElementById("picks-grid");
+
+const todayBets     = document.getElementById("today-bets");
+const todayRecord   = document.getElementById("today-record");
+const todayUnits    = document.getElementById("today-units");
+const todayProfit   = document.getElementById("today-profit");
+
+const overallBankroll = document.getElementById("overall-bankroll");
+const overallPL       = document.getElementById("overall-pl");
+const overallLastDay  = document.getElementById("overall-lastday");
+
+const bankrollSummary = document.getElementById("bankroll-summary");
+const lastUpdated     = document.getElementById("last-updated");
+
+let chartInstance = null;
 
 // Main loader
 async function loadSmartPicks() {
     try {
         const response = await fetch(DATA_URL);
         if (!response.ok) throw new Error("Failed to load data.json");
-
         const data = await response.json();
+
         console.log("Loaded SmartPicks data:", data);
 
-        renderDailySummary(data.daily_summary);
+        renderTodayStats(data.daily_summary);
+        renderOverallStats(data.performance);
         renderPicks(data.top10);
-        renderPerformance(data.performance);
+
+        renderBankrollChart(data.performance);
+        renderBankrollSummary(data.performance);
+
+        lastUpdated.innerText = "Last update: " + new Date().toLocaleString();
+
     } catch (err) {
         console.error(err);
-        picksContainer.innerHTML = `<div class="error">❌ Failed to load SmartPicks data.</div>`;
+        picksGrid.innerHTML = "<p>❌ Failed to load SmartPicks data.</p>";
     }
 }
 
 // ---------------------------
-// RENDER: Daily Summary
+// TODAY STATS
 // ---------------------------
-function renderDailySummary(s) {
-    if (!s) {
-        dailyBox.innerHTML = "<p>No summary available.</p>";
-        return;
-    }
+function renderTodayStats(s) {
+    if (!s) return;
 
-    dailyBox.innerHTML = `
-        <p><strong>Date:</strong> ${s.date}</p>
-        <p><strong>Total Bets:</strong> ${s.total_bets}</p>
-        <p><strong>Record:</strong> ${s.record} (${s.win_pct.toFixed(1)}%)</p>
-        <p><strong>Units Wagered:</strong> ${s.units_wagered.toFixed(2)}u</p>
-        <p><strong>Expected Profit:</strong> ${s.expected_profit.toFixed(2)}u</p>
-        <p><strong>Actual Profit:</strong> ${s.actual_profit.toFixed(2)}u</p>
-        <p><strong>ROI:</strong> ${s.roi_pct.toFixed(2)}%</p>
-        <p><strong>Bankroll:</strong> ${s.bankroll.toFixed(2)}u</p>
-    `;
+    todayBets.innerText   = s.total_bets;
+    todayRecord.innerText = s.record + ` (${s.win_pct.toFixed(1)}%)`;
+    todayUnits.innerText  = s.units_wagered.toFixed(2) + "u";
+    todayProfit.innerText = s.actual_profit.toFixed(2) + "u";
 }
 
 // ---------------------------
-// RENDER: Picks
+// OVERALL STATS
+// ---------------------------
+function renderOverallStats(p) {
+    if (!p) return;
+
+    overallBankroll.innerText = p.current_bankroll.toFixed(2) + "u";
+    overallPL.innerText       = p.actual_profit.toFixed(2) + "u";
+
+    // Last day's stats safely
+    overallLastDay.innerText = p.bankroll_history.length
+        ? p.bankroll_history[p.bankroll_history.length - 1]
+        : "--";
+}
+
+// ---------------------------
+// PICKS GRID
 // ---------------------------
 function renderPicks(picks) {
+    picksGrid.innerHTML = ""; // clear old picks
+
     if (!picks || picks.length === 0) {
-        picksContainer.innerHTML = "<p>No picks available.</p>";
+        picksGrid.innerHTML = "<p>No picks today.</p>";
         return;
     }
 
-    let html = `
-        <table class="picks-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Match</th>
-                    <th>Team</th>
-                    <th>Market</th>
-                    <th>Price</th>
-                    <th>Prob</th>
-                    <th>Adj EV</th>
-                    <th>Kelly</th>
-                    <th>Why</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+    picks.forEach((p, idx) => {
+        const card = document.createElement("div");
+        card.className = "pick-card";
 
-    picks.forEach((p, i) => {
-        html += `
-        <tr>
-            <td>${i + 1}</td>
-            <td>${p.match}</td>
-            <td>${p.team}</td>
-            <td>${p.market}</td>
-            <td>${p.price}</td>
-            <td>${(p.prob * 100).toFixed(1)}%</td>
-            <td>${p.adj_ev.toFixed(3)}</td>
-            <td>${p.kelly.toFixed(3)}</td>
-            <td>${p.why}</td>
-        </tr>
+        card.innerHTML = `
+            <div class="pick-rank">#${idx + 1}</div>
+            <div class="pick-match">${p.match}</div>
+            <div class="pick-team">${p.team}</div>
+            <div class="pick-market">Market: ${p.market}</div>
+            <div class="pick-price">Price: ${p.price}</div>
+            <div class="pick-prob">Prob: ${(p.prob * 100).toFixed(1)}%</div>
+            <div class="pick-ev">Adj EV: ${p.adj_ev.toFixed(3)}</div>
+            <div class="pick-kelly">Kelly: ${p.kelly.toFixed(3)}</div>
+            <div class="pick-why">${p.why}</div>
         `;
-    });
 
-    html += `</tbody></table>`;
-    picksContainer.innerHTML = html;
+        picksGrid.appendChild(card);
+    });
 }
 
 // ---------------------------
-// RENDER: Performance
+// BANKROLL SUMMARY
 // ---------------------------
-function renderPerformance(p) {
-    if (!p) {
-        perfBox.innerHTML = "<p>No performance data.</p>";
-        return;
-    }
-
-    perfBox.innerHTML = `
+function renderBankrollSummary(p) {
+    bankrollSummary.innerHTML = `
         <p><strong>Total Bets:</strong> ${p.total_bets}</p>
-        <p><strong>Wins:</strong> ${p.wins}</p>
-        <p><strong>Losses:</strong> ${p.losses}</p>
-        <p><strong>Pushes:</strong> ${p.pushes}</p>
-        <p><strong>Units Wagered:</strong> ${p.units_wagered.toFixed(2)}u</p>
-        <p><strong>Expected Profit:</strong> ${p.expected_profit.toFixed(2)}u</p>
-        <p><strong>Actual Profit:</strong> ${p.actual_profit.toFixed(2)}u</p>
+        <p><strong>P/L:</strong> ${p.actual_profit.toFixed(2)}u</p>
         <p><strong>ROI:</strong> ${p.roi_pct.toFixed(2)}%</p>
-        <p><strong>Current Bankroll:</strong> ${p.current_bankroll.toFixed(2)}u</p>
+        <p><strong>Bankroll:</strong> ${p.current_bankroll.toFixed(2)}u</p>
     `;
 }
 
-// Start
-loadSmartPicks();
+// ---------------------------
+// BANKROLL CHART
+// ---------------------------
+function renderBankrollChart(perf) {
+    const ctx = document.getElementById("bankrollChart").getContext("2d");
 
+    const x = perf.bankroll_history.map((_, i) => i + 1);
+    const y = perf.bankroll_history;
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: x,
+            datasets: [
+                {
+                    label: "Bankroll (units)",
+                    data: y,
+                    borderColor: "#4CAF50",
+                    backgroundColor: "rgba(76, 175, 80, 0.2)",
+                    borderWidth: 2,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+}
+
+// Start when DOM is ready
+document.addEventListener("DOMContentLoaded", loadSmartPicks);
