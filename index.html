@@ -49,6 +49,22 @@
             <span>Profit</span>
             <span id="today-profit">--</span>
           </div>
+          <div class="card">
+  <h2>📈 Bankroll Over Time</h2>
+  <canvas id="bankrollChart" height="120"></canvas>
+  <h3>📉 ROI Over Time</h3>
+  <canvas id="roiChart" height="80"></canvas>
+  <h3>🧠 Model Confidence (Top 10)</h3>
+  <canvas id="confidenceChart" height="80"></canvas>
+  <div id="bankroll-summary" class="mini-metrics"></div>
+</div>
+
+<!-- After the big picks section, add: -->
+<section class="card card-full">
+  <h2>🎯 Win % by Sport</h2>
+  <canvas id="sportWinChart" height="100"></canvas>
+</section>
+
         </div>
         <hr />
         <div id="stats-overall" class="stat-block">
