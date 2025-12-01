@@ -5,133 +5,169 @@
   <title>SmartPicksGPT Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Styles -->
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
       background: #111;
       color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
-    h1 {
+    header {
+      background: #1e1e1e;
+      padding: 18px;
       text-align: center;
-      margin-bottom: 30px;
+      font-size: 26px;
+      font-weight: bold;
+      border-bottom: 2px solid #333;
     }
 
-    .top-bar {
+    nav {
+      background: #181818;
+      padding: 10px;
       display: flex;
-      justify-content: space-between;
-      padding: 15px 0;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #333;
     }
 
-    .panel {
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 30px auto;
+    }
+
+    h2 {
+      margin-top: 40px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
       background: #1c1c1c;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
     }
 
-    .panel h2 {
-      margin-top: 0;
-      margin-bottom: 15px;
+    th, td {
+      padding: 10px;
+      border: 1px solid #333;
+      text-align: left;
     }
 
-    .grid {
+    th {
+      background: #222;
+    }
+
+    tr:nth-child(even) {
+      background: #171717;
+    }
+
+    .card {
+      background: #1b1b1b;
+      padding: 15px;
+      border: 1px solid #333;
+      margin-top: 15px;
+      border-radius: 6px;
+    }
+
+    .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
+      gap: 15px;
+      margin-top: 15px;
     }
 
-    .stat {
+    .summary-item {
       background: #222;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-    }
-
-    .pick-list, .history-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .pick-card, .history-card {
-      background: #222;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 12px;
       border: 1px solid #333;
-    }
-
-    .pick-card strong {
-      font-size: 1.1rem;
-    }
-
-    .footer {
+      border-radius: 6px;
       text-align: center;
-      margin-top: 40px;
-      opacity: 0.6;
     }
 
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      text-align: center;
+      color: #555;
     }
   </style>
-
-  <script defer src="app.js"></script>
 </head>
 
 <body>
 
-  <h1>SmartPicksGPT Dashboard</h1>
+<header>SmartPicksGPT Dashboard</header>
 
-  <!-- DAILY SUMMARY PANEL -->
-  <div class="panel">
-    <h2>Today's Summary</h2>
-    <div class="grid">
-      <div class="stat">Bets: <span id="daily-bets">0</span></div>
-      <div class="stat">Staked: $<span id="daily-staked">0.00</span></div>
-      <div class="stat">Profit: $<span id="daily-profit">0.00</span></div>
-      <div class="stat">ROI: <span id="daily-roi">0%</span></div>
-      <div class="stat">Bankroll: <span id="daily-bankroll">$0.00</span></div>
+<nav>
+  <a href="#top10_section">Top 10 Picks</a>
+  <a href="#daily_section">Today's Summary</a>
+  <a href="#perf_section">Performance</a>
+  <a href="#history_section">Bet History</a>
+</nav>
+
+<div class="container">
+
+  <!-- TOP 10 PICKS -->
+  <section id="top10_section">
+    <h2>Top 10 Picks (Next 24 Hours)</h2>
+    <div id="top10"></div>
+  </section>
+
+  <!-- DAILY SUMMARY -->
+  <section id="daily_section">
+    <h2>Today's Betting Summary</h2>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Date</b><br><span id="daily_date">—</span></div>
+      <div class="summary-item"><b># of Bets</b><br><span id="daily_num">0</span></div>
+      <div class="summary-item"><b>Total Staked</b><br>$<span id="daily_staked">0.00</span></div>
+      <div class="summary-item"><b>Profit</b><br>$<span id="daily_profit">0.00</span></div>
+      <div class="summary-item"><b>ROI</b><br><span id="daily_roi">0%</span></div>
+      <div class="summary-item"><b>Bankroll</b><br>$<span id="daily_bankroll">0.00</span></div>
     </div>
-  </div>
+  </section>
 
-  <!-- PERFORMANCE PANEL -->
-  <div class="panel">
-    <h2>Lifetime Performance</h2>
-    <div class="grid">
-      <div class="stat">Total Bets: <span id="total-bets">0</span></div>
-      <div class="stat">Wins: <span id="wins">0</span></div>
-      <div class="stat">Losses: <span id="losses">0</span></div>
-      <div class="stat">Pushes: <span id="pushes">0</span></div>
-
-      <div class="stat">Bankroll: <span id="bankroll">$0.00</span></div>
-      <div class="stat">Total Staked: <span id="total-staked">$0.00</span></div>
-      <div class="stat">Total Profit: <span id="total-profit">$0.00</span></div>
-      <div class="stat">ROI: <span id="roi">0%</span></div>
+  <!-- PERFORMANCE -->
+  <section id="perf_section">
+    <h2>Overall Performance</h2>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Total Bets</b><br><span id="perf_total">0</span></div>
+      <div class="summary-item"><b>Wins</b><br><span id="perf_wins">0</span></div>
+      <div class="summary-item"><b>Losses</b><br><span id="perf_losses">0</span></div>
+      <div class="summary-item"><b>Pushes</b><br><span id="perf_pushes">0</span></div>
+      <div class="summary-item"><b>Total Staked</b><br>$<span id="perf_staked">0.00</span></div>
+      <div class="summary-item"><b>Total Profit</b><br>$<span id="perf_profit">0.00</span></div>
+      <div class="summary-item"><b>ROI %</b><br><span id="perf_roi">0%</span></div>
+      <div class="summary-item"><b>Bankroll</b><br>$<span id="perf_bankroll">0.00</span></div>
     </div>
-  </div>
-
-  <!-- TOP PICKS -->
-  <div class="panel">
-    <h2>Top 10 Picks</h2>
-    <div id="top10" class="pick-list"></div>
-  </div>
+  </section>
 
   <!-- HISTORY -->
-  <div class="panel">
+  <section id="history_section">
     <h2>Bet History</h2>
-    <div id="history" class="history-list"></div>
-  </div>
+    <div id="history"></div>
+  </section>
 
-  <div class="footer">
-    SmartPicksGPT &copy; 2025
-  </div>
+</div>
 
+<footer>
+  SmartPicksGPT © 2025 — Fully automated sports analytics
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
