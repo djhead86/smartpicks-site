@@ -121,6 +121,21 @@
       "explanation": "We like **Dallas Mavericks (H2H +420)** in Dallas Mavericks @ Denver Nuggets with a model probability of 36.9% vs an implied 19.2%, giving an edge of about **17.7%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     },
     {
+      "sport": "basketball_nba",
+      "match": "Chicago Bulls @ Orlando Magic",
+      "team": "Chicago Bulls 8.5",
+      "market": "spread",
+      "price": "-106",
+      "prob": "0.6139",
+      "ev": "0.0994",
+      "adj_ev": "0.0169",
+      "kelly": "0.0020",
+      "recommended_stake": "0.40",
+      "expected_profit": "0.0738",
+      "event_time": "2025-12-02 00:40:00",
+      "explanation": "We like **Chicago Bulls 8.5 (SPREAD -106)** in Chicago Bulls @ Orlando Magic with a model probability of 61.4% vs an implied 51.5%, giving an edge of about **9.9%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
+    },
+    {
       "sport": "americanfootball_nfl",
       "match": "New York Giants @ New England Patriots",
       "team": "New York Giants 7.5",
@@ -134,21 +149,6 @@
       "expected_profit": "0.0597",
       "event_time": "2025-12-02 01:15:00",
       "explanation": "We like **New York Giants 7.5 (SPREAD -120)** in New York Giants @ New England Patriots with a model probability of 64.0% vs an implied 54.5%, giving an edge of about **9.5%**. This edge is strongly influenced by road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
-    },
-    {
-      "sport": "basketball_nba",
-      "match": "Chicago Bulls @ Orlando Magic",
-      "team": "Chicago Bulls 8.5",
-      "market": "spread",
-      "price": "-110",
-      "prob": "0.6176",
-      "ev": "0.0938",
-      "adj_ev": "0.0164",
-      "kelly": "0.0020",
-      "recommended_stake": "0.39",
-      "expected_profit": "0.0635",
-      "event_time": "2025-12-02 00:40:00",
-      "explanation": "We like **Chicago Bulls 8.5 (SPREAD -110)** in Chicago Bulls @ Orlando Magic with a model probability of 61.8% vs an implied 52.4%, giving an edge of about **9.4%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     }
   ],
   "daily_summary": {
