@@ -1,43 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SmartPicksGPT Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>SmartPicksGPT Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Styles -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+
+    .panel {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      background: #222;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .pick-list, .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pick-card, .history-card {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #333;
+    }
+
+    .pick-card strong {
+      font-size: 1.1rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+
+  <script defer src="app.js"></script>
 </head>
+
 <body>
 
-    <header>
-        <h1>SmartPicksGPT · Daily Betting Model</h1>
-        <p class="subtitle">Auto-generated picks · EV model · Kelly scoring · bankroll tracking</p>
-    </header>
+  <h1>SmartPicksGPT Dashboard</h1>
 
-    <section id="summary">
-        <h2>📊 Daily Summary</h2>
-        <div id="daily-summary-box" class="card"></div>
-    </section>
+  <!-- DAILY SUMMARY PANEL -->
+  <div class="panel">
+    <h2>Today's Summary</h2>
+    <div class="grid">
+      <div class="stat">Bets: <span id="daily-bets">0</span></div>
+      <div class="stat">Staked: $<span id="daily-staked">0.00</span></div>
+      <div class="stat">Profit: $<span id="daily-profit">0.00</span></div>
+      <div class="stat">ROI: <span id="daily-roi">0%</span></div>
+      <div class="stat">Bankroll: <span id="daily-bankroll">$0.00</span></div>
+    </div>
+  </div>
 
-    <section id="picks">
-        <h2>🔥 Today's Top 10 Value Picks</h2>
-        <div id="picks-container"></div>
-    </section>
+  <!-- PERFORMANCE PANEL -->
+  <div class="panel">
+    <h2>Lifetime Performance</h2>
+    <div class="grid">
+      <div class="stat">Total Bets: <span id="total-bets">0</span></div>
+      <div class="stat">Wins: <span id="wins">0</span></div>
+      <div class="stat">Losses: <span id="losses">0</span></div>
+      <div class="stat">Pushes: <span id="pushes">0</span></div>
 
-    <section id="performance">
-        <h2>📈 System Performance</h2>
-        <div id="performance-box" class="card"></div>
-        <h2>Bet History</h2>
-        <div id="history-box"></div>
-    </section>
+      <div class="stat">Bankroll: <span id="bankroll">$0.00</span></div>
+      <div class="stat">Total Staked: <span id="total-staked">$0.00</span></div>
+      <div class="stat">Total Profit: <span id="total-profit">$0.00</span></div>
+      <div class="stat">ROI: <span id="roi">0%</span></div>
+    </div>
+  </div>
 
-    <section id="How Did I Do?">
-        <h2> Bet History>/h2?</h2>
-        <div id="history-box"></div>
-    </section>section>
-    
-    <footer>
-        <p>SmartPicksGPT © 2025 — generated locally by your model</p>
-    </footer>
+  <!-- TOP PICKS -->
+  <div class="panel">
+    <h2>Top 10 Picks</h2>
+    <div id="top10" class="pick-list"></div>
+  </div>
 
-    <script src="app.js"></script>
+  <!-- HISTORY -->
+  <div class="panel">
+    <h2>Bet History</h2>
+    <div id="history" class="history-list"></div>
+  </div>
+
+  <div class="footer">
+    SmartPicksGPT &copy; 2025
+  </div>
+
 </body>
 </html>
