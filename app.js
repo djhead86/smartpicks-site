@@ -17,9 +17,9 @@ async function loadSmartPicks() {
         const data = await response.json();
         console.log("Loaded SmartPicks data:", data);
 
-        renderDailySummary(data.daily_summary);
-        renderPicks(data.top10);
-        renderPerformance(data.performance);
+        renderPicks(data);
+        renderSystemPerformance(data);
+
     } catch (err) {
         console.error(err);
         picksContainer.innerHTML = `<div class="error">❌ Failed to load SmartPicks data.</div>`;
