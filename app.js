@@ -66,7 +66,7 @@ function renderOverallStats(p) {
     overallPL.innerText       = p.actual_profit.toFixed(2) + "u";
 
     overallLastDay.innerText = p.bankroll_history.length
-        ? p.bankroll_history[p.bankroll_history.length - 1]
+        ? p.bankroll_history[p.bankroll_history.length - 1].toFixed(2)
         : "--";
 }
 
@@ -142,4 +142,23 @@ function renderBankrollChart(perf) {
         options: {
             responsive: true,
             scales: {
-                y: { begi
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: "Units"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Bet Number"
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Start the dashboard
+loadSmartPicks();
