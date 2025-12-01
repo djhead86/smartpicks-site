@@ -1,4 +1,4 @@
-// app.js (Patched to use the absolute data path for maximum reliability)
+// app.js (Final Patch: Repository-Relative Path without leading slash)
 
 async function fetchAndRenderPicks() {
     const picksContainer = document.getElementById('picks');
@@ -8,23 +8,24 @@ async function fetchAndRenderPicks() {
     picksContainer.innerHTML = ''; 
 
     try {
-        // --- MODIFICATION: Using /smartpicks-site/data/data.json for robustness ---
-        const response = await fetch('/smartpicks-site/data/data.json'); 
+        // --- FINAL MODIFICATION: Use the repository name followed by the file path ---
+        // This is often required for project sites on GitHub Pages.
+        const response = await fetch('smartpicks-site/data/data.json'); 
         
         if (!response.ok) {
-            // Note: The error message will now show the correct path if it still fails
-            throw new Error(`HTTP error! Status: ${response.status} for /smartpicks-site/data/data.json`);
+            throw new Error(`HTTP error! Status: ${response.status} for smartpicks-site/data/data.json`);
         }
-        // ... (rest of the code remains the same)
+
         const data = await response.json();
 
+        // 2. Success State: Hide loading and render data
         loadingMessage.style.display = 'none';
 
         if (data.length === 0) {
              picksContainer.innerHTML = '<p class="info-message">No value picks found for today. Check back tomorrow!</p>';
              return;
         }
-        // ... (data rendering loop remains the same)
+
         data.forEach(pick => {
             const el = document.createElement('div');
             el.className = 'pick';
