@@ -1,20 +1,6 @@
 {
   "top10": [
     {
-      "sport": "basketball_nba",
-      "match": "Chicago Bulls @ Orlando Magic",
-      "team": "Chicago Bulls",
-      "market": "h2h",
-      "price": 295,
-      "prob": 0.25316455696202533,
-      "ev": 1.1102230246251565e-16,
-      "adj_ev": 1.1102230246251565e-16,
-      "kelly": 7.526935760170553e-18,
-      "recommended_stake": 7.526935760170552e-17,
-      "expected_profit": 1.232595164407831e-32,
-      "event_time": "2025-12-02 00:40:00"
-    },
-    {
       "sport": "icehockey_nhl",
       "match": "Winnipeg Jets @ Buffalo Sabres",
       "team": "Winnipeg Jets",
@@ -69,6 +55,20 @@
       "recommended_stake": 0.0,
       "expected_profit": 0.0,
       "event_time": "2025-12-02 00:30:00"
+    },
+    {
+      "sport": "basketball_nba",
+      "match": "Chicago Bulls @ Orlando Magic",
+      "team": "Orlando Magic",
+      "market": "h2h",
+      "price": -360,
+      "prob": 0.782608695652174,
+      "ev": 5.551115123125783e-17,
+      "adj_ev": 5.551115123125783e-17,
+      "kelly": 0.0,
+      "recommended_stake": 0.0,
+      "expected_profit": 0.0,
+      "event_time": "2025-12-02 00:40:00"
     },
     {
       "sport": "basketball_nba",
@@ -143,14 +143,14 @@
   ],
   "daily_summary": {
     "date": "2025-12-01",
-    "num_bets": 20,
+    "num_bets": 21,
     "staked": 10.0,
     "profit": 32.0,
     "roi_pct": 320.0,
     "current_bankroll": 232.0
   },
   "performance": {
-    "total_bets": 20,
+    "total_bets": 21,
     "wins": 3,
     "losses": 1,
     "pushes": 0,
@@ -656,6 +656,31 @@
       "kelly_fraction": "0.0000",
       "profit": "0.00",
       "bankroll_after": "232.00",
+      "resolved_time": "",
+      "winner": "",
+      "score": ""
+    },
+    {
+      "date": "2025-12-01",
+      "sport": "basketball_nba",
+      "match": "Chicago Bulls @ Orlando Magic",
+      "team": "Orlando Magic",
+      "market": "h2h",
+      "price": "-360",
+      "prob": "0.7826",
+      "ev": "0.0000",
+      "adj_ev": "0.0000",
+      "kelly": "0.0000",
+      "stake": "0.00",
+      "expected_profit": "0.0000",
+      "result": "PENDING",
+      "actual_profit": "0.00",
+      "bankroll": "",
+      "event_time": "2025-12-02 00:40:00",
+      "expected_value": "0.0000",
+      "kelly_fraction": "0.0000",
+      "profit": "",
+      "bankroll_after": "",
       "resolved_time": "",
       "winner": "",
       "score": ""
