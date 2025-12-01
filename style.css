@@ -1,47 +1,517 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #121212;
-    color: #e0e0e0;
+/**
+ * SmartPicksGPT Styles
+ */
+
+/* ============================================================================
+   RESET & BASE
+   ============================================================================ */
+
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --neutral: #6b7280;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: #334155;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, #1a2332 100%);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ============================================================================
+   LAYOUT
+   ============================================================================ */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
 }
 
 header {
-    background: #1f1f1f;
-    padding: 20px;
     text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .subtitle {
-    font-size: 14px;
-    margin-top: 5px;
-    color: #9e9e9e;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
 }
 
-h2 {
-    margin-left: 20px;
+.last-updated {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
 }
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
 
 .card {
-    background: #1b1b1b;
-    padding: 15px;
-    margin: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.75rem;
+}
+
+/* ============================================================================
+   LOADING & ERROR STATES
+   ============================================================================ */
+
+.loading, .error {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.spinner {
+    border: 4px solid var(--border);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    color: var(--danger);
+    font-size: 1.1rem;
+}
+
+/* ============================================================================
+   STATS GRID
+   ============================================================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    box-shadow: 0px 0px 10px #000;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-value.positive {
+    color: var(--success);
+}
+
+.stat-value.negative {
+    color: var(--danger);
+}
+
+/* ============================================================================
+   TODAY'S PICKS
+   ============================================================================ */
+
+.today-summary {
+    margin-bottom: 1.5rem;
+}
+
+.summary-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.summary-stats span {
+    color: var(--text-secondary);
+}
+
+.summary-stats strong {
+    color: var(--text-primary);
+    margin-right: 0.25rem;
+}
+
+.no-picks {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.picks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
 }
 
 .pick-card {
-    background: #222;
-    padding: 15px;
-    margin: 15px 20px;
-    border-left: 4px solid #4caf50;
-    border-radius: 6px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-footer {
-    margin-top: 40px;
-    padding: 15px;
+.pick-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--shadow);
+}
+
+.pick-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.pick-game {
+    flex: 1;
+}
+
+.pick-game strong {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.sport-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pick-time {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.pick-time.live {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.pick-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.pick-selection {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.bet-type-badge {
+    padding: 0.25rem 0.75rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.bet-type-badge.small {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+.pick-odds .odds {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.pick-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+}
+
+.stat-item .label {
+    color: var(--text-secondary);
+}
+
+.stat-item .value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ev-positive {
+    color: var(--success);
+}
+
+/* ============================================================================
+   BET HISTORY TABLE
+   ============================================================================ */
+
+.table-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.table-controls label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.table-controls select {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.table-controls select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+}
+
+thead {
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border);
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+}
+
+tbody tr {
+    transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+    background: var(--bg-primary);
+}
+
+tbody tr.status-won {
+    border-left: 3px solid var(--success);
+}
+
+tbody tr.status-lost {
+    border-left: 3px solid var(--danger);
+}
+
+tbody tr.status-pending {
+    border-left: 3px solid var(--warning);
+}
+
+tbody tr.status-push {
+    border-left: 3px solid var(--neutral);
+}
+
+.game-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ev-cell {
+    font-weight: 600;
+}
+
+.positive {
+    color: var(--success);
+}
+
+.negative {
+    color: var(--danger);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.status-won {
+    background: var(--success);
+    color: white;
+}
+
+.status-badge.status-lost {
+    background: var(--danger);
+    color: white;
+}
+
+.status-badge.status-pending {
+    background: var(--warning);
+    color: white;
+}
+
+.status-badge.status-push {
+    background: var(--neutral);
+    color: white;
+}
+
+.no-data {
     text-align: center;
-    background: #1f1f1f;
-    color: #777;
+    padding: 3rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .picks-container {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .table-wrapper {
+        font-size: 0.75rem;
+    }
+
+    th, td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
 }
