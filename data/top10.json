@@ -1,0 +1,13 @@
+[
+  {
+    "pick": "Example Team",
+    "market": "h2h",
+    "match": "Away Team @ Home Team",
+    "sport": "basketball_nba",
+    "time": "2025-11-30 19:10:00 MST",
+    "price": -110,
+    "model_score": "65.0/100",
+    "payout": "0.91",
+    "why": "Stub example pick – will be replaced by your script."
+  }
+]
