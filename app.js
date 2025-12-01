@@ -104,5 +104,39 @@ function renderPerformance(p) {
         <p><strong>Current Bankroll:</strong> ${p.current_bankroll.toFixed(2)}</p>
     `;
 }
+// ----------------------------
+// RENDER HISTORY (last 50 bets)
+// ----------------------------
+function renderHistory(history) {
+    const historyBox = document.getElementById("history-box");
+    if (!history || history.length === 0) {
+        historyBox.innerHTML = "<p>No history available.</p>";
+        return;
+    }
+
+    let html = "<table class='history-table'><tr>"
+             + "<th>Date</th><th>Sport</th><th>Match</th><th>Team</th>"
+             + "<th>Market</th><th>Price</th><th>Stake</th>"
+             + "<th>Result</th><th>Profit</th><th>Bankroll</th>"
+             + "</tr>";
+
+    history.forEach(r => {
+        html += `<tr>
+            <td>${r.date}</td>
+            <td>${r.sport}</td>
+            <td>${r.match}</td>
+            <td>${r.team}</td>
+            <td>${r.market}</td>
+            <td>${r.price}</td>
+            <td>${r.stake}</td>
+            <td>${r.result}</td>
+            <td>${r.profit}</td>
+            <td>${r.bankroll_after}</td>
+        </tr>`;
+    });
+
+    html += "</table>";
+    historyBox.innerHTML = html;
+}
 
 loadSmartPicks();
