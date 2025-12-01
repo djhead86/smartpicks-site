@@ -1,32 +1,30 @@
-// app.js (Patched to use the correct data path)
+// app.js (Patched to use the absolute data path for maximum reliability)
 
 async function fetchAndRenderPicks() {
     const picksContainer = document.getElementById('picks');
     const loadingMessage = document.getElementById('loading-message');
     
-    // 1. Initial State: Show loading message
     loadingMessage.style.display = 'block';
     picksContainer.innerHTML = ''; 
 
     try {
-        // --- MODIFICATION: Updated path to include the 'data/' subdirectory ---
-        const response = await fetch('data/data.json'); 
+        // --- MODIFICATION: Using /smartpicks-site/data/data.json for robustness ---
+        const response = await fetch('/smartpicks-site/data/data.json'); 
         
         if (!response.ok) {
             // Note: The error message will now show the correct path if it still fails
-            throw new Error(`HTTP error! Status: ${response.status} for data/data.json`);
+            throw new Error(`HTTP error! Status: ${response.status} for /smartpicks-site/data/data.json`);
         }
-
+        // ... (rest of the code remains the same)
         const data = await response.json();
 
-        // 2. Success State: Hide loading and render data
         loadingMessage.style.display = 'none';
 
         if (data.length === 0) {
              picksContainer.innerHTML = '<p class="info-message">No value picks found for today. Check back tomorrow!</p>';
              return;
         }
-
+        // ... (data rendering loop remains the same)
         data.forEach(pick => {
             const el = document.createElement('div');
             el.className = 'pick';
