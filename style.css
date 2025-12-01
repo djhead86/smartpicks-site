@@ -206,3 +206,70 @@ main {
   margin-top: 4px;
 }
 
+/* Summary Graphics -------------------------------------------------- */
+
+.summary-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #f36f21;
+  text-shadow: 0 0 8px rgba(255, 80, 0, 0.6);
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin-bottom: 40px;
+}
+
+.chart-card, .gauge-card {
+  background: #141414;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Gauge -------------------------------------------------------------- */
+
+.gauge {
+  width: 140px;
+  height: 70px;
+  background: #222;
+  border-radius: 140px 140px 0 0;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  border: 3px solid #444;
+}
+
+.gauge-fill {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: 100%;
+  left: -50%;
+  background: linear-gradient(90deg, #ff5500, #ff8800);
+  transform-origin: center top;
+  transform: rotate(0deg);
+  transition: transform 1.5s ease-out;
+}
+
+.gauge-cover {
+  width: 100px;
+  height: 50px;
+  background: #141414;
+  border-radius: 0 0 100px 100px;
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #ff7f2a;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(255,120,60,0.8);
+}
+

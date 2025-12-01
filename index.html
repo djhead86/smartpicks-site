@@ -29,7 +29,40 @@
 <main>
     <section id="picks" class="tab-content active"></section>
     <section id="history" class="tab-content"></section>
-    <section id="summary" class="tab-content"></section>
+<section id="summary" class="tab-content">
+
+  <h2 class="summary-title">Performance Metrics</h2>
+
+  <div class="chart-row">
+
+    <!-- ROI Gauge -->
+    <div class="gauge-card">
+      <h3>All-Time ROI</h3>
+      <div class="gauge">
+         <div class="gauge-fill" id="roi-fill"></div>
+         <div class="gauge-cover" id="roi-text">0%</div>
+      </div>
+    </div>
+
+    <!-- Win/Loss Donut -->
+    <div class="chart-card">
+      <h3>Win / Loss</h3>
+      <canvas id="winLossChart"></canvas>
+    </div>
+
+    <!-- Bankroll Sparkline -->
+    <div class="chart-card">
+      <h3>Bankroll Over Time</h3>
+      <canvas id="bankrollChart"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Summary cards will be injected here -->
+  <div id="summary-cards"></div>
+
+</section>
+
 </main>
 
 <script src="app.js?v=2.70"></script>

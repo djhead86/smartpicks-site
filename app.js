@@ -17,6 +17,8 @@ fetch('data/data.json')
     renderTopPicks(top10);
     renderHistory(history);
     renderSummary(summary, performance);
+    buildGraphics(performance, history);
+
   })
   .catch(err => {
     console.error("Failed to load data.json:", err);
@@ -213,5 +215,84 @@ function formatPct(v) {
   const num = Number(v);
   if (isNaN(num)) return v;
   return num.toFixed(1) + "%";
+}
+
+/* ------------------ GRAPHICS RENDERING ------------------------ */
+
+function buildGraphics(performance, history) {
+  renderROIGauge(performance);
+  renderWinLoss(performance);
+  renderBankroll(history);
+}
+
+/* ---- ROI Gauge ---- */
+
+function renderROIGauge(perf) {
+  const roi = Number(perf?.roi_pct ?? 0);
+  const clamped = Math.max(-100, Math.min(roi, 100));
+
+  // Convert -100..100 → 0..180 degrees
+  const angle = ((clamped + 100) / 200) * 180;
+
+  document.getElementById("roi-fill").style.transform =
+    `rotate(${angle}deg)`;
+
+  document.getElementById("roi-text").textContent = roi.toFixed(1) + "%";
+}
+
+/* ---- Win/Loss Donut ---- */
+
+function renderWinLoss(perf) {
+  const ctx = document.getElementById("winLossChart");
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Wins", "Losses", "Pushes"],
+      datasets: [{
+        data: [
+          perf.wins ?? 0,
+          perf.losses ?? 0,
+          perf.pushes ?? 0
+        ],
+        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#ccc" } } },
+      cutout: "60%"
+    }
+  });
+}
+
+/* ---- Bankroll Sparkline ---- */
+
+function renderBankroll(history) {
+  const ctx = document.getElementById("bankrollChart");
+
+  const labels = history.map(h => h.date);
+  const bankroll = history.map(h => Number(h.bankroll || 0));
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        data: bankroll,
+        borderColor: "#ff7a1c",
+        backgroundColor: "rgba(255,122,28,0.2)",
+        borderWidth: 2,
+        tension: 0.25
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: "#666" }, grid: { color: "#222" } },
+        y: { ticks: { color: "#ccc" }, grid: { color: "#222" } }
+      }
+    }
+  });
 }
 
