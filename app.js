@@ -1,7 +1,8 @@
 // SmartPicksGPT Ultra Dashboard JS
-// Supports both:
-// 1) Old schema: data.json = [ array of picks ]
-// 2) New schema: data.json = { picks: [...], history: [...], summary: {...}, meta: {...} }
+// Patched to support ALL known SmartPicks schema formats, including:
+// 1) Ultra format: { picks, summary, meta, history }
+// 2) Your current format: { top10, daily_summary, performance, history }
+// 3) Legacy array-only format: [ { pick }, ... ]
 
 let allPicks = [];
 let filteredPicks = [];
@@ -9,7 +10,7 @@ let allHistory = [];
 let summaryData = null;
 let metaData = null;
 
-// History pagination
+// Pagination
 const PAGE_SIZE = 15;
 let currentHistoryPage = 1;
 
@@ -25,16 +26,127 @@ document.addEventListener("DOMContentLoaded", () => {
   loadData();
 });
 
-/* ========== INIT ========== */
+/* ============================================================
+   THE CRITICAL FIX: JSON SCHEMA AUTO-ADAPTER
+   ============================================================ */
+
+function applySchema(json) {
+  // ---------------------------------------------
+  // 1) ULTRA SCHEMA
+  // ---------------------------------------------
+  if (json.picks || json.summary || json.meta) {
+    return {
+      picks: json.picks ?? [],
+      history: json.history ?? [],
+      summary: json.summary ?? null,
+      meta: json.meta ?? null
+    };
+  }
+
+  // ---------------------------------------------
+  // 2) YOUR CURRENT SMARTPICKS FORMAT
+  // ---------------------------------------------
+  if (json.top10) {
+    const perf = json.performance ?? {};
+    const daily = json.daily_summary ?? {};
+
+    // Build summary object the Ultra UI expects
+    const total_bets = perf.total_bets ?? daily.num_bets ?? 0;
+    const wins = perf.wins ?? null;
+    const win_rate =
+      wins !== null && total_bets > 0 ? wins / total_bets : null;
+
+    const roi_pct = perf.roi_pct ?? daily.roi_pct ?? null;
+    const roi = roi_pct != null ? roi_pct / 100 : null;
+
+    const net_profit =
+      perf.total_profit ?? daily.profit ?? 0;
+
+    const generated =
+      daily.date ??
+      perf.generated_at ??
+      null;
+
+    return {
+      picks: json.top10,
+      history: json.history ?? [],
+      summary: {
+        total_bets,
+        settled_bets: (json.history ?? []).filter(
+          (h) => h.result && h.result !== "PENDING"
+        ).length,
+        win_rate,
+        roi,
+        net_profit,
+        generated_at: generated
+      },
+      meta: {
+        generated_at: generated
+      }
+    };
+  }
+
+  // ---------------------------------------------
+  // 3) LEGACY ARRAY OF PICKS ONLY
+  // ---------------------------------------------
+  if (Array.isArray(json)) {
+    return {
+      picks: json,
+      history: [],
+      summary: null,
+      meta: null
+    };
+  }
+
+  // Fallback empty
+  return {
+    picks: [],
+    history: [],
+    summary: null,
+    meta: null
+  };
+}
+
+/* ============================================================
+   CORE LOAD
+   ============================================================ */
+
+function loadData() {
+  fetch("data.json", { cache: "no-store" })
+    .then((r) => r.json())
+    .then((raw) => {
+      const mapped = applySchema(raw);
+
+      allPicks = mapped.picks ?? [];
+      filteredPicks = [...allPicks];
+      allHistory = mapped.history ?? [];
+      summaryData = mapped.summary ?? null;
+      metaData = mapped.meta ?? null;
+
+      renderAll();
+    })
+    .catch((err) => {
+      console.error("Error loading data.json:", err);
+      showLoadError(err.message);
+    });
+}
+
+/* ============================================================
+   THE REST OF YOUR FILE…
+   (tabs, theme, rendering, charts, helpers)
+   ============================================================ */
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
 
 function initTheme() {
   const saved = localStorage.getItem("sp_theme");
-  if (saved === "dark") {
-    document.body.classList.add("dark");
-  }
+  if (saved === "dark") document.body.classList.add("dark");
+
+  updateThemeIcon();
 
   const toggleBtn = document.getElementById("theme-toggle");
-  updateThemeIcon();
+  if (!toggleBtn) return;
 
   toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
@@ -43,69 +155,82 @@ function initTheme() {
       document.body.classList.contains("dark") ? "dark" : "light"
     );
     updateThemeIcon();
-    // Charts need to update theme colors if needed; keep it simple for now
   });
 }
 
 function updateThemeIcon() {
   const toggleBtn = document.getElementById("theme-toggle");
   if (!toggleBtn) return;
-  toggleBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+
+  toggleBtn.textContent = document.body.classList.contains("dark")
+    ? "☀️"
+    : "🌙";
 }
+
+/* ============================================================
+   TABS
+   ============================================================ */
 
 function initTabs() {
   const buttons = document.querySelectorAll(".tab-button");
-
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const tab = btn.getAttribute("data-tab");
+      const targetTab = btn.dataset.tab;
 
-      document
-        .querySelectorAll(".tab-button")
-        .forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".tab-button").forEach((b) => {
+        b.classList.remove("active");
+      });
       btn.classList.add("active");
 
-      document
-        .querySelectorAll(".tab-content")
-        .forEach((section) => section.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach((tab) => {
+        tab.classList.remove("active");
+      });
 
-      const target = document.getElementById(`tab-${tab}`);
-      if (target) {
-        target.classList.add("active");
-      }
+      const target = document.getElementById(`tab-${targetTab}`);
+      if (target) target.classList.add("active");
     });
   });
 }
 
-function initSearch() {
-  const searchInput = document.getElementById("picks-search");
-  if (!searchInput) return;
+/* ============================================================
+   SEARCH FILTER
+   ============================================================ */
 
-  searchInput.addEventListener("input", (e) => {
-    const term = e.target.value.toLowerCase().trim();
+function initSearch() {
+  const input = document.getElementById("picks-search");
+  if (!input) return;
+
+  input.addEventListener("input", (e) => {
+    const term = e.target.value.toLowerCase();
+
     if (!term) {
       filteredPicks = [...allPicks];
     } else {
       filteredPicks = allPicks.filter((p) => {
-        const team = String(p.team || "").toLowerCase();
-        const match = String(p.match || "").toLowerCase();
-        const market = String(p.market || "").toLowerCase();
         return (
-          team.includes(term) || match.includes(term) || market.includes(term)
+          (p.team ?? "").toLowerCase().includes(term) ||
+          (p.match ?? "").toLowerCase().includes(term) ||
+          (p.market ?? "").toLowerCase().includes(term) ||
+          (p.sport ?? "").toLowerCase().includes(term)
         );
       });
     }
+
     renderPicks();
     updateEvChart();
   });
 }
 
-function initHistoryPagination() {
-  const prevBtn = document.getElementById("history-prev");
-  const nextBtn = document.getElementById("history-next");
+/* ============================================================
+   HISTORY PAGINATION
+   ============================================================ */
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
+function initHistoryPagination() {
+  const prev = document.getElementById("history-prev");
+  const next = document.getElementById("history-next");
+
+  if (prev) {
+    prev.addEventListener("click", () => {
       if (currentHistoryPage > 1) {
         currentHistoryPage--;
         renderHistory();
@@ -113,9 +238,9 @@ function initHistoryPagination() {
     });
   }
 
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      const totalPages = Math.max(1, Math.ceil(allHistory.length / PAGE_SIZE));
+  if (next) {
+    next.addEventListener("click", () => {
+      const totalPages = Math.ceil(allHistory.length / PAGE_SIZE);
       if (currentHistoryPage < totalPages) {
         currentHistoryPage++;
         renderHistory();
@@ -124,84 +249,9 @@ function initHistoryPagination() {
   }
 }
 
-/* ========== DATA LOADING ========== */
-
-function loadData() {
-  fetch("data.json", { cache: "no-store" })
-    .then((r) => {
-      if (!r.ok) throw new Error(`Failed to load data.json (${r.status})`);
-      return r.json();
-    })
-    .then((json) => {
-      // Detect schema
-      if (Array.isArray(json)) {
-        allPicks = json;
-        filteredPicks = [...allPicks];
-        allHistory = [];
-        summaryData = null;
-        metaData = null;
-    } else if (json && typeof json === "object") {
-  // Support Ultra Dashboard new format
-      if (Array.isArray(json.picks)) {
-        allPicks = json.picks;
-        filteredPicks = [...allPicks];
-        allHistory = json.history || [];
-        summaryData = json.summary || null;
-        metaData = json.meta || null;
-
-  // Support YOUR current SmartPicks format
-  } else if (Array.isArray(json.top10)) {
-    allPicks = json.top10;
-    filteredPicks = [...allPicks];
-    allHistory = Array.isArray(json.history) ? json.history : [];
-    summaryData = {
-      total_bets: json.performance?.total_bets ?? json.daily_summary?.num_bets,
-      settled_bets: json.history?.filter(h => h.result !== "PENDING").length ?? 0,
-      roi: (json.performance?.roi_pct ?? json.daily_summary?.roi_pct) / 100,
-      win_rate: json.performance
-        ? json.performance.wins / json.performance.total_bets
-        : null,
-      net_profit: json.performance?.total_profit ?? json.daily_summary?.profit,
-      generated_at: json.daily_summary?.date ?? null
-    };
-    metaData = { generated_at: json.daily_summary?.date ?? null };
-
-  } else {
-    allPicks = [];
-    filteredPicks = [];
-    allHistory = [];
-    summaryData = null;
-    metaData = null;
-  }
-}
-
-      } else {
-        allPicks = [];
-        filteredPicks = [];
-        allHistory = [];
-        summaryData = null;
-        metaData = null;
-      }
-
-      renderAll();
-    })
-    .catch((err) => {
-      console.error(err);
-      showLoadError(err.message);
-    });
-}
-
-function showLoadError(message) {
-  const picksContainer = document.getElementById("picks-container");
-  const picksEmpty = document.getElementById("picks-empty");
-  if (picksContainer) picksContainer.innerHTML = "";
-  if (picksEmpty) {
-    picksEmpty.classList.remove("hidden");
-    picksEmpty.textContent = `⚠️ Could not load picks (${message}).`;
-  }
-}
-
-/* ========== RENDER ROOT ========== */
+/* ============================================================
+   ROOT RENDER
+   ============================================================ */
 
 function renderAll() {
   renderMeta();
@@ -212,269 +262,200 @@ function renderAll() {
   updateCharts();
 }
 
-/* ========== META / LAST UPDATED ========== */
+/* ============================================================
+   META (LAST UPDATED)
+   ============================================================ */
 
 function renderMeta() {
-  const labelEl = document.getElementById("last-updated-value");
-  if (!labelEl) return;
+  const label = document.getElementById("last-updated-value");
+  if (!label) return;
 
-  // Try meta.generated_at then summary.generated_at, else fallback
-  let ts = null;
-  if (metaData && metaData.generated_at) ts = metaData.generated_at;
-  else if (summaryData && summaryData.generated_at)
-    ts = summaryData.generated_at;
+  const ts =
+    (metaData && metaData.generated_at) ||
+    (summaryData && summaryData.generated_at) ||
+    "Unknown";
 
-  labelEl.textContent = ts || "Unknown";
+  label.textContent = ts;
 }
 
-/* ========== SUMMARY ========== */
+/* ============================================================
+   SUMMARY
+   ============================================================ */
 
 function renderSummary() {
-  const totalBetsEl = document.getElementById("summary-total-bets");
-  const winRateEl = document.getElementById("summary-win-rate");
-  const roiEl = document.getElementById("summary-roi");
-  const bankrollEl = document.getElementById("summary-bankroll");
-  const countLabel = document.getElementById("history-count-label");
+  const elTotal = document.getElementById("summary-total-bets");
+  const elWinRate = document.getElementById("summary-win-rate");
+  const elROI = document.getElementById("summary-roi");
+  const elBankroll = document.getElementById("summary-bankroll");
+  const elCount = document.getElementById("history-count-label");
 
-  // If we have explicit summary data, use it
-  if (summaryData) {
-    if (totalBetsEl)
-      totalBetsEl.textContent = formatNumber(summaryData.total_bets ?? "–");
-    if (winRateEl)
-      winRateEl.textContent = formatPercent(summaryData.win_rate);
-    if (roiEl) roiEl.textContent = formatPercent(summaryData.roi);
-    if (bankrollEl)
-      bankrollEl.textContent = formatCurrency(summaryData.net_profit);
-
-    if (countLabel) {
-      const settled = summaryData.settled_bets ?? allHistory.length ?? 0;
-      countLabel.textContent = `${settled} settled bets`;
-    }
+  if (!summaryData) {
+    // No summary available — empty UI
+    if (elTotal) elTotal.textContent = "–";
+    if (elWinRate) elWinRate.textContent = "–";
+    if (elROI) elROI.textContent = "–";
+    if (elBankroll) elBankroll.textContent = "–";
+    if (elCount) elCount.textContent = "0 settled bets";
     return;
   }
 
-  // Otherwise, derive simple stats from history if present
-  const bets = allHistory;
-  if (!bets || bets.length === 0) {
-    if (totalBetsEl) totalBetsEl.textContent = "–";
-    if (winRateEl) winRateEl.textContent = "–";
-    if (roiEl) roiEl.textContent = "–";
-    if (bankrollEl) bankrollEl.textContent = "–";
-    if (countLabel) countLabel.textContent = "0 settled bets";
-    return;
-  }
+  const settled = summaryData.settled_bets ?? allHistory.length ?? 0;
 
-  const total = bets.length;
-  const wins = bets.filter((b) =>
-    String(b.result || "").toLowerCase().includes("win")
-  ).length;
-
-  const pnlValues = bets.map((b) => parseNumber(b.profit ?? b.pnl ?? 0));
-  const totalPnl = pnlValues.reduce((a, v) => a + v, 0);
-
-  const stakeValues = bets.map((b) => parseNumber(b.stake ?? b.staked ?? 0));
-  const totalStake = stakeValues.reduce((a, v) => a + v, 0);
-
-  const winRate = total > 0 ? wins / total : null;
-  const roi = totalStake > 0 ? totalPnl / totalStake : null;
-
-  if (totalBetsEl) totalBetsEl.textContent = formatNumber(total);
-  if (winRateEl) winRateEl.textContent = formatPercent(winRate);
-  if (roiEl) roiEl.textContent = formatPercent(roi);
-  if (bankrollEl) bankrollEl.textContent = formatCurrency(totalPnl);
-  if (countLabel) countLabel.textContent = `${total} settled bets`;
+  if (elTotal) elTotal.textContent = formatNumber(summaryData.total_bets);
+  if (elWinRate) elWinRate.textContent = formatPercent(summaryData.win_rate);
+  if (elROI) elROI.textContent = formatPercent(summaryData.roi);
+  if (elBankroll) elBankroll.textContent = formatCurrency(summaryData.net_profit);
+  if (elCount) elCount.textContent = `${settled} settled bets`;
 }
 
-/* ========== PICKS ========== */
+/* ============================================================
+   PICKS
+   ============================================================ */
 
 function renderPicks() {
   const container = document.getElementById("picks-container");
-  const emptyEl = document.getElementById("picks-empty");
-  const countLabel = document.getElementById("picks-count-label");
+  const empty = document.getElementById("picks-empty");
+  const count = document.getElementById("picks-count-label");
 
-  if (!container || !emptyEl) return;
+  if (!container || !empty) return;
 
   container.innerHTML = "";
 
-  const picks = filteredPicks || [];
-  if (countLabel) {
-    countLabel.textContent = `${picks.length} pick${picks.length === 1 ? "" : "s"} loaded`;
+  if (count) {
+    count.textContent = `${filteredPicks.length} pick${
+      filteredPicks.length === 1 ? "" : "s"
+    } loaded`;
   }
 
-  if (picks.length === 0) {
-    emptyEl.classList.remove("hidden");
+  if (filteredPicks.length === 0) {
+    empty.classList.remove("hidden");
     return;
-  } else {
-    emptyEl.classList.add("hidden");
   }
 
-  picks.forEach((pick, idx) => {
+  empty.classList.add("hidden");
+
+  filteredPicks.forEach((p, i) => {
     const card = document.createElement("article");
     card.className = "pick-card";
 
-    const rank = pick.rank ?? idx + 1;
-    const team = pick.team ?? "Unknown team";
-    const market = pick.market ?? "market";
-    const match = pick.match ?? pick.game ?? "Unknown matchup";
-    const price = pick.price ?? pick.odds ?? "-";
-    const reason = pick.reason ?? "";
-    const sport = pick.sport ?? pick.league ?? "";
-    const evRaw = pick.ev ?? pick.edge;
-    const ev = parseNumber(evRaw);
-
+    const rank = p.rank ?? i + 1;
+    const ev = parseNumber(p.ev ?? p.adj_ev ?? 0);
     const evClass = getEvClass(ev);
-    const evLabel = ev >= 0 ? "Positive EV" : "Negative EV";
 
     card.innerHTML = `
       <div class="pick-header">
         <div>
-          <div class="pick-title">#${rank} – ${team}</div>
+          <div class="pick-title">#${rank} – ${p.team}</div>
           <div class="pick-meta">
-            ${match}${sport ? " · " + sport : ""}<br />
-            <span class="pick-badge">${market}</span>
+            ${p.match}<br />
+            <span class="pick-badge">${p.market}</span>
           </div>
         </div>
       </div>
       <div class="pick-footer">
-        <div class="pick-odds">
-          <strong>Odds:</strong> ${formatOdds(price)}
-        </div>
+        <div><strong>Odds:</strong> ${formatOdds(p.price)}</div>
         <div class="pick-ev-pill ${evClass}">
-          <span>${evLabel}</span>
-          <strong>${formatEV(evRaw)}</strong>
+          <span>${ev >= 0 ? "Positive EV" : "Negative EV"}</span>
+          <strong>${formatEV(ev)}</strong>
         </div>
       </div>
-      ${
-        reason
-          ? `<div class="pick-meta"><strong>Reason:</strong> ${sanitize(reason)}</div>`
-          : ""
-      }
+      <div class="pick-reason">
+        ${sanitize(p.explanation ?? "")}
+      </div>
     `;
 
     container.appendChild(card);
   });
 }
 
-/* ========== HISTORY ========== */
+/* ============================================================
+   HISTORY
+   ============================================================ */
 
 function renderHistory() {
   const tbody = document.getElementById("history-body");
-  const emptyEl = document.getElementById("history-empty");
+  const empty = document.getElementById("history-empty");
   const pager = document.getElementById("history-pagination");
-  const pageInfo = document.getElementById("history-page-info");
-  const prevBtn = document.getElementById("history-prev");
-  const nextBtn = document.getElementById("history-next");
+  const info = document.getElementById("history-page-info");
 
-  if (!tbody || !emptyEl || !pager || !pageInfo) return;
+  if (!tbody || !empty || !pager || !info) return;
 
   tbody.innerHTML = "";
 
-  const total = allHistory.length;
-  if (total === 0) {
-    emptyEl.classList.remove("hidden");
+  if (!allHistory.length) {
+    empty.classList.remove("hidden");
     pager.classList.add("hidden");
     return;
   }
-  emptyEl.classList.add("hidden");
+
+  empty.classList.add("hidden");
   pager.classList.remove("hidden");
 
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  // Pagination
+  const totalPages = Math.ceil(allHistory.length / PAGE_SIZE);
   if (currentHistoryPage > totalPages) currentHistoryPage = totalPages;
 
-  const startIdx = (currentHistoryPage - 1) * PAGE_SIZE;
-  const pageItems = allHistory.slice(startIdx, startIdx + PAGE_SIZE);
+  const start = (currentHistoryPage - 1) * PAGE_SIZE;
+  const items = allHistory.slice(start, start + PAGE_SIZE);
 
-  pageItems.forEach((bet) => {
+  items.forEach((bet) => {
     const tr = document.createElement("tr");
 
-    const date = bet.date ?? bet.game_date ?? bet.settled_at ?? "";
-    const sport = bet.sport ?? bet.league ?? "";
-    const match = bet.match ?? bet.game ?? "";
-    const pick = bet.team ?? bet.selection ?? "";
-    const market = bet.market ?? "";
-    const price = bet.price ?? bet.odds ?? "";
-    const resultRaw = String(bet.result ?? bet.outcome ?? "").toLowerCase();
-    const pnlRaw = bet.profit ?? bet.pnl ?? 0;
-    const pnl = parseNumber(pnlRaw);
-
-    const resultClass = resultRaw.includes("win")
-      ? "result-win"
-      : resultRaw.includes("loss") || resultRaw.includes("lose")
-      ? "result-loss"
-      : "";
-    const pnlClass =
-      pnl > 0 ? "pnl-positive" : pnl < 0 ? "pnl-negative" : "";
+    const pnl = parseNumber(bet.actual_profit ?? bet.profit ?? 0);
+    const pnlClass = pnl > 0 ? "pnl-positive" : pnl < 0 ? "pnl-negative" : "";
 
     tr.innerHTML = `
-      <td>${sanitize(date)}</td>
-      <td>${sanitize(sport)}</td>
-      <td>${sanitize(match)}</td>
-      <td>${sanitize(pick)}</td>
-      <td>${sanitize(market)}</td>
-      <td>${formatOdds(price)}</td>
-      <td class="${resultClass}">${sanitize(bet.result ?? bet.outcome ?? "")}</td>
+      <td>${sanitize(bet.date)}</td>
+      <td>${sanitize(bet.sport)}</td>
+      <td>${sanitize(bet.match)}</td>
+      <td>${sanitize(bet.team)}</td>
+      <td>${sanitize(bet.market)}</td>
+      <td>${formatOdds(bet.price)}</td>
+      <td>${sanitize(bet.result)}</td>
       <td class="${pnlClass}">${formatCurrency(pnl)}</td>
     `;
 
     tbody.appendChild(tr);
   });
 
-  // Update pagination controls
-  pageInfo.textContent = `Page ${currentHistoryPage} / ${totalPages}`;
-  if (prevBtn) prevBtn.disabled = currentHistoryPage <= 1;
-  if (nextBtn) nextBtn.disabled = currentHistoryPage >= totalPages;
+  info.textContent = `Page ${currentHistoryPage} / ${totalPages}`;
 }
 
-/* ========== AUTO-HIDING EMPTY SECTIONS ========== */
+/* ============================================================
+   AUTO-HIDING EMPTY TABS
+   ============================================================ */
 
 function setupAutoHiding() {
-  // Summary: hide tab if no summary and no history
-  const summaryTabButton = document.querySelector('[data-tab="summary"]');
-  const summarySection = document.getElementById("tab-summary");
-  const hideSummary = !summaryData && (!allHistory || allHistory.length === 0);
+  // Summary tab
+  const summaryBtn = document.querySelector('[data-tab="summary"]');
+  const summaryTab = document.getElementById("tab-summary");
 
-  if (summaryTabButton && summarySection) {
-    if (hideSummary) {
-      summaryTabButton.classList.add("hidden");
-      summarySection.classList.add("hidden");
-      // If summary is currently active, switch to picks
-      if (summarySection.classList.contains("active")) {
-        summarySection.classList.remove("active");
-        const picksSection = document.getElementById("tab-picks");
-        const picksTabButton = document.querySelector('[data-tab="picks"]');
-        if (picksSection && picksTabButton) {
-          picksSection.classList.add("active");
-          document
-            .querySelectorAll(".tab-button")
-            .forEach((b) => b.classList.remove("active"));
-          picksTabButton.classList.add("active");
-        }
-      }
+  if (summaryBtn && summaryTab) {
+    if (!summaryData && !allHistory.length) {
+      summaryBtn.classList.add("hidden");
+      summaryTab.classList.add("hidden");
     }
   }
 
-  // Picks: hide tab if no picks
-  const picksTabButton = document.querySelector('[data-tab="picks"]');
-  const picksSection = document.getElementById("tab-picks");
-  if (picksTabButton && picksSection) {
-    if (!allPicks || allPicks.length === 0) {
-      picksTabButton.classList.add("hidden");
-      picksSection.classList.add("hidden");
-    }
+  // Picks tab
+  const picksBtn = document.querySelector('[data-tab="picks"]');
+  const picksTab = document.getElementById("tab-picks");
+  if (picksBtn && picksTab && !allPicks.length) {
+    picksBtn.classList.add("hidden");
+    picksTab.classList.add("hidden");
   }
 
-  // History: hide tab if no history
-  const historyTabButton = document.querySelector('[data-tab="history"]');
-  const historySection = document.getElementById("tab-history");
-  if (historyTabButton && historySection) {
-    if (!allHistory || allHistory.length === 0) {
-      historyTabButton.classList.add("hidden");
-      historySection.classList.add("hidden");
-    }
+  // History tab
+  const historyBtn = document.querySelector('[data-tab="history"]');
+  const historyTab = document.getElementById("tab-history");
+  if (historyBtn && historyTab && !allHistory.length) {
+    historyBtn.classList.add("hidden");
+    historyTab.classList.add("hidden");
   }
 }
-
-/* ========== CHARTS ========== */
+/* ============================================================
+   CHARTS
+   ============================================================ */
 
 function updateCharts() {
   updatePerformanceChart();
@@ -486,7 +467,7 @@ function updatePerformanceChart() {
   const emptyMsg = document.getElementById("chart-performance-empty");
   if (!canvas || !emptyMsg) return;
 
-  if (!allHistory || allHistory.length === 0) {
+  if (!allHistory.length) {
     emptyMsg.classList.remove("hidden");
     if (performanceChart) {
       performanceChart.destroy();
@@ -495,18 +476,21 @@ function updatePerformanceChart() {
     return;
   }
 
-  // Build cumulative PnL by date (best effort)
+  // Aggregate PnL by date and build cumulative curve
   const byDate = {};
-  allHistory.forEach((b) => {
+  allHistory.forEach((bet) => {
     const date =
-      b.date ?? b.game_date ?? (b.settled_at || "").slice(0, 10) ?? "Unknown";
-    const pnl = parseNumber(b.profit ?? b.pnl ?? 0);
+      bet.date ||
+      bet.game_date ||
+      (bet.resolved_time || bet.event_time || "").slice(0, 10) ||
+      "Unknown";
+    const pnl = parseNumber(bet.actual_profit ?? bet.profit ?? 0);
     if (!byDate[date]) byDate[date] = 0;
     byDate[date] += pnl;
   });
 
   const dates = Object.keys(byDate).sort();
-  if (dates.length === 0) {
+  if (!dates.length) {
     emptyMsg.classList.remove("hidden");
     if (performanceChart) {
       performanceChart.destroy();
@@ -515,11 +499,10 @@ function updatePerformanceChart() {
     return;
   }
 
-  const cumulative = [];
   let running = 0;
-  dates.forEach((d) => {
+  const cumulative = dates.map((d) => {
     running += byDate[d];
-    cumulative.push(running);
+    return running;
   });
 
   emptyMsg.classList.add("hidden");
@@ -563,7 +546,8 @@ function updateEvChart() {
   const emptyMsg = document.getElementById("chart-ev-empty");
   if (!canvas || !emptyMsg) return;
 
-  if (!filteredPicks || filteredPicks.length === 0) {
+  const source = filteredPicks.length ? filteredPicks : allPicks;
+  if (!source.length) {
     emptyMsg.classList.remove("hidden");
     if (evChart) {
       evChart.destroy();
@@ -572,11 +556,11 @@ function updateEvChart() {
     return;
   }
 
-  const evValues = filteredPicks
-    .map((p) => parseNumber(p.ev ?? p.edge))
-    .filter((v) => !isNaN(v));
+  const evValues = source
+    .map((p) => parseNumber(p.ev ?? p.adj_ev))
+    .filter((v) => !Number.isNaN(v));
 
-  if (evValues.length === 0) {
+  if (!evValues.length) {
     emptyMsg.classList.remove("hidden");
     if (evChart) {
       evChart.destroy();
@@ -587,7 +571,6 @@ function updateEvChart() {
 
   emptyMsg.classList.add("hidden");
 
-  // Simple buckets: <0, 0–2.5, 2.5–5, >5
   const buckets = {
     negative: 0,
     low: 0,
@@ -610,7 +593,7 @@ function updateEvChart() {
   evChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["EV < 0", "0–2.5", "2.5–5", "> 5"],
+      labels: ["EV < 0", "0 – 2.5", "2.5 – 5", "> 5"],
       datasets: [
         {
           label: "Count of picks",
@@ -634,34 +617,51 @@ function updateEvChart() {
   });
 }
 
-/* ========== HELPERS ========== */
+/* ============================================================
+   ERROR DISPLAY
+   ============================================================ */
+
+function showLoadError(message) {
+  const picksContainer = document.getElementById("picks-container");
+  const picksEmpty = document.getElementById("picks-empty");
+
+  if (picksContainer) picksContainer.innerHTML = "";
+  if (picksEmpty) {
+    picksEmpty.classList.remove("hidden");
+    picksEmpty.textContent = `⚠️ Could not load picks (${message}).`;
+  }
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
 
 function parseNumber(value) {
   if (typeof value === "number") return value;
   if (typeof value === "string") {
     const cleaned = value.replace(/[^\d.-]/g, "");
     const n = Number(cleaned);
-    return isNaN(n) ? 0 : n;
+    return Number.isNaN(n) ? 0 : n;
   }
   return 0;
 }
 
 function formatNumber(value) {
   const n = parseNumber(value);
-  if (!isFinite(n)) return "–";
+  if (!Number.isFinite(n)) return "–";
   return n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 }
 
 function formatPercent(value) {
   if (value === null || value === undefined || value === "") return "–";
   const n = typeof value === "number" ? value : parseNumber(value);
-  if (!isFinite(n)) return "–";
+  if (!Number.isFinite(n)) return "–";
   return (n * 100).toFixed(1) + "%";
 }
 
 function formatCurrency(value) {
   const n = parseNumber(value);
-  if (!isFinite(n) || n === 0) return "$0";
+  if (!Number.isFinite(n)) return "$0";
   const sign = n < 0 ? "-" : "";
   const abs = Math.abs(n);
   return (
@@ -676,24 +676,22 @@ function formatCurrency(value) {
 
 function formatOdds(value) {
   if (value === null || value === undefined || value === "") return "-";
-  const asNum = parseNumber(value);
-  // If original looked like +XXX or -XXX, return as is; otherwise add sign
   if (typeof value === "string" && /[+\-]\d+/.test(value.trim())) {
     return value;
   }
-  if (asNum === 0) return "-";
-  return (asNum > 0 ? "+" : "") + asNum.toString();
+  const n = parseNumber(value);
+  if (!n) return "-";
+  return (n > 0 ? "+" : "") + n.toString();
 }
 
 function formatEV(value) {
-  // Could be already percent or decimal
   const n = parseNumber(value);
-  if (!isFinite(n)) return "–";
+  if (!Number.isFinite(n)) return "–";
   return n.toFixed(2) + "%";
 }
 
 function getEvClass(ev) {
-  if (!isFinite(ev)) return "ev-neutral";
+  if (!Number.isFinite(ev)) return "ev-neutral";
   if (ev >= 5) return "ev-strong-positive";
   if (ev >= 0) return "ev-mild-positive";
   if (ev < 0) return "ev-negative";
