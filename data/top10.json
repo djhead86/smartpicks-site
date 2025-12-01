@@ -44,28 +44,6 @@
     "why": "Aggressive EV/Kelly model pick."
   },
   {
-    "pick": "Over",
-    "market": "totals",
-    "match": "Memphis Grizzlies @ Sacramento Kings",
-    "sport": "basketball_nba",
-    "time": "2025-11-30 19:10:00 MST",
-    "price": -113,
-    "model_score": "53.1/100",
-    "payout": "0.88",
-    "why": "Aggressive EV/Kelly model pick."
-  },
-  {
-    "pick": "Sacramento Kings",
-    "market": "spreads",
-    "match": "Memphis Grizzlies @ Sacramento Kings",
-    "sport": "basketball_nba",
-    "time": "2025-11-30 19:10:00 MST",
-    "price": -112,
-    "model_score": "52.8/100",
-    "payout": "0.89",
-    "why": "Aggressive EV/Kelly model pick."
-  },
-  {
     "pick": "Washington Commanders",
     "market": "spreads",
     "match": "Denver Broncos @ Washington Commanders",
@@ -74,6 +52,17 @@
     "price": -112,
     "model_score": "52.8/100",
     "payout": "0.89",
+    "why": "Aggressive EV/Kelly model pick."
+  },
+  {
+    "pick": "Buffalo Sabres",
+    "market": "h2h",
+    "match": "Winnipeg Jets @ Buffalo Sabres",
+    "sport": "icehockey_nhl",
+    "time": "2025-12-01 17:30:00 MST",
+    "price": -110,
+    "model_score": "52.4/100",
+    "payout": "0.91",
     "why": "Aggressive EV/Kelly model pick."
   },
   {
@@ -88,7 +77,29 @@
     "why": "Aggressive EV/Kelly model pick."
   },
   {
-    "pick": "Over",
+    "pick": "Memphis Grizzlies",
+    "market": "spreads",
+    "match": "Memphis Grizzlies @ Sacramento Kings",
+    "sport": "basketball_nba",
+    "time": "2025-11-30 19:10:00 MST",
+    "price": -105,
+    "model_score": "51.2/100",
+    "payout": "0.95",
+    "why": "Aggressive EV/Kelly model pick."
+  },
+  {
+    "pick": "Under",
+    "market": "totals",
+    "match": "Memphis Grizzlies @ Sacramento Kings",
+    "sport": "basketball_nba",
+    "time": "2025-11-30 19:10:00 MST",
+    "price": -105,
+    "model_score": "51.2/100",
+    "payout": "0.95",
+    "why": "Aggressive EV/Kelly model pick."
+  },
+  {
+    "pick": "Under",
     "market": "totals",
     "match": "New Orleans Pelicans @ Los Angeles Lakers",
     "sport": "basketball_nba",
@@ -96,17 +107,6 @@
     "price": -105,
     "model_score": "51.2/100",
     "payout": "0.95",
-    "why": "Aggressive EV/Kelly model pick."
-  },
-  {
-    "pick": "Sacramento Kings",
-    "market": "h2h",
-    "match": "Memphis Grizzlies @ Sacramento Kings",
-    "sport": "basketball_nba",
-    "time": "2025-11-30 19:10:00 MST",
-    "price": 120,
-    "model_score": "45.5/100",
-    "payout": "1.20",
     "why": "Aggressive EV/Kelly model pick."
   }
 ]

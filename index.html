@@ -1,37 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SmartPicksGPT Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>SmartPicksGPT Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <span class="brand-text">SmartPicksGPT</span>
+    </div>
+    <div class="header-meta">
+      <span id="last-updated">Last update: --</span>
+      <span class="pill pill-green">Bankroll Model v2</span>
+    </div>
+  </header>
 
-    <header>
-        <h1>SmartPicksGPT · Daily Betting Model</h1>
-        <p class="subtitle">Auto-generated picks · EV model · Kelly scoring · bankroll tracking</p>
-    </header>
+  <main class="page">
+    <section class="grid-2">
+      <!-- Left: Bankroll chart -->
+      <div class="card">
+        <h2>📈 Bankroll Over Time</h2>
+        <canvas id="bankrollChart" height="120"></canvas>
+        <div id="bankroll-summary" class="mini-metrics"></div>
+      </div>
 
-    <section id="summary">
-        <h2>📊 Daily Summary</h2>
-        <div id="daily-summary-box" class="card"></div>
+      <!-- Right: Quick stats -->
+      <div class="card">
+        <h2>📊 Today & Overall</h2>
+        <div id="stats-today" class="stat-block">
+          <h3>Today</h3>
+          <div class="stat-row">
+            <span>Total Bets</span>
+            <span id="today-bets">--</span>
+          </div>
+          <div class="stat-row">
+            <span>Record</span>
+            <span id="today-record">--</span>
+          </div>
+          <div class="stat-row">
+            <span>Units Wagered</span>
+            <span id="today-units">--</span>
+          </div>
+          <div class="stat-row">
+            <span>Profit</span>
+            <span id="today-profit">--</span>
+          </div>
+        </div>
+        <hr />
+        <div id="stats-overall" class="stat-block">
+          <h3>All Time</h3>
+          <div class="stat-row">
+            <span>Bankroll</span>
+            <span id="overall-bankroll">--</span>
+          </div>
+          <div class="stat-row">
+            <span>Lifetime P/L</span>
+            <span id="overall-pl">--</span>
+          </div>
+          <div class="stat-row">
+            <span>Last Day</span>
+            <span id="overall-lastday">--</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="picks">
-        <h2>🔥 Today's Top 10 Value Picks</h2>
-        <div id="picks-container"></div>
+    <!-- Picks list -->
+    <section class="card card-full">
+      <h2>🔥 Today's Top 10 Value Picks</h2>
+      <div id="picks-grid" class="picks-grid">
+        <!-- pick cards injected by app.js -->
+      </div>
     </section>
+  </main>
 
-    <section id="performance">
-        <h2>📈 System Performance</h2>
-        <div id="performance-box" class="card"></div>
-    </section>
+  <footer class="footer">
+    <span>SmartPicksGPT · generated locally by your model · bankroll in units</span>
+  </footer>
 
-    <footer>
-        <p>SmartPicksGPT © 2025 — generated locally by your model</p>
-    </footer>
-
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
 
