@@ -1,5 +1,5 @@
 {
-  "top10": [
+  "picks": [
     {
       "sport": "basketball_nba",
       "match": "Milwaukee Bucks @ Washington Wizards",
@@ -151,24 +151,6 @@
       "explanation": "We like **New York Giants 7.5 (SPREAD -120)** in New York Giants @ New England Patriots with a model probability of 64.0% vs an implied 54.5%, giving an edge of about **9.5%**. This edge is strongly influenced by road performance adjusted for travel/fatigue, resulting in a high-confidence 'calculated risk' value bet."
     }
   ],
-  "daily_summary": {
-    "date": "2025-12-01",
-    "num_bets": 2,
-    "staked": 1.09,
-    "profit": -1.09,
-    "roi_pct": -100.0,
-    "current_bankroll": 198.91
-  },
-  "performance": {
-    "total_bets": 2.0,
-    "wins": 0.0,
-    "losses": 2.0,
-    "pushes": 0.0,
-    "current_bankroll": 198.91,
-    "total_staked": 1.09,
-    "total_profit": -1.0900000000000034,
-    "roi_pct": -100.00000000000031
-  },
   "history": [
     {
       "date": "2025-12-01",
@@ -477,6 +459,41 @@
       "winner": "",
       "score": "",
       "explanation": "We like **Indiana Pacers 5.5 (SPREAD -112)** in Cleveland Cavaliers @ Indiana Pacers with a model probability of 62.3% vs an implied 52.8%, giving an edge of about **9.5%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
+    },
+    {
+      "date": "2025-12-01",
+      "sport": "basketball_nba",
+      "match": "Cleveland Cavaliers @ Indiana Pacers",
+      "team": "Indiana Pacers 4.5",
+      "market": "spread",
+      "price": "-108",
+      "prob": "0.6037",
+      "ev": "0.0845",
+      "adj_ev": "0.0154",
+      "kelly": "0.0018",
+      "stake": "0.35",
+      "expected_profit": "0.0527",
+      "result": "PENDING",
+      "actual_profit": "0.00",
+      "bankroll": "198.91",
+      "event_time": "2025-12-02 00:10:00",
+      "resolved_time": "",
+      "winner": "",
+      "score": "",
+      "explanation": "We like **Indiana Pacers 4.5 (SPREAD -108)** in Cleveland Cavaliers @ Indiana Pacers with a model probability of 60.4% vs an implied 51.9%, giving an edge of about **8.4%**. This edge is strongly influenced by self-imposed fatigue or serious injury concerns and home-ice/home-court advantage, resulting in a high-confidence 'calculated risk' value bet."
     }
-  ]
+  ],
+  "summary": {
+    "total_bets": 2,
+    "wins": 0,
+    "losses": 2,
+    "pushes": 0,
+    "roi_pct": -1.0,
+    "net_profit": -1.09,
+    "settled_bets": 2,
+    "generated_at": "2025-12-01T19:03:50.746379Z"
+  },
+  "meta": {
+    "generated_at": "2025-12-01T19:03:50.747094Z"
+  }
 }
