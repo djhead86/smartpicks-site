@@ -4,21 +4,13 @@
     <meta charset="UTF-8">
     <title>SmartPicksGPT Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.ico">
 </head>
 <body>
 
     <header>
         <h1>SmartPicksGPT · Daily Betting Model</h1>
         <p class="subtitle">Auto-generated picks · EV model · Kelly scoring · bankroll tracking</p>
-        <p id="last-updated" class="subtitle"></p>
     </header>
-    <div id="score-banner" class="card" style="text-align:center; display:none;">
-    Fetching live scores...
-</div>
-
-
-    <div id="loading">Loading SmartPicks data...</div>
 
     <section id="summary">
         <h2>📊 Daily Summary</h2>
@@ -26,19 +18,13 @@
     </section>
 
     <section id="picks">
-        <h2>🔥 Today's Model Pick</h2>
+        <h2>🔥 Today's Top 10 Value Picks</h2>
         <div id="picks-container"></div>
     </section>
 
     <section id="performance">
         <h2>📈 System Performance</h2>
         <div id="performance-box" class="card"></div>
-    </section>
-
-    <!-- Future chart section (ready for Chart.js if you want it later) -->
-    <section id="charts">
-        <h2>📉 ROI Over Time</h2>
-        <canvas id="roiChart" class="card"></canvas>
     </section>
 
     <footer>
