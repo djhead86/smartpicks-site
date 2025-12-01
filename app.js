@@ -36,6 +36,58 @@ async function loadSmartPicks() {
         showError(err);
     }
 }
+async function loadScores() {
+    try {
+        const resp = await fetch("https://site.web.api.espn.com/apis/v2/sports/basketball/nba/scoreboard");
+        const data = await resp.json();
+
+        const games = data.events || [];
+
+        // Find today's game your model picked
+        const modelPick = window.SMARTPICK_MATCH; // We'll store the match name here
+        let banner = document.getElementById("score-banner");
+
+        let found = false;
+
+        for (const game of games) {
+            const name = game.shortName; // "MEM @ LAL"
+
+            if (!modelPick || !name.includes(modelPick)) continue;
+
+            found = true;
+
+            const status = game.status?.type?.name || "STATUS_UNKNOWN";
+            const isFinal = (status === "STATUS_FINAL");
+
+            const home = game.competitions[0].competitors.find(c => c.homeAway === "home");
+            const away = game.competitions[0].competitors.find(c => c.homeAway === "away");
+
+            const scoreText = `${away.team.abbreviation} ${away.score} — ${home.team.abbreviation} ${home.score}`;
+
+            banner.style.display = "block";
+
+            if (isFinal) {
+                banner.style.borderLeft = "4px solid #4caf50";
+                banner.innerHTML = `🏁 Final Score: ${scoreText}`;
+            } else {
+                banner.style.borderLeft = "4px solid #FFC107";
+                banner.innerHTML = `⏳ Live: ${scoreText} (${game.status.type.shortDetail})`;
+            }
+        }
+
+        if (!found) {
+            banner.style.display = "block";
+            banner.innerHTML = "No tracked games for today.";
+        }
+
+    } catch (err) {
+        console.error("Score fetch failed:", err);
+    }
+}
+
+// Run score updater periodically
+setInterval(loadScores, 60000);
+setTimeout(loadScores, 2000);
 
 // ---------------------------
 // RENDER: Daily Summary
