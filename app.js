@@ -154,6 +154,25 @@ function renderPicks(picks) {
         }
     });
 }
+function renderDailySummary(data) {
+  const elem = document.getElementById("daily-summary");
+  if (!elem) return;
+
+  let total = data.length;
+  let wins = data.filter(b => b.outcome === "win").length;
+  let losses = data.filter(b => b.outcome === "loss").length;
+  let pending = data.filter(b => b.outcome === "pending").length;
+
+  elem.innerHTML = `
+    <div class="summary-card">
+      <h3>Daily Summary</h3>
+      <p><strong>Total Bets:</strong> ${total}</p>
+      <p><strong>Wins:</strong> ${wins}</p>
+      <p><strong>Losses:</strong> ${losses}</p>
+      <p><strong>Pending:</strong> ${pending}</p>
+    </div>
+  `;
+}
 
 // Start the dashboard
 loadSmartPicks();
