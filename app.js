@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// SmartPicksGPT – Fully Regenerated Application Script
-// Dynamic Rendering • Confidence Meter • Search • Clean Dashboard Logic
+// SmartPicksGPT – Fully Working Dashboard Script
+// Now properly reads data.picks from data.json
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -8,7 +8,6 @@
 //  CONFIDENCE METER LOGIC
 // ---------------------------------------------------------------------------
 
-// Convert American odds to implied probability
 function impliedProbability(odds) {
   const o = Number(odds);
   if (isNaN(o)) return null;
@@ -16,14 +15,12 @@ function impliedProbability(odds) {
   return 100 / (o + 100);
 }
 
-// Compute a 0–100 confidence score
 function computeConfidence(pick) {
   const prob = impliedProbability(pick.price);
-  if (prob == null) return 50;
+  if (!prob && prob !== 0) return 50;
   return Math.round(prob * 100);
 }
 
-// Map score to a visual style + text label
 function getConfidenceTheme(score) {
   if (score < 40) return { theme: "low", label: "Cooling Off" };
   if (score < 70) return { theme: "neutral", label: "Neutral Trend" };
@@ -31,7 +28,6 @@ function getConfidenceTheme(score) {
   return { theme: "hyper", label: "Sharp Action" };
 }
 
-// Build and append the confidence meter into a card
 function attachConfidenceMeter(card, pick) {
   const score = computeConfidence(pick);
   const { theme, label } = getConfidenceTheme(score);
@@ -55,20 +51,19 @@ function attachConfidenceMeter(card, pick) {
 
 
 // ---------------------------------------------------------------------------
-//  CARD COMPONENT BUILDER
+//  CARD GENERATOR
 // ---------------------------------------------------------------------------
 
 function createPickCard(pick) {
   const card = document.createElement("article");
   card.className = "pick-card";
 
-  // Determine EV styling class
+  // EV styling
   let evClass = "ev-neutral";
   if (pick.ev > 0.05) evClass = "ev-strong-positive";
   else if (pick.ev > 0) evClass = "ev-mild-positive";
   else if (pick.ev < 0) evClass = "ev-negative";
 
-  // Build card inner HTML
   card.innerHTML = `
     <div class="pick-header">
       <div>
@@ -89,11 +84,11 @@ function createPickCard(pick) {
     </div>
 
     <div class="pick-reason">
-      ${pick.reason}
+      ${pick.explanation}
     </div>
   `;
 
-  // Add confidence meter section
+  // Add confidence meter
   attachConfidenceMeter(card, pick);
 
   return card;
@@ -101,7 +96,7 @@ function createPickCard(pick) {
 
 
 // ---------------------------------------------------------------------------
-//  RENDER ALL PICKS
+//  RENDER PICKS
 // ---------------------------------------------------------------------------
 
 function renderPicks(picks) {
@@ -113,14 +108,13 @@ function renderPicks(picks) {
     container.appendChild(card);
   });
 
-  // Update “X picks loaded” label
   const label = document.getElementById("picks-count-label");
   if (label) label.textContent = `${picks.length} picks loaded`;
 }
 
 
 // ---------------------------------------------------------------------------
-//  SEARCH / FILTER
+//  SEARCH BAR
 // ---------------------------------------------------------------------------
 
 function setupSearch(picks) {
@@ -142,28 +136,30 @@ function setupSearch(picks) {
 
 
 // ---------------------------------------------------------------------------
-//  LAST UPDATED TIME
+//  LAST UPDATED
 // ---------------------------------------------------------------------------
 
-function updateLastUpdated() {
+function updateLastUpdated(meta) {
   const el = document.getElementById("last-updated-value");
   if (!el) return;
-  el.textContent = new Date().toISOString();
+
+  el.textContent = meta?.generated_at || new Date().toISOString();
 }
 
 
 // ---------------------------------------------------------------------------
-//  MAIN INITIALIZATION
+//  MAIN LOAD
 // ---------------------------------------------------------------------------
 
 fetch("data.json")
   .then(r => r.json())
-  .then(picks => {
-    renderPicks(picks);    // Build cards dynamically
-    setupSearch(picks);    // Activate search
-    updateLastUpdated();   // Timestamp
+  .then(data => {
+    const picks = data.picks || [];     // ← FIXED
+    const meta = data.meta || {};       // ← For timestamp
+
+    renderPicks(picks);
+    setupSearch(picks);
+    updateLastUpdated(meta);
   })
-  .catch(err => {
-    console.error("Failed to load picks:", err);
-  });
+  .catch(err => console.error("Failed to load data.json:", err));
 
