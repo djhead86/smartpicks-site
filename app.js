@@ -1,437 +1,358 @@
-/* style.css - SmartPicksGPT Cyber Dashboard */
+// SmartPicksGPT Cyberpunk Dashboard Logic
 
-:root {
-  --bg: #02030a;
-  --bg-alt: #050719;
-  --bg-elevated: #080b23;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --accent: #4df0ff;
-  --accent-soft: rgba(77, 240, 255, 0.18);
-  --accent-2: #ff3b9d;
-  --accent-3: #a86bff;
-  --text: #f5f7ff;
-  --text-muted: #9ca4c7;
-  --danger: #ff4b6b;
-  --success: #5dffb5;
-  --pending: #ffd166;
-  --radius-lg: 18px;
-  --radius-md: 12px;
-  --radius-pill: 999px;
-  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.65);
-  --grid-gap: 18px;
-  --transition-fast: 160ms ease-out;
-}
+const DATA_URL = "data/data.json";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  loadDashboard().catch((err) => {
+    console.error("Dashboard error:", err);
+    const statusEls = [
+      document.getElementById("overview-status"),
+      document.getElementById("top-picks-status"),
+      document.getElementById("daily-status"),
+    ].filter(Boolean);
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-}
+    statusEls.forEach((el) => {
+      el.textContent = "Failed to load data.json – check GitHub Pages build.";
+      el.classList.add("status-error");
+    });
+  });
+});
 
-.sp-body {
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #111537 0, #040511 45%, #010109 100%);
-  color: var(--text);
-  position: relative;
-  overflow-x: hidden;
-}
+async function loadDashboard() {
+  setLastUpdatedNow();
 
-/* Noise / scanline overlay */
-
-.sp-noise {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  opacity: 0.16;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1600 900' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  mix-blend-mode: screen;
-}
-
-/* Top bar */
-
-.sp-top-bar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 28px;
-  backdrop-filter: blur(18px);
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.85),
-    rgba(4, 10, 30, 0.9),
-    rgba(0, 0, 0, 0.85)
-  );
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.sp-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.sp-logo-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent));
-  box-shadow: 0 0 20px var(--accent);
-}
-
-.sp-brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.sp-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.sp-subtitle {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.sp-top-meta {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  font-size: 0.8rem;
-}
-
-.sp-meta-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.sp-label {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.sp-value {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Layout */
-
-.sp-main {
-  max-width: 1200px;
-  margin: 22px auto 40px;
-  padding: 0 18px 40px;
-}
-
-.sp-grid {
-  display: grid;
-  gap: var(--grid-gap);
-}
-
-.sp-grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.sp-grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (max-width: 960px) {
-  .sp-grid-3,
-  .sp-grid-2 {
-    grid-template-columns: minmax(0, 1fr);
+  const res = await fetch(`${DATA_URL}?t=${Date.now()}`);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
   }
 
-  .sp-top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
+  const data = await res.json();
 
-  .sp-top-meta {
-    width: 100%;
-    justify-content: space-between;
-  }
+  const top10 = Array.isArray(data.top10) ? data.top10 : [];
+  const daily = data.daily_summary || {};
+  const perf = data.performance || {};
+  const history = Array.isArray(data.history) ? data.history : [];
 
-  .sp-main {
-    margin-top: 16px;
+  renderOverview(perf);
+  renderDailySummary(daily);
+  renderTopPicks(top10);
+  renderHistory(history);
+}
+
+/* ---------- UTILITIES ---------- */
+
+function setLastUpdatedNow() {
+  const el = document.getElementById("last-updated");
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function asNumber(value, fallback = 0) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+}
+
+function formatCurrency(value) {
+  const num = asNumber(value, 0);
+  return `$${num.toFixed(2)}`;
+}
+
+function formatPercent(value) {
+  const num = asNumber(value, 0);
+  return `${num.toFixed(1)}%`;
+}
+
+function formatPercentFromFraction(value) {
+  const num = asNumber(value, 0) * 100;
+  return `${num.toFixed(1)}%`;
+}
+
+function formatMoneyline(price) {
+  const num = asNumber(price, NaN);
+  if (!Number.isFinite(num)) return "—";
+  if (num > 0) return `+${num}`;
+  return `${num}`;
+}
+
+function formatSportCode(code) {
+  if (!code) return "—";
+  return code.replace(/_/g, " ").toUpperCase();
+}
+
+function formatMarketLabel(market) {
+  switch (market) {
+    case "h2h":
+      return "Moneyline";
+    case "spreads":
+      return "Spread";
+    case "totals":
+      return "Over / Under";
+    default:
+      return market || "Unknown";
   }
 }
 
-/* Cards */
-
-.sp-card {
-  position: relative;
-  border-radius: var(--radius-lg);
-  padding: 16px 18px 14px;
-  background: radial-gradient(circle at top left, #151a3a 0, #050618 40%, #02020a 100%);
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  overflow: hidden;
+function formatDateTimeShort(dtString) {
+  if (!dtString) return "—";
+  const d = new Date(dtString.replace(" ", "T") + "Z");
+  if (isNaN(d.getTime())) return dtString;
+  return d.toLocaleString(undefined, {
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
-.sp-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.3;
-  background: linear-gradient(
-    135deg,
-    rgba(77, 240, 255, 0.12),
-    transparent 35%,
-    transparent 65%,
-    rgba(168, 107, 255, 0.18)
-  );
-  mix-blend-mode: screen;
+function formatDateOnly(dtString) {
+  if (!dtString) return "—";
+  const d = new Date(dtString.replace(" ", "T") + "Z");
+  if (isNaN(d.getTime())) return dtString;
+  return d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
 }
 
-.sp-card-header {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 10px;
+/* ---------- OVERVIEW / PERFORMANCE ---------- */
+
+function renderOverview(perf) {
+  const statusEl = document.getElementById("overview-status");
+  if (!perf || Object.keys(perf).length === 0) {
+    if (statusEl) {
+      statusEl.textContent = "No lifetime performance data yet. Once bets settle, stats will appear here.";
+      statusEl.classList.remove("status-error");
+      statusEl.classList.add("status-muted");
+    }
+    setText("kpi-bankroll", "$0.00");
+    setText("kpi-total-profit", "$0.00");
+    setText("kpi-roi", "0.0%");
+    setText("perf-total-bets", "0");
+    setText("perf-wins", "0");
+    setText("perf-losses", "0");
+    setText("perf-pushes", "0");
+    setText("perf-total-staked", "$0.00");
+    return;
+  }
+
+  if (statusEl) statusEl.textContent = "";
+
+  const bankroll = asNumber(perf.current_bankroll);
+  const totalProfit = asNumber(perf.total_profit);
+  const roiPct = asNumber(perf.roi_pct);
+  const totalBets = asNumber(perf.total_bets);
+  const wins = asNumber(perf.wins);
+  const losses = asNumber(perf.losses);
+  const pushes = asNumber(perf.pushes);
+  const totalStaked = asNumber(perf.total_staked);
+
+  setText("kpi-bankroll", formatCurrency(bankroll));
+  setText("kpi-total-profit", formatCurrency(totalProfit));
+  setText("kpi-roi", formatPercent(roiPct));
+
+  setText("perf-total-bets", totalBets.toString());
+  setText("perf-wins", wins.toString());
+  setText("perf-losses", losses.toString());
+  setText("perf-pushes", pushes.toString());
+  setText("perf-total-staked", formatCurrency(totalStaked));
 }
 
-.sp-card-header span:first-child {
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* ---------- DAILY SUMMARY ---------- */
+
+function renderDailySummary(daily) {
+  const statusEl = document.getElementById("daily-status");
+  const datePill = document.getElementById("daily-date-pill");
+
+  if (!daily || Object.keys(daily).length === 0) {
+    if (statusEl) {
+      statusEl.textContent = "No bets placed in the current daily window.";
+      statusEl.classList.remove("status-error");
+      statusEl.classList.add("status-muted");
+    }
+    if (datePill) datePill.textContent = "No session";
+    setText("daily-bets", "0");
+    setText("daily-staked", "$0.00");
+    setText("daily-profit", "$0.00");
+    setText("daily-roi", "0.0%");
+    setText("daily-bankroll", "$0.00");
+    return;
+  }
+
+  if (statusEl) statusEl.textContent = "";
+  if (datePill) {
+    const d = daily.date || "";
+    datePill.textContent = d || "Today";
+  }
+
+  const numBets = asNumber(daily.num_bets);
+  const staked = asNumber(daily.staked);
+  const profit = asNumber(daily.profit);
+  const roiPct = asNumber(daily.roi_pct);
+  const br = asNumber(daily.current_bankroll);
+
+  setText("daily-bets", numBets.toString());
+  setText("daily-staked", formatCurrency(staked));
+  setText("daily-profit", formatCurrency(profit));
+  setText("daily-roi", formatPercent(roiPct));
+  setText("daily-bankroll", formatCurrency(br));
 }
 
-.sp-card-subtitle {
-  font-size: 0.78rem;
-  color: var(--text-muted);
+/* ---------- TOP PICKS ---------- */
+
+function renderTopPicks(top10) {
+  const listEl = document.getElementById("top-picks-list");
+  const statusEl = document.getElementById("top-picks-status");
+
+  if (!listEl) return;
+
+  if (!Array.isArray(top10) || top10.length === 0) {
+    listEl.innerHTML = `
+      <div class="empty-state mono">
+        No model-positive edges in the next 24 hours. Check back after the next refresh.
+      </div>
+    `;
+    if (statusEl) statusEl.textContent = "";
+    return;
+  }
+
+  if (statusEl) statusEl.textContent = "";
+
+  const html = top10
+    .map((pick, idx) => {
+      const rank = idx + 1;
+      const sport = formatSportCode(pick.sport);
+      const match = pick.match || "Unknown matchup";
+      const team = pick.team || "Unknown side";
+      const market = pick.market || "h2h";
+      const marketLabel = formatMarketLabel(market);
+      const oddsStr = formatMoneyline(pick.price);
+      const probPct = formatPercentFromFraction(pick.prob);
+      const adjEv = asNumber(pick.adj_ev);
+      const kelly = asNumber(pick.kelly);
+      const stake = asNumber(pick.recommended_stake);
+      const expProfit = asNumber(pick.expected_profit);
+      const time = formatDateTimeShort(pick.event_time);
+
+      return `
+        <article class="pick-card">
+          <div class="pick-rank mono">#${rank.toString().padStart(2, "0")}</div>
+          <div>
+            <div class="pick-header">
+              <div class="pick-match mono">${escapeHtml(match)}</div>
+              <div class="pick-odds mono">${oddsStr}</div>
+            </div>
+            <div class="pick-meta-row">
+              <span class="pick-team mono">${escapeHtml(team)}</span>
+              <span class="pick-market mono">${marketLabel}</span>
+              <span class="pick-sport mono">${sport}</span>
+              <span class="pick-time mono">⏱ ${time}</span>
+            </div>
+            <div class="pick-metrics-row mono">
+              <span class="pick-prob">
+                Hit prob: <strong>${probPct}</strong>
+              </span>
+              <span class="pick-ev">
+                Adj. EV: <strong>${expProfit.toFixed(2)}u</strong>
+              </span>
+              <span>
+                Kelly: <strong>${(kelly * 100).toFixed(2)}%</strong>
+              </span>
+              <span>
+                Stake: <strong>${stake.toFixed(2)}u</strong>
+              </span>
+            </div>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  listEl.innerHTML = html;
 }
 
-.sp-card-body {
-  position: relative;
-  z-index: 1;
+/* ---------- HISTORY TABLE ---------- */
+
+function renderHistory(history) {
+  const tbody = document.getElementById("history-body");
+  if (!tbody) return;
+
+  if (!Array.isArray(history) || history.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="11" class="empty-row">
+          <span class="mono empty-state">No graded tickets yet. Once results settle, they will show up here.</span>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const rows = history.slice(-50).map((bet) => {
+    const date = bet.date || "";
+    const sport = formatSportCode(bet.sport);
+    const match = bet.match || "";
+    const team = bet.team || "";
+    const market = formatMarketLabel(bet.market);
+    const odds = formatMoneyline(bet.price);
+    const stake = formatCurrency(bet.stake || bet.units || 0);
+    const ev = formatCurrency(bet.expected_profit ?? bet.expected_value ?? 0);
+    const result = (bet.result || "PENDING").toUpperCase();
+    const actualProfit = formatCurrency(bet.actual_profit ?? bet.profit ?? 0);
+    const bankroll = bet.bankroll_after ?? bet.bankroll ?? "";
+    const bankrollDisplay = bankroll === "" ? "—" : formatCurrency(bankroll);
+
+    const resultClass =
+      result === "WIN"
+        ? "result-win"
+        : result === "LOSS"
+        ? "result-loss"
+        : result === "PUSH"
+        ? "result-push"
+        : "result-pending";
+
+    return `
+      <tr>
+        <td class="mono">${escapeHtml(date)}</td>
+        <td class="mono">${sport}</td>
+        <td class="mono">${escapeHtml(match)}</td>
+        <td class="mono">${escapeHtml(team)}</td>
+        <td class="mono">${market}</td>
+        <td class="mono">${odds}</td>
+        <td class="mono">${stake}</td>
+        <td class="mono">${ev}</td>
+        <td class="mono">
+          <span class="result-pill ${resultClass}">${result}</span>
+        </td>
+        <td class="mono">${actualProfit}</td>
+        <td class="mono">${bankrollDisplay}</td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = rows.join("");
 }
 
-/* Pills */
+/* ---------- DOM HELPERS ---------- */
 
-.sp-pill {
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  border: 1px solid var(--accent);
-  background: rgba(0, 0, 0, 0.6);
-  color: var(--accent);
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = value;
 }
 
-.sp-pill-secondary {
-  border-color: var(--accent-2);
-  color: var(--accent-2);
+function escapeHtml(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
-
-.sp-pill-tertiary {
-  border-color: var(--accent-3);
-  color: var(--accent-3);
-}
-
-/* KPI cards */
-
-.sp-card-kpi {
-  padding-bottom: 16px;
-}
-
-.sp-kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 16px;
-  margin-top: 8px;
-}
-
-.sp-kpi {
-  display: flex;
-  flex-direction: column;
-}
-
-.sp-kpi-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.sp-kpi-value {
-  font-variant-numeric: tabular-nums;
-  font-size: 1.05rem;
-  margin-top: 4px;
-}
-
-.sp-kpi-pl {
-  color: var(--success);
-}
-
-/* Tables */
-
-.sp-table-wrapper {
-  max-height: 320px;
-  overflow: auto;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(1, 2, 10, 0.7);
-}
-
-.sp-table-history {
-  max-height: 360px;
-}
-
-.sp-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.78rem;
-}
-
-.sp-table thead {
-  position: sticky;
-  top: 0;
-  background: linear-gradient(to right, #090c27, #050618);
-  z-index: 1;
-}
-
-.sp-table th,
-.sp-table td {
-  padding: 7px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  white-space: nowrap;
-  text-align: left;
-}
-
-.sp-table th {
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.sp-table tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.01);
-}
-
-.sp-table tbody tr:hover {
-  background: rgba(77, 240, 255, 0.05);
-}
-
-.sp-table-sm th,
-.sp-table-sm td {
-  padding: 6px 8px;
-}
-
-/* Chips & States */
-
-.sp-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.sp-chip-win {
-  background: rgba(93, 255, 181, 0.12);
-  border: 1px solid rgba(93, 255, 181, 0.7);
-  color: var(--success);
-}
-
-.sp-chip-loss {
-  background: rgba(255, 75, 107, 0.12);
-  border: 1px solid rgba(255, 75, 107, 0.7);
-  color: var(--danger);
-}
-
-.sp-chip-push {
-  background: rgba(255, 209, 102, 0.12);
-  border: 1px solid rgba(255, 209, 102, 0.7);
-  color: var(--pending);
-}
-
-.sp-chip-pending {
-  background: rgba(156, 164, 199, 0.12);
-  border: 1px solid rgba(156, 164, 199, 0.7);
-  color: var(--text-muted);
-}
-
-/* Text coloring */
-
-.sp-text-pos {
-  color: var(--success);
-}
-
-.sp-text-neg {
-  color: var(--danger);
-}
-
-.sp-empty-row {
-  text-align: center;
-  color: var(--text-muted);
-}
-
-/* Spacing helpers */
-
-.sp-mt-lg {
-  margin-top: 22px;
-}
-
-/* Footer */
-
-.sp-footer {
-  max-width: 1200px;
-  margin: 0 auto 20px;
-  padding: 0 18px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  opacity: 0.8;
-}
-
-.sp-footer-hint {
-  font-style: italic;
-}
-
-/* Scrollbars */
-
-.sp-table-wrapper::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.sp-table-wrapper::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.sp-table-wrapper::-webkit-scrollbar-thumb {
-  background: var(--accent-soft);
-  border-radius: var(--radius-pill);
-}
-
