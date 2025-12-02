@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-01T18:15:31.218568",
+  "last_updated": "2025-12-01T18:30:37.763037",
   "top10": [
     {
       "sport": "basketball_nba",
@@ -51,13 +51,13 @@
       "match": "Chicago Bulls @ Orlando Magic",
       "team": "Orlando Magic",
       "market": "h2h",
-      "price": -455,
-      "prob": 0.8968018018018018,
-      "ev": 0.0939010989010989,
-      "adj_ev": 0.0939010989010989,
-      "kelly": 0.4272500000000009,
-      "recommended_fraction": 0.042725000000000096,
-      "recommended_stake": 8.54500000000002,
+      "price": -435,
+      "prob": 0.889392523364486,
+      "ev": 0.09385057471264374,
+      "adj_ev": 0.09385057471264374,
+      "kelly": 0.40825000000000006,
+      "recommended_fraction": 0.04082500000000001,
+      "recommended_stake": 8.165000000000001,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 17:43:00"
     },
@@ -81,45 +81,30 @@
       "match": "Los Angeles Clippers @ Miami Heat",
       "team": "Miami Heat",
       "market": "h2h",
-      "price": -400,
-      "prob": 0.8750000000000001,
-      "ev": 0.09375000000000014,
-      "adj_ev": 0.09375000000000014,
-      "kelly": 0.3750000000000009,
-      "recommended_fraction": 0.03750000000000009,
-      "recommended_stake": 7.500000000000018,
+      "price": -333,
+      "prob": 0.840958429561201,
+      "ev": 0.09349849849849867,
+      "adj_ev": 0.09349849849849867,
+      "kelly": 0.3113500000000002,
+      "recommended_fraction": 0.03113500000000002,
+      "recommended_stake": 6.227000000000004,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 17:41:13"
-    },
-    {
-      "sport": "basketball_nba",
-      "match": "Atlanta Hawks @ Detroit Pistons",
-      "team": "Detroit Pistons",
-      "market": "h2h",
-      "price": -315,
-      "prob": 0.8299397590361446,
-      "ev": 0.09341269841269839,
-      "adj_ev": 0.09341269841269839,
-      "kelly": 0.29424999999999996,
-      "recommended_fraction": 0.029424999999999996,
-      "recommended_stake": 5.884999999999999,
-      "why": "Model-adjusted edge with best available line.",
-      "event_time": "2025-12-01 17:10:00"
     },
     {
       "sport": "americanfootball_nfl",
       "match": "New York Giants @ New England Patriots",
       "team": "New England Patriots",
       "market": "h2h",
-      "price": -310,
-      "prob": 0.8267073170731708,
-      "ev": 0.09338709677419366,
-      "adj_ev": 0.09338709677419366,
-      "kelly": 0.28950000000000037,
-      "recommended_fraction": 0.028950000000000038,
-      "recommended_stake": 5.790000000000008,
+      "price": -325,
+      "prob": 0.8361764705882353,
+      "ev": 0.09346153846153848,
+      "adj_ev": 0.09346153846153848,
+      "kelly": 0.3037500000000001,
+      "recommended_fraction": 0.03037500000000001,
+      "recommended_stake": 6.075000000000002,
       "why": "Model-adjusted edge with best available line.",
-      "event_time": "2025-12-01 18:18:00"
+      "event_time": "2025-12-01 18:15:45"
     },
     {
       "sport": "americanfootball_nfl",
@@ -150,28 +135,43 @@
       "recommended_stake": 5.029999999999991,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-07 11:00:00"
+    },
+    {
+      "sport": "americanfootball_nfl",
+      "match": "Pittsburgh Steelers @ Baltimore Ravens",
+      "team": "Baltimore Ravens",
+      "market": "h2h",
+      "price": -250,
+      "prob": 0.7807142857142858,
+      "ev": 0.09300000000000014,
+      "adj_ev": 0.09300000000000014,
+      "kelly": 0.23249999999999993,
+      "recommended_fraction": 0.023249999999999993,
+      "recommended_stake": 4.649999999999999,
+      "why": "Model-adjusted edge with best available line.",
+      "event_time": "2025-12-07 11:00:00"
     }
   ],
   "daily_summary": {
     "date": "12/01/25",
-    "total_bets": 13,
+    "total_bets": 14,
     "record": "0-0-0",
     "win_pct": 0.0,
-    "units_wagered": 105.4,
-    "expected_profit": 9.8865,
+    "units_wagered": 111.48,
+    "expected_profit": 10.4547,
     "actual_profit": 0.0,
     "roi_pct": 0.0,
     "bankroll": 200.0
   },
   "performance": {
-    "total_bets": 23,
+    "total_bets": 24,
     "wins": 5,
     "losses": 5,
     "pushes": 0,
-    "units_wagered": 105.4,
-    "expected_profit": 9.8865,
+    "units_wagered": 111.48,
+    "expected_profit": 10.4547,
     "actual_profit": 0.0,
-    "win_pct": 0.21739130434782608,
+    "win_pct": 0.20833333333333334,
     "roi_pct": 0.0,
     "current_bankroll": 200.0
   },
@@ -293,6 +293,21 @@
       "profit": 0.0,
       "bankroll_after": 200.0,
       "event_time": "2025-12-01 18:18:00",
+      "winner": "",
+      "score": ""
+    },
+    {
+      "date": "12/01/25",
+      "sport": "americanfootball_nfl",
+      "match": "New York Giants @ New England Patriots",
+      "team": "New England Patriots",
+      "market": "h2h",
+      "price": -325.0,
+      "stake": 6.08,
+      "result": "PENDING",
+      "profit": 0.0,
+      "bankroll_after": 200.0,
+      "event_time": "2025-12-01 18:15:45",
       "winner": "",
       "score": ""
     },
@@ -522,66 +537,4 @@
       "score": "110-100"
     }
   ]
-,
-,
-"analytics": {
-  "roi_history": [
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
-
-    { "date": "11/24/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "11/24/25", "roi_pct": 0.0, "bankroll": 200.0 },
-
-    { "date": "11/23/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "11/23/25", "roi_pct": 0.0, "bankroll": 200.0 },
-
-    { "date": "11/22/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "11/22/25", "roi_pct": 0.0, "bankroll": 200.0 },
-
-    { "date": "11/21/25", "roi_pct": 0.0, "bankroll": 200.0 },
-    { "date": "11/21/25", "roi_pct": 0.0, "bankroll": 200.0 }
-  ],
-
-  "bankroll_history": [
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-    { "date": "12/01/25", "bankroll": 200.0 },
-
-    { "date": "11/24/25", "bankroll": 200.0 },
-    { "date": "11/24/25", "bankroll": 200.0 },
-
-    { "date": "11/23/25", "bankroll": 200.0 },
-    { "date": "11/23/25", "bankroll": 200.0 },
-
-    { "date": "11/22/25", "bankroll": 200.0 },
-    { "date": "11/22/25", "bankroll": 200.0 },
-
-    { "date": "11/21/25", "bankroll": 200.0 },
-    { "date": "11/21/25", "bankroll": 200.0 }
-  ],
-
-  "sport_winrates": {
-    "basketball_nba": 0.0,
-    "americanfootball_nfl": 0.5,
-    "mma_mixed_martial_arts": 0.5,
-    "soccer_epl": 0.5,
-    "icehockey_nhl": 0.5
-  }
-}
-
 }
