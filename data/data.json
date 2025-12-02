@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-01T18:10:34.123659",
+  "last_updated": "2025-12-01T18:11:03.600395",
   "top10": [
     {
       "sport": "basketball_nba",
@@ -96,13 +96,13 @@
       "match": "New York Giants @ New England Patriots",
       "team": "New England Patriots",
       "market": "h2h",
-      "price": -340,
-      "prob": 0.845,
-      "ev": 0.09352941176470586,
-      "adj_ev": 0.09352941176470586,
-      "kelly": 0.3179999999999999,
-      "recommended_fraction": 0.03179999999999999,
-      "recommended_stake": 6.359999999999998,
+      "price": -320,
+      "prob": 0.8330952380952381,
+      "ev": 0.0934375,
+      "adj_ev": 0.0934375,
+      "kelly": 0.2990000000000002,
+      "recommended_fraction": 0.029900000000000024,
+      "recommended_stake": 5.980000000000005,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 18:18:00"
     },
