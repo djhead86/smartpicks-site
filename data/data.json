@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-02T06:07:55.432586",
+  "last_updated": "2025-12-02T06:16:54.695251",
   "top10": [
     {
       "sport": "americanfootball_nfl",
@@ -96,17 +96,17 @@
       "match": "Dallas Cowboys @ Detroit Lions",
       "team": "Detroit Lions",
       "market": "h2h",
-      "price": -164.0,
-      "prob": 0.6802891898631589,
-      "ev": 0.09509967148703635,
-      "adj_ev": 0.07355632303388475,
-      "kelly": 0.15596346123873958,
+      "price": -166.0,
+      "prob": 0.6834310549213657,
+      "ev": 0.0951365096932727,
+      "adj_ev": 0.07334640116009675,
+      "kelly": 0.1579266060908327,
       "recommended_fraction": 0.1,
       "recommended_stake": 20.37,
-      "why": "In sweet-spot favorite band (\u2013300 to \u2013120). Moneyline-style side where the model sees a meaningful win-probability edge. Model win prob 68.0% vs market 62.1% \u2192 edge of +5.9 percentage points. Expected value per 1.0 unit stake: +0.095 units (decimal odds 1.610). Recommended stake 20.37 units (Kelly fraction capped at 10.00% of bankroll). Weak context; treat as a thinner edge.",
+      "why": "In sweet-spot favorite band (\u2013300 to \u2013120). Moneyline-style side where the model sees a meaningful win-probability edge. Model win prob 68.3% vs market 62.4% \u2192 edge of +5.9 percentage points. Expected value per 1.0 unit stake: +0.095 units (decimal odds 1.602). Recommended stake 20.37 units (Kelly fraction capped at 10.00% of bankroll). Weak context; treat as a thinner edge.",
       "event_time": "2025-12-04 18:15:00",
       "risk_factor": 1.25,
-      "aggression_bias": 0.872739729123157,
+      "aggression_bias": 0.8699120505707709,
       "context_factor": 0.709
     },
     {
