@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ----------------------------
 async function loadData() {
   try {
-    const response = await fetch("data.json?cache=" + Date.now());
+    const response = await fetch("data/data.json?cache=" + Date.now());
     const data = await response.json();
 
     populateLastUpdated(data);
