@@ -523,29 +523,64 @@
     }
   ]
 ,
+,
 "analytics": {
   "roi_history": [
-    { "date": "11/21/25", "roi_pct": 0.00, "bankroll": 200 },
-    { "date": "11/22/25", "roi_pct": 0.00, "bankroll": 200 },
-    { "date": "11/23/25", "roi_pct": 0.00, "bankroll": 200 },
-    { "date": "11/24/25", "roi_pct": 0.00, "bankroll": 200 },
-    { "date": "12/01/25", "roi_pct": 0.00, "bankroll": 200 }
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "12/01/25", "roi_pct": 0.0, "bankroll": 200.0 },
+
+    { "date": "11/24/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "11/24/25", "roi_pct": 0.0, "bankroll": 200.0 },
+
+    { "date": "11/23/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "11/23/25", "roi_pct": 0.0, "bankroll": 200.0 },
+
+    { "date": "11/22/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "11/22/25", "roi_pct": 0.0, "bankroll": 200.0 },
+
+    { "date": "11/21/25", "roi_pct": 0.0, "bankroll": 200.0 },
+    { "date": "11/21/25", "roi_pct": 0.0, "bankroll": 200.0 }
   ],
 
   "bankroll_history": [
-    { "date": "11/21/25", "bankroll": 200 },
-    { "date": "11/22/25", "bankroll": 200 },
-    { "date": "11/23/25", "bankroll": 200 },
-    { "date": "11/24/25", "bankroll": 200 },
-    { "date": "12/01/25", "bankroll": 200 }
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+    { "date": "12/01/25", "bankroll": 200.0 },
+
+    { "date": "11/24/25", "bankroll": 200.0 },
+    { "date": "11/24/25", "bankroll": 200.0 },
+
+    { "date": "11/23/25", "bankroll": 200.0 },
+    { "date": "11/23/25", "bankroll": 200.0 },
+
+    { "date": "11/22/25", "bankroll": 200.0 },
+    { "date": "11/22/25", "bankroll": 200.0 },
+
+    { "date": "11/21/25", "bankroll": 200.0 },
+    { "date": "11/21/25", "bankroll": 200.0 }
   ],
 
   "sport_winrates": {
-    "basketball_nba": 1.0,
-    "americanfootball_nfl": 1.0,
+    "basketball_nba": 0.0,
+    "americanfootball_nfl": 0.5,
     "mma_mixed_martial_arts": 0.5,
-    "icehockey_nhl": 0.5,
-    "soccer_epl": 0.5
+    "soccer_epl": 0.5,
+    "icehockey_nhl": 0.5
   }
 }
 
