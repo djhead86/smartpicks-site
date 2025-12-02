@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-01T18:11:03.600395",
+  "last_updated": "2025-12-01T18:15:31.218568",
   "top10": [
     {
       "sport": "basketball_nba",
@@ -33,21 +33,6 @@
     },
     {
       "sport": "basketball_nba",
-      "match": "Los Angeles Clippers @ Miami Heat",
-      "team": "Miami Heat",
-      "market": "h2h",
-      "price": -580,
-      "prob": 0.933235294117647,
-      "ev": 0.09413793103448276,
-      "adj_ev": 0.09413793103448276,
-      "kelly": 0.5459999999999999,
-      "recommended_fraction": 0.054599999999999996,
-      "recommended_stake": 10.92,
-      "why": "Model-adjusted edge with best available line.",
-      "event_time": "2025-12-01 17:41:13"
-    },
-    {
-      "sport": "basketball_nba",
       "match": "Dallas Mavericks @ Denver Nuggets",
       "team": "Denver Nuggets",
       "market": "h2h",
@@ -66,13 +51,13 @@
       "match": "Chicago Bulls @ Orlando Magic",
       "team": "Orlando Magic",
       "market": "h2h",
-      "price": -450,
-      "prob": 0.8950000000000001,
-      "ev": 0.09388888888888902,
-      "adj_ev": 0.09388888888888902,
-      "kelly": 0.4225000000000011,
-      "recommended_fraction": 0.042250000000000114,
-      "recommended_stake": 8.450000000000022,
+      "price": -455,
+      "prob": 0.8968018018018018,
+      "ev": 0.0939010989010989,
+      "adj_ev": 0.0939010989010989,
+      "kelly": 0.4272500000000009,
+      "recommended_fraction": 0.042725000000000096,
+      "recommended_stake": 8.54500000000002,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 17:43:00"
     },
@@ -92,19 +77,19 @@
       "event_time": "2025-12-07 11:00:00"
     },
     {
-      "sport": "americanfootball_nfl",
-      "match": "New York Giants @ New England Patriots",
-      "team": "New England Patriots",
+      "sport": "basketball_nba",
+      "match": "Los Angeles Clippers @ Miami Heat",
+      "team": "Miami Heat",
       "market": "h2h",
-      "price": -320,
-      "prob": 0.8330952380952381,
-      "ev": 0.0934375,
-      "adj_ev": 0.0934375,
-      "kelly": 0.2990000000000002,
-      "recommended_fraction": 0.029900000000000024,
-      "recommended_stake": 5.980000000000005,
+      "price": -400,
+      "prob": 0.8750000000000001,
+      "ev": 0.09375000000000014,
+      "adj_ev": 0.09375000000000014,
+      "kelly": 0.3750000000000009,
+      "recommended_fraction": 0.03750000000000009,
+      "recommended_stake": 7.500000000000018,
       "why": "Model-adjusted edge with best available line.",
-      "event_time": "2025-12-01 18:18:00"
+      "event_time": "2025-12-01 17:41:13"
     },
     {
       "sport": "basketball_nba",
@@ -120,6 +105,21 @@
       "recommended_stake": 5.884999999999999,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 17:10:00"
+    },
+    {
+      "sport": "americanfootball_nfl",
+      "match": "New York Giants @ New England Patriots",
+      "team": "New England Patriots",
+      "market": "h2h",
+      "price": -310,
+      "prob": 0.8267073170731708,
+      "ev": 0.09338709677419366,
+      "adj_ev": 0.09338709677419366,
+      "kelly": 0.28950000000000037,
+      "recommended_fraction": 0.028950000000000038,
+      "recommended_stake": 5.790000000000008,
+      "why": "Model-adjusted edge with best available line.",
+      "event_time": "2025-12-01 18:18:00"
     },
     {
       "sport": "americanfootball_nfl",
