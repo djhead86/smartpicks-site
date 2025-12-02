@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>SmartPicksGPT Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header class="top-bar">
@@ -12,46 +15,88 @@
       <span class="brand-text">SmartPicksGPT</span>
     </div>
     <div class="header-meta">
-      <span id="last-updated">Last updated: --</span>
+      <span id="last-updated">Last update: —</span>
     </div>
   </header>
 
-  <main>
-    <section class="panel">
-      <h2>Daily Summary</h2>
-      <div id="daily-summary-box" class="card"></div>
-    </section>
+  <main class="main-layout">
+    <nav class="tabs">
+      <button class="tab-button active" data-tab="summary-tab">Summary</button>
+      <button class="tab-button" data-tab="top-picks-tab">Top Picks</button>
+      <button class="tab-button" data-tab="history-tab">Today&apos;s Bets</button>
+      <button class="tab-button" data-tab="future-tab">Future Bets</button>
+      <button class="tab-button" data-tab="analytics-tab">Analytics</button>
+    </nav>
 
-    <section class="panel">
-      <h2>Top Picks</h2>
-      <div id="picks-container" class="grid"></div>
-    </section>
+    <!-- SUMMARY TAB -->
+    <section id="summary-tab" class="tab-content active">
+      <h2>Today at a Glance</h2>
+      <div id="summary" class="card"></div>
 
-    <section class="panel">
       <h2>Overall Performance</h2>
-      <div id="performance-box" class="card"></div>
+      <div id="performance" class="card"></div>
     </section>
 
-    <section class="panel">
-      <h2>Recent Bet History</h2>
-      <div class="history-wrapper">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Event Time</th>
-              <th>Sport</th>
-              <th>Match</th>
-              <th>Bet</th>
-              <th>Price</th>
-              <th>Stake</th>
-              <th>Result</th>
-              <th>Profit</th>
-              <th>Bankroll After</th>
-            </tr>
-          </thead>
-          <tbody id="history-body"></tbody>
-        </table>
+    <!-- TOP PICKS TAB -->
+    <section id="top-picks-tab" class="tab-content">
+      <h2>Top Confidence Picks</h2>
+      <div id="top-picks" class="card-grid"></div>
+    </section>
+
+    <!-- TODAY'S BETS TAB (NEXT 24 HOURS) -->
+    <section id="history-tab" class="tab-content">
+      <h2>Today&apos;s Bets (Next 24 Hours)</h2>
+      <p class="muted">
+        Only bets with event times within the next 24 hours are shown here.
+      </p>
+      <div class="card table-card">
+        <div class="table-wrapper">
+          <table class="bets-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Event Time</th>
+                <th>Sport</th>
+                <th>Match</th>
+                <th>Pick</th>
+                <th>Price</th>
+                <th>Stake</th>
+                <th>Status</th>
+                <th>Profit</th>
+                <th>Bankroll After</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body"></tbody>
+          </table>
+        </div>
+        <div id="history-pagination" class="pagination"></div>
+      </div>
+    </section>
+
+    <!-- FUTURE BETS TAB (NEXT 7 DAYS + COLLAPSIBLE) -->
+    <section id="future-tab" class="tab-content">
+      <!-- JS will populate this, but we set basic structure -->
+      <div class="card" id="future-root">
+        <!-- buildFutureTabSkeleton() will fill this -->
+      </div>
+    </section>
+
+    <!-- ANALYTICS TAB -->
+    <section id="analytics-tab" class="tab-content">
+      <h2>Analytics</h2>
+      <div class="analytics-grid">
+        <div class="card">
+          <h3>ROI Over Time</h3>
+          <canvas id="roi-chart"></canvas>
+        </div>
+        <div class="card">
+          <h3>Bankroll Over Time</h3>
+          <canvas id="bankroll-chart"></canvas>
+        </div>
+        <div class="card">
+          <h3>Win % by Sport</h3>
+          <canvas id="winrate-chart"></canvas>
+        </div>
       </div>
     </section>
   </main>

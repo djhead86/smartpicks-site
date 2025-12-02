@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ----------------------------
 async function loadData() {
   try {
-    const response = await fetch("data/data.json?cache=" + Date.now());
+    const response = await fetch("data.json?cache=" + Date.now());
     const data = await response.json();
 
     populateLastUpdated(data);
@@ -69,9 +69,8 @@ function populateTopPicks(topPicks) {
     const card = document.createElement("div");
     card.className = "pick-card";
 
-    const confidencePct = pick.confidence != null
-      ? (pick.confidence * 100).toFixed(1) + "%"
-      : "—";
+    const confidencePct =
+      pick.confidence != null ? (pick.confidence * 100).toFixed(1) + "%" : "—";
 
     card.innerHTML = `
       <div class="pick-header">
@@ -138,9 +137,6 @@ function populatePerformance(perf) {
 // HISTORY TAB — ONLY NEXT 24 HOURS (Option A)
 // ------------------------------------------------------
 function populateBetHistoryFiltered(history) {
-  const tbody = document.getElementById("history-table-body");
-  if (!tbody) return;
-
   const now = new Date();
   const cutoff = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
@@ -193,20 +189,8 @@ function renderHistoryPage() {
 }
 
 function renderHistoryPagination() {
-  let container = document.getElementById("history-pagination");
-  const tbody = document.getElementById("history-table-body");
-
-  if (!tbody) return;
-
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "history-pagination";
-    container.className = "pagination";
-    const table = tbody.closest("table");
-    if (table && table.parentElement) {
-      table.parentElement.appendChild(container);
-    }
-  }
+  const container = document.getElementById("history-pagination");
+  if (!container) return;
 
   container.innerHTML = "";
 
@@ -247,14 +231,11 @@ function renderHistoryPagination() {
 // FUTURE BETS TAB — UPCOMING 7 DAYS (Collapsible)
 // ------------------------------------------------------
 function buildFutureTabSkeleton() {
-  const futureSection = document.getElementById("future");
-  if (!futureSection) return;
+  const root = document.getElementById("future-root");
+  if (!root || root.dataset.built === "true") return;
+  root.dataset.built = "true";
 
-  // Only build once
-  if (futureSection.dataset.built === "true") return;
-  futureSection.dataset.built = "true";
-
-  futureSection.innerHTML = `
+  root.innerHTML = `
     <div class="future-header">
       <h2>Future Bets</h2>
       <p class="muted">Upcoming bets over the next 7 days.</p>
@@ -297,10 +278,6 @@ function buildFutureTabSkeleton() {
 }
 
 function populateFutureBets(history) {
-  const tbody = document.getElementById("future-table-body");
-  const summaryEl = document.getElementById("future-summary");
-  if (!tbody || !summaryEl) return;
-
   const now = new Date();
   const sevenDaysOut = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
@@ -402,7 +379,10 @@ function renderFutureSummary() {
   }
 
   const count = futureDataFiltered.length;
-  const totalStake = futureDataFiltered.reduce((sum, r) => sum + (r.stake || 0), 0);
+  const totalStake = futureDataFiltered.reduce(
+    (sum, r) => sum + (r.stake || 0),
+    0
+  );
 
   summaryEl.innerHTML = `
     <div class="future-summary-grid">
@@ -421,7 +401,6 @@ function renderCharts(analytics) {
   renderWinrateChart(analytics.sport_winrates || {});
 }
 
-// ROI Chart
 function renderROIChart(history) {
   const ctx = document.getElementById("roi-chart");
   if (!ctx || !history.length) return;
@@ -441,7 +420,6 @@ function renderROIChart(history) {
   });
 }
 
-// Bankroll Chart
 function renderBankrollChart(history) {
   const ctx = document.getElementById("bankroll-chart");
   if (!ctx || !history.length) return;
@@ -461,7 +439,6 @@ function renderBankrollChart(history) {
   });
 }
 
-// Sport Winrate Chart
 function renderWinrateChart(winrates) {
   const ctx = document.getElementById("winrate-chart");
   if (!ctx || !Object.keys(winrates).length) return;
@@ -531,4 +508,5 @@ function statusBadgeHtml(status) {
 
   return `<span class="${cls}">${s || "—"}</span>`;
 }
+
 
