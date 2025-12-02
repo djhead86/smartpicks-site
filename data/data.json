@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-02T01:24:08.034567",
+  "last_updated": "2025-12-02T01:31:45.318278",
   "top10": [
     {
       "sport": "americanfootball_nfl",
@@ -57,6 +57,24 @@
     },
     {
       "sport": "americanfootball_nfl",
+      "match": "Indianapolis Colts @ Jacksonville Jaguars",
+      "team": "Jacksonville Jaguars",
+      "market": "h2h",
+      "price": 116.0,
+      "prob": 0.5058117816091955,
+      "ev": 0.09255344827586232,
+      "adj_ev": 0.07770995554055293,
+      "kelly": 0.07978745541022612,
+      "recommended_fraction": 0.07978745541022612,
+      "recommended_stake": 16.25,
+      "why": "In sweet-spot underdog band (+100 to +200). Moneyline-style side where the model sees a meaningful win-probability edge. Model win prob 50.6% vs market 46.3% \u2192 edge of +4.3 percentage points. Expected value per 1.0 unit stake: +0.093 units (decimal odds 2.160). Recommended stake 16.25 units (Kelly fraction capped at 7.98% of bankroll). Weak context; treat as a thinner edge.",
+      "event_time": "2025-12-07 11:00:00",
+      "risk_factor": 1.15,
+      "aggression_bias": 1.029769396551724,
+      "context_factor": 0.709
+    },
+    {
+      "sport": "americanfootball_nfl",
       "match": "Washington Commanders @ Minnesota Vikings",
       "team": "Minnesota Vikings",
       "market": "h2h",
@@ -71,24 +89,6 @@
       "event_time": "2025-12-07 11:00:00",
       "risk_factor": 1.15,
       "aggression_bias": 1.0276310502348494,
-      "context_factor": 0.709
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "match": "Indianapolis Colts @ Jacksonville Jaguars",
-      "team": "Jacksonville Jaguars",
-      "market": "h2h",
-      "price": 114.0,
-      "prob": 0.5105858673633812,
-      "ev": 0.0926537561576356,
-      "adj_ev": 0.07746958278372836,
-      "kelly": 0.08127522469968038,
-      "recommended_fraction": 0.08127522469968038,
-      "recommended_stake": 16.56,
-      "why": "In sweet-spot underdog band (+100 to +200). Moneyline-style side where the model sees a meaningful win-probability edge. Model win prob 51.1% vs market 46.7% \u2192 edge of +4.3 percentage points. Expected value per 1.0 unit stake: +0.093 units (decimal odds 2.140). Recommended stake 16.56 units (Kelly fraction capped at 8.13% of bankroll). Weak context; treat as a thinner edge.",
-      "event_time": "2025-12-07 11:00:00",
-      "risk_factor": 1.15,
-      "aggression_bias": 1.025472719372957,
       "context_factor": 0.709
     },
     {
