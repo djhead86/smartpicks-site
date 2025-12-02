@@ -1,169 +1,244 @@
-console.log("SmartPicksGPT frontend initialized.");
+// SMARTPICKSGPT DASHBOARD SCRIPT
+// ================================================
+// Regenerated for Option A: Show only bets within
+// the next 24 hours in the Bet History tab.
+// ================================================
 
-const DATA_URL = "data/data.json";
+document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+    setupTabs();
+});
 
-// DOM references
-const picksBox = document.getElementById("picks-container");
-const summaryBox = document.getElementById("daily-summary-box");
-const perfBox = document.getElementById("performance-box");
-const historyBody = document.getElementById("history-body");
-const lastUpdatedSpan = document.getElementById("last-updated");
-
-// MAIN LOADER
-async function loadSmartPicks() {
-  try {
-    const response = await fetch(DATA_URL + "?_=" + Date.now()); // cache-bust
-    if (!response.ok) throw new Error("Failed to load data.json");
-
-    const data = await response.json();
-    console.log("Loaded SmartPicks data:", data);
-
-    if (data.last_updated && lastUpdatedSpan) {
-      lastUpdatedSpan.textContent = "Last updated: " + data.last_updated;
+// ----------------------------
+// Load data.json
+// ----------------------------
+async function loadData() {
+    try {
+        const response = await fetch("data/data.json?cache=" + Date.now());
+        const data = await response.json();
+        populateLastUpdated(data);
+        populateTopPicks(data.top10);
+        populateDailySummary(data.daily_summary);
+        populatePerformance(data.performance);
+        populateBetHistoryFiltered(data.history);
+        renderCharts(data.analytics);
+    } catch (err) {
+        console.error("Failed to load data.json:", err);
     }
-
-    renderDailySummary(data.daily_summary);
-    renderPicks(data.top10);
-    renderPerformance(data.performance);
-    renderHistory(data.history);
-  } catch (err) {
-    console.error(err);
-    picksBox.innerHTML = `<div class="error">❌ Failed to load SmartPicks data.</div>`;
-  }
 }
 
 // ----------------------------
-// RENDER DAILY SUMMARY
+// Last Updated timestamp
 // ----------------------------
-function renderDailySummary(ds) {
-  if (!ds) {
-    summaryBox.innerHTML = "<p>No summary available.</p>";
-    return;
-  }
-
-  const winPct = (ds.win_pct || 0) * 100;
-  const roiPct = (ds.roi_pct || 0) * 100;
-
-  summaryBox.innerHTML = `
-    <p><strong>Date:</strong> ${ds.date}</p>
-    <p><strong>Total Bets:</strong> ${ds.total_bets}</p>
-    <p><strong>Record:</strong> ${ds.record}</p>
-    <p><strong>Win %:</strong> ${winPct.toFixed(1)}%</p>
-    <p><strong>Units Wagered:</strong> ${Number(ds.units_wagered || 0).toFixed(2)}</p>
-    <p><strong>Expected Profit:</strong> ${Number(ds.expected_profit || 0).toFixed(2)}</p>
-    <p><strong>Actual Profit:</strong> ${Number(ds.actual_profit || 0).toFixed(2)}</p>
-    <p><strong>ROI:</strong> ${roiPct.toFixed(1)}%</p>
-    <p><strong>Bankroll:</strong> ${Number(ds.bankroll || 0).toFixed(2)}</p>
-  `;
+function populateLastUpdated(data) {
+    const el = document.getElementById("last-updated");
+    if (!el) return;
+    el.textContent = "Last update: " + new Date(data.last_updated).toLocaleString();
 }
 
 // ----------------------------
-// RENDER TOP 10 PICKS
+// TOP PICKS
 // ----------------------------
-function renderPicks(picks) {
-  if (!picks || picks.length === 0) {
-    picksBox.innerHTML = "<p>No picks available.</p>";
-    return;
-  }
+function populateTopPicks(topPicks) {
+    const container = document.getElementById("top-picks");
+    if (!container) return;
 
-  let html = "";
+    container.innerHTML = "";
 
-  picks.forEach((p) => {
-    const prob = p.prob ? (p.prob * 100).toFixed(1) : "--";
-    const ev = typeof p.ev === "number" ? (p.ev * 100).toFixed(2) : "0.00";
-    const kelly = typeof p.kelly === "number" ? (p.kelly * 100).toFixed(2) : "0.00";
+    topPicks.forEach(pick => {
+        const card = document.createElement("div");
+        card.className = "pick-card";
 
-    html += `
-      <div class="pick-card">
-        <h3>${p.match}</h3>
-        <p><strong>Sport:</strong> ${p.sport}</p>
-        <p><strong>Team:</strong> ${p.team}</p>
-        <p><strong>Market:</strong> ${p.market}</p>
-        <p><strong>Price:</strong> ${p.price}</p>
-        <p><strong>Probability:</strong> ${prob}%</p>
-        <p><strong>EV:</strong> ${ev}%</p>
-        <p><strong>Kelly %:</strong> ${kelly}%</p>
-        <p><em>${p.why || ""}</em></p>
-      </div>
+        card.innerHTML = `
+            <h3>${formatSport(pick.sport)}</h3>
+            <p><strong>${pick.match}</strong></p>
+            <p>Pick: <strong>${pick.team}</strong> (${pick.market.toUpperCase()})</p>
+            <p>Price: ${pick.price}</p>
+            <p>Probability: ${(pick.prob * 100).toFixed(1)}%</p>
+            <p>Confidence: ${(pick.confidence * 100).toFixed(1)}%</p>
+            <p>Stake: ${pick.recommended_stake.toFixed(2)} units</p>
+            <p class="why">${pick.why}</p>
+            <p class="event-time">Event: ${formatDateTime(pick.event_time)}</p>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+// ----------------------------
+// DAILY SUMMARY
+// ----------------------------
+function populateDailySummary(sum) {
+    const el = document.getElementById("summary");
+    if (!el) return;
+
+    el.innerHTML = `
+        <div class="summary-grid">
+            <div class="summary-item"><strong>Bets Today:</strong> ${sum.total_bets}</div>
+            <div class="summary-item"><strong>Record:</strong> ${sum.record}</div>
+            <div class="summary-item"><strong>Win %:</strong> ${(sum.win_pct * 100).toFixed(1)}%</div>
+            <div class="summary-item"><strong>Units Wagered:</strong> ${sum.units_wagered.toFixed(2)}</div>
+            <div class="summary-item"><strong>Expected Profit:</strong> ${sum.expected_profit.toFixed(2)}</div>
+            <div class="summary-item"><strong>Actual Profit:</strong> ${sum.actual_profit.toFixed(2)}</div>
+            <div class="summary-item"><strong>ROI:</strong> ${(sum.roi_pct * 100).toFixed(2)}%</div>
+            <div class="summary-item"><strong>Bankroll:</strong> ${sum.bankroll.toFixed(2)}</div>
+        </div>
     `;
-  });
-
-  picksBox.innerHTML = html;
 }
 
 // ----------------------------
-// RENDER PERFORMANCE
+// PERFORMANCE OVERALL
 // ----------------------------
-function renderPerformance(p) {
-  if (!p) {
-    perfBox.innerHTML = "<p>No performance data.</p>";
-    return;
-  }
+function populatePerformance(perf) {
+    const el = document.getElementById("performance");
+    if (!el) return;
 
-  const winPct = (p.win_pct || 0) * 100;
-  const roiPct = (p.roi_pct || 0) * 100;
-
-  perfBox.innerHTML = `
-    <p><strong>Total Bets:</strong> ${p.total_bets}</p>
-    <p><strong>Wins:</strong> ${p.wins}</p>
-    <p><strong>Losses:</strong> ${p.losses}</p>
-    <p><strong>Pushes:</strong> ${p.pushes}</p>
-    <p><strong>Units Wagered:</strong> ${Number(p.units_wagered || 0).toFixed(2)}</p>
-    <p><strong>Expected Profit:</strong> ${Number(p.expected_profit || 0).toFixed(2)}</p>
-    <p><strong>Actual Profit:</strong> ${Number(p.actual_profit || 0).toFixed(2)}</p>
-    <p><strong>Win %:</strong> ${winPct.toFixed(1)}%</p>
-    <p><strong>ROI:</strong> ${roiPct.toFixed(1)}%</p>
-    <p><strong>Current Bankroll:</strong> ${Number(p.current_bankroll || 0).toFixed(2)}</p>
-  `;
-}
-
-// ----------------------------
-// RENDER HISTORY
-// ----------------------------
-function renderHistory(history) {
-  if (!historyBody) return;
-
-  if (!history || history.length === 0) {
-    historyBody.innerHTML = `
-      <tr>
-        <td colspan="10" style="text-align:center;">No history available.</td>
-      </tr>
+    el.innerHTML = `
+        <div class="perf-grid">
+            <div>Total Bets: ${perf.total_bets}</div>
+            <div>Wins: ${perf.wins}</div>
+            <div>Losses: ${perf.losses}</div>
+            <div>Win %: ${(perf.win_pct * 100).toFixed(1)}%</div>
+            <div>Units Wagered: ${perf.units_wagered.toFixed(2)}</div>
+            <div>Expected Profit: ${perf.expected_profit.toFixed(2)}</div>
+            <div>Actual Profit: ${perf.actual_profit.toFixed(2)}</div>
+            <div>ROI: ${(perf.roi_pct * 100).toFixed(2)}%</div>
+            <div>Current Bankroll: ${perf.current_bankroll.toFixed(2)}</div>
+        </div>
     `;
-    return;
-  }
-
-  let rows = "";
-
-  history.forEach((h) => {
-    const date = h.date || "";
-    const eventTime = h.event_time || "";
-    const sport = h.sport || "";
-    const match = h.match || "";
-    const bet = `${h.team || ""} (${h.market || ""})`;
-    const price = h.price ?? "";
-    const stake = Number(h.stake || 0).toFixed(2);
-    const result = h.result || "";
-    const profit = Number(h.profit ?? h.actual_profit ?? 0).toFixed(2);
-    const bankrollAfter = Number(h.bankroll_after || 0).toFixed(2);
-
-    rows += `
-      <tr>
-        <td>${date}</td>
-        <td>${eventTime}</td>
-        <td>${sport}</td>
-        <td>${match}</td>
-        <td>${bet}</td>
-        <td>${price}</td>
-        <td>${stake}</td>
-        <td>${result}</td>
-        <td>${profit}</td>
-        <td>${bankrollAfter}</td>
-      </tr>
-    `;
-  });
-
-  historyBody.innerHTML = rows;
 }
 
-loadSmartPicks();
+// ------------------------------------------------------
+// OPTION A: BET HISTORY — ONLY NEXT 24 HOURS
+// ------------------------------------------------------
+function populateBetHistoryFiltered(history) {
+    const table = document.getElementById("history-table-body");
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    const now = new Date();
+    const cutoff = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    const filtered = history.filter(item => {
+        const eventTime = new Date(item.event_time);
+        return eventTime >= now && eventTime <= cutoff;
+    });
+
+    filtered.forEach(row => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${formatDateTime(row.event_time)}</td>
+            <td>${formatSport(row.sport)}</td>
+            <td>${row.match}</td>
+            <td>${row.team} (${row.market})</td>
+            <td>${row.price}</td>
+            <td>${row.stake.toFixed(2)}</td>
+            <td>${row.result}</td>
+            <td>${row.profit.toFixed(2)}</td>
+            <td>${row.bankroll_after.toFixed(2)}</td>
+        `;
+
+        table.appendChild(tr);
+    });
+}
+
+// ----------------------------
+// CHARTS
+// ----------------------------
+function renderCharts(analytics) {
+    if (!analytics) return;
+
+    renderROIChart(analytics.roi_history);
+    renderBankrollChart(analytics.bankroll_history);
+    renderWinrateChart(analytics.sport_winrates);
+}
+
+// ROI Chart
+function renderROIChart(history) {
+    const ctx = document.getElementById("roi-chart");
+    if (!ctx) return;
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: history.map(e => e.date),
+            datasets: [{
+                label: "ROI %",
+                data: history.map(e => e.roi_pct * 100),
+                borderWidth: 2,
+            }]
+        }
+    });
+}
+
+// Bankroll Chart
+function renderBankrollChart(history) {
+    const ctx = document.getElementById("bankroll-chart");
+    if (!ctx) return;
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: history.map(e => e.date),
+            datasets: [{
+                label: "Bankroll",
+                data: history.map(e => e.bankroll),
+                borderWidth: 2,
+            }]
+        }
+    });
+}
+
+// Sport Winrate Chart
+function renderWinrateChart(winrates) {
+    const ctx = document.getElementById("winrate-chart");
+    if (!ctx) return;
+
+    const labels = Object.keys(winrates);
+    const values = Object.values(winrates).map(v => v * 100);
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Win % by Sport",
+                data: values,
+                borderWidth: 1
+            }]
+        }
+    });
+}
+
+// ----------------------------
+// TAB HANDLER
+// ----------------------------
+function setupTabs() {
+    const buttons = document.querySelectorAll(".tab-button");
+    const contents = document.querySelectorAll(".tab-content");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            buttons.forEach(b => b.classList.remove("active"));
+            contents.forEach(c => c.classList.remove("active"));
+
+            btn.classList.add("active");
+            document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+    });
+}
+
+// ----------------------------
+// HELPERS
+// ----------------------------
+function formatDateTime(dtString) {
+    return new Date(dtString).toLocaleString();
+}
+
+function formatSport(s) {
+    return s.replace(/_/g, " ").toUpperCase();
+}
 
