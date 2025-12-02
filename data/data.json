@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-01T17:48:38.722962",
+  "last_updated": "2025-12-01T17:51:32.015270",
   "top10": [
     {
       "sport": "basketball_nba",
@@ -47,6 +47,21 @@
       "event_time": "2025-12-01 19:10:00"
     },
     {
+      "sport": "basketball_nba",
+      "match": "Atlanta Hawks @ Detroit Pistons",
+      "team": "Detroit Pistons",
+      "market": "h2h",
+      "price": -450,
+      "prob": 0.8950000000000001,
+      "ev": 0.09388888888888902,
+      "adj_ev": 0.09388888888888902,
+      "kelly": 0.4225000000000011,
+      "recommended_fraction": 0.042250000000000114,
+      "recommended_stake": 8.450000000000022,
+      "why": "Model-adjusted edge with best available line.",
+      "event_time": "2025-12-01 17:10:00"
+    },
+    {
       "sport": "americanfootball_nfl",
       "match": "New Orleans Saints @ Tampa Bay Buccaneers",
       "team": "Tampa Bay Buccaneers",
@@ -78,31 +93,16 @@
     },
     {
       "sport": "basketball_nba",
-      "match": "Atlanta Hawks @ Detroit Pistons",
-      "team": "Detroit Pistons",
-      "market": "h2h",
-      "price": -333,
-      "prob": 0.840958429561201,
-      "ev": 0.09349849849849867,
-      "adj_ev": 0.09349849849849867,
-      "kelly": 0.3113500000000002,
-      "recommended_fraction": 0.03113500000000002,
-      "recommended_stake": 6.227000000000004,
-      "why": "Model-adjusted edge with best available line.",
-      "event_time": "2025-12-01 17:10:00"
-    },
-    {
-      "sport": "basketball_nba",
       "match": "Chicago Bulls @ Orlando Magic",
       "team": "Orlando Magic",
       "market": "h2h",
-      "price": -280,
-      "prob": 0.8055263157894736,
-      "ev": 0.0932142857142857,
-      "adj_ev": 0.0932142857142857,
-      "kelly": 0.26099999999999995,
-      "recommended_fraction": 0.026099999999999998,
-      "recommended_stake": 5.22,
+      "price": -286,
+      "prob": 0.8100259067357513,
+      "ev": 0.0932517482517482,
+      "adj_ev": 0.0932517482517482,
+      "kelly": 0.26669999999999955,
+      "recommended_fraction": 0.026669999999999958,
+      "recommended_stake": 5.333999999999992,
       "why": "Model-adjusted edge with best available line.",
       "event_time": "2025-12-01 17:43:00"
     },
