@@ -15,95 +15,49 @@
       <span class="brand-text">SmartPicksGPT</span>
     </div>
     <div class="header-meta">
-      <span id="last-updated">Last update: —</span>
+      <span id="last-updated">Last updated: --</span>
     </div>
   </header>
 
-  <main class="main-layout">
+  <main class="layout">
     <nav class="tabs">
-      <button class="tab-button active" data-tab="summary-tab">Summary</button>
-      <button class="tab-button" data-tab="top-picks-tab">Top Picks</button>
-      <button class="tab-button" data-tab="history-tab">Today&apos;s Bets</button>
-      <button class="tab-button" data-tab="future-tab">Future Bets</button>
-      <button class="tab-button" data-tab="analytics-tab">Analytics</button>
+      <button class="tab-button active" data-tab="summary">Summary</button>
+      <button class="tab-button" data-tab="top10">Top Picks</button>
+      <button class="tab-button" data-tab="analytics">Analytics</button>
     </nav>
 
     <!-- SUMMARY TAB -->
-    <section id="summary-tab" class="tab-content active">
-      <h2>Today at a Glance</h2>
-      <div id="summary" class="card"></div>
+    <section id="summary" class="tab-content active"></section>
 
-      <h2>Overall Performance</h2>
-      <div id="performance" class="card"></div>
-    </section>
-
-    <!-- TOP PICKS TAB -->
-    <section id="top-picks-tab" class="tab-content">
-      <h2>Top Confidence Picks</h2>
-      <div id="top-picks" class="card-grid"></div>
-    </section>
-
-    <!-- TODAY'S BETS TAB (NEXT 24 HOURS) -->
-    <section id="history-tab" class="tab-content">
-      <h2>Today&apos;s Bets (Next 24 Hours)</h2>
-      <p class="muted">
-        Only bets with event times within the next 24 hours are shown here.
-      </p>
-      <div class="card table-card">
-        <div class="table-wrapper">
-          <table class="bets-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Event Time</th>
-                <th>Sport</th>
-                <th>Match</th>
-                <th>Pick</th>
-                <th>Price</th>
-                <th>Stake</th>
-                <th>Status</th>
-                <th>Profit</th>
-                <th>Bankroll After</th>
-              </tr>
-            </thead>
-            <tbody id="history-table-body"></tbody>
-          </table>
-        </div>
-        <div id="history-pagination" class="pagination"></div>
-      </div>
-    </section>
-
-    <!-- FUTURE BETS TAB (NEXT 7 DAYS + COLLAPSIBLE) -->
-    <section id="future-tab" class="tab-content">
-      <!-- JS will populate this, but we set basic structure -->
-      <div class="card" id="future-root">
-        <!-- buildFutureTabSkeleton() will fill this -->
-      </div>
-    </section>
+    <!-- TOP 10 TAB -->
+    <section id="top10" class="tab-content"></section>
 
     <!-- ANALYTICS TAB -->
-    <section id="analytics-tab" class="tab-content">
-      <h2>Analytics</h2>
-<div class="chart-card">
-  <h3>ROI Over Time</h3>
-  <canvas id="roiChart"></canvas>
-</div>
-
-<div class="chart-card">
-  <h3>Bankroll Over Time</h3>
-  <canvas id="bankrollChart"></canvas>
-</div>
-
-<div class="chart-card">
-  <h3>Win % by Sport</h3>
-  <canvas id="winBySportChart"></canvas>
-</div>
-
+    <section id="analytics" class="tab-content">
+      <div class="analytics-grid">
+        <div class="card">
+          <h3>Bankroll Over Time</h3>
+          <canvas id="bankrollChart"></canvas>
+        </div>
+        <div class="card">
+          <h3>ROI Over Time</h3>
+          <canvas id="roiChart"></canvas>
+        </div>
+        <div class="card">
+          <h3>Top 10 EV Distribution</h3>
+          <canvas id="evChart"></canvas>
+        </div>
+        <div class="card">
+          <h3>Win Prob vs Odds</h3>
+          <canvas id="probOddsChart"></canvas>
+        </div>
       </div>
+      <p class="analytics-note">
+        Deeper analytics coming soon: sport-by-sport splits, streaks, and Kelly efficiency.
+      </p>
     </section>
   </main>
 
   <script src="app.js"></script>
 </body>
 </html>
-
