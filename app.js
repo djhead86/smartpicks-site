@@ -1,165 +1,169 @@
-///////////////////////////////////////////////////////////////////////////////
-// SmartPicksGPT – Fully Working Dashboard Script
-// Now properly reads data.picks from data.json
-///////////////////////////////////////////////////////////////////////////////
+console.log("SmartPicksGPT frontend initialized.");
 
+const DATA_URL = "data/data.json";
 
-// ---------------------------------------------------------------------------
-//  CONFIDENCE METER LOGIC
-// ---------------------------------------------------------------------------
+// DOM references
+const picksBox = document.getElementById("picks-container");
+const summaryBox = document.getElementById("daily-summary-box");
+const perfBox = document.getElementById("performance-box");
+const historyBody = document.getElementById("history-body");
+const lastUpdatedSpan = document.getElementById("last-updated");
 
-function impliedProbability(odds) {
-  const o = Number(odds);
-  if (isNaN(o)) return null;
-  if (o < 0) return Math.abs(o) / (Math.abs(o) + 100);
-  return 100 / (o + 100);
+// MAIN LOADER
+async function loadSmartPicks() {
+  try {
+    const response = await fetch(DATA_URL + "?_=" + Date.now()); // cache-bust
+    if (!response.ok) throw new Error("Failed to load data.json");
+
+    const data = await response.json();
+    console.log("Loaded SmartPicks data:", data);
+
+    if (data.last_updated && lastUpdatedSpan) {
+      lastUpdatedSpan.textContent = "Last updated: " + data.last_updated;
+    }
+
+    renderDailySummary(data.daily_summary);
+    renderPicks(data.top10);
+    renderPerformance(data.performance);
+    renderHistory(data.history);
+  } catch (err) {
+    console.error(err);
+    picksBox.innerHTML = `<div class="error">❌ Failed to load SmartPicks data.</div>`;
+  }
 }
 
-function computeConfidence(pick) {
-  const prob = impliedProbability(pick.price);
-  if (!prob && prob !== 0) return 50;
-  return Math.round(prob * 100);
-}
+// ----------------------------
+// RENDER DAILY SUMMARY
+// ----------------------------
+function renderDailySummary(ds) {
+  if (!ds) {
+    summaryBox.innerHTML = "<p>No summary available.</p>";
+    return;
+  }
 
-function getConfidenceTheme(score) {
-  if (score < 40) return { theme: "low", label: "Cooling Off" };
-  if (score < 70) return { theme: "neutral", label: "Neutral Trend" };
-  if (score < 90) return { theme: "high", label: "Trending Up" };
-  return { theme: "hyper", label: "Sharp Action" };
-}
+  const winPct = (ds.win_pct || 0) * 100;
+  const roiPct = (ds.roi_pct || 0) * 100;
 
-function attachConfidenceMeter(card, pick) {
-  const score = computeConfidence(pick);
-  const { theme, label } = getConfidenceTheme(score);
-  const angle = (score / 100) * 180;
-
-  const wrapper = document.createElement("div");
-  wrapper.className = `confidence-wrapper meter-${theme}`;
-
-  wrapper.innerHTML = `
-    <div class="confidence-meter">
-      <div class="confidence-arc" style="--confidence-angle:${angle}deg"></div>
-      <div class="confidence-center">
-        <span class="confidence-value">${score}%</span>
-      </div>
-    </div>
-    <div class="confidence-label">${label}</div>
+  summaryBox.innerHTML = `
+    <p><strong>Date:</strong> ${ds.date}</p>
+    <p><strong>Total Bets:</strong> ${ds.total_bets}</p>
+    <p><strong>Record:</strong> ${ds.record}</p>
+    <p><strong>Win %:</strong> ${winPct.toFixed(1)}%</p>
+    <p><strong>Units Wagered:</strong> ${Number(ds.units_wagered || 0).toFixed(2)}</p>
+    <p><strong>Expected Profit:</strong> ${Number(ds.expected_profit || 0).toFixed(2)}</p>
+    <p><strong>Actual Profit:</strong> ${Number(ds.actual_profit || 0).toFixed(2)}</p>
+    <p><strong>ROI:</strong> ${roiPct.toFixed(1)}%</p>
+    <p><strong>Bankroll:</strong> ${Number(ds.bankroll || 0).toFixed(2)}</p>
   `;
-
-  card.appendChild(wrapper);
 }
 
-
-// ---------------------------------------------------------------------------
-//  CARD GENERATOR
-// ---------------------------------------------------------------------------
-
-function createPickCard(pick) {
-  const card = document.createElement("article");
-  card.className = "pick-card";
-
-  // EV styling
-  let evClass = "ev-neutral";
-  if (pick.ev > 0.05) evClass = "ev-strong-positive";
-  else if (pick.ev > 0) evClass = "ev-mild-positive";
-  else if (pick.ev < 0) evClass = "ev-negative";
-
-  card.innerHTML = `
-    <div class="pick-header">
-      <div>
-        <div class="pick-title">#${pick.rank} – ${pick.team}</div>
-        <div class="pick-meta">
-          ${pick.match}<br>
-          <span class="pick-badge">${pick.market}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="pick-footer">
-      <div><strong>Odds:</strong> ${pick.price}</div>
-      <div class="pick-ev-pill ${evClass}">
-        <span>${pick.ev >= 0 ? "Positive EV" : "Negative EV"}</span>
-        <strong>${(pick.ev * 100).toFixed(2)}%</strong>
-      </div>
-    </div>
-
-    <div class="pick-reason">
-      ${pick.explanation}
-    </div>
-  `;
-
-  // Add confidence meter
-  attachConfidenceMeter(card, pick);
-
-  return card;
-}
-
-
-// ---------------------------------------------------------------------------
-//  RENDER PICKS
-// ---------------------------------------------------------------------------
-
+// ----------------------------
+// RENDER TOP 10 PICKS
+// ----------------------------
 function renderPicks(picks) {
-  const container = document.getElementById("picks-container");
-  container.innerHTML = "";
+  if (!picks || picks.length === 0) {
+    picksBox.innerHTML = "<p>No picks available.</p>";
+    return;
+  }
 
-  picks.forEach(pick => {
-    const card = createPickCard(pick);
-    container.appendChild(card);
+  let html = "";
+
+  picks.forEach((p) => {
+    const prob = p.prob ? (p.prob * 100).toFixed(1) : "--";
+    const ev = typeof p.ev === "number" ? (p.ev * 100).toFixed(2) : "0.00";
+    const kelly = typeof p.kelly === "number" ? (p.kelly * 100).toFixed(2) : "0.00";
+
+    html += `
+      <div class="pick-card">
+        <h3>${p.match}</h3>
+        <p><strong>Sport:</strong> ${p.sport}</p>
+        <p><strong>Team:</strong> ${p.team}</p>
+        <p><strong>Market:</strong> ${p.market}</p>
+        <p><strong>Price:</strong> ${p.price}</p>
+        <p><strong>Probability:</strong> ${prob}%</p>
+        <p><strong>EV:</strong> ${ev}%</p>
+        <p><strong>Kelly %:</strong> ${kelly}%</p>
+        <p><em>${p.why || ""}</em></p>
+      </div>
+    `;
   });
 
-  const label = document.getElementById("picks-count-label");
-  if (label) label.textContent = `${picks.length} picks loaded`;
+  picksBox.innerHTML = html;
 }
 
+// ----------------------------
+// RENDER PERFORMANCE
+// ----------------------------
+function renderPerformance(p) {
+  if (!p) {
+    perfBox.innerHTML = "<p>No performance data.</p>";
+    return;
+  }
 
-// ---------------------------------------------------------------------------
-//  SEARCH BAR
-// ---------------------------------------------------------------------------
+  const winPct = (p.win_pct || 0) * 100;
+  const roiPct = (p.roi_pct || 0) * 100;
 
-function setupSearch(picks) {
-  const input = document.getElementById("picks-search");
-  if (!input) return;
+  perfBox.innerHTML = `
+    <p><strong>Total Bets:</strong> ${p.total_bets}</p>
+    <p><strong>Wins:</strong> ${p.wins}</p>
+    <p><strong>Losses:</strong> ${p.losses}</p>
+    <p><strong>Pushes:</strong> ${p.pushes}</p>
+    <p><strong>Units Wagered:</strong> ${Number(p.units_wagered || 0).toFixed(2)}</p>
+    <p><strong>Expected Profit:</strong> ${Number(p.expected_profit || 0).toFixed(2)}</p>
+    <p><strong>Actual Profit:</strong> ${Number(p.actual_profit || 0).toFixed(2)}</p>
+    <p><strong>Win %:</strong> ${winPct.toFixed(1)}%</p>
+    <p><strong>ROI:</strong> ${roiPct.toFixed(1)}%</p>
+    <p><strong>Current Bankroll:</strong> ${Number(p.current_bankroll || 0).toFixed(2)}</p>
+  `;
+}
 
-  input.addEventListener("input", () => {
-    const q = input.value.toLowerCase();
+// ----------------------------
+// RENDER HISTORY
+// ----------------------------
+function renderHistory(history) {
+  if (!historyBody) return;
 
-    const filtered = picks.filter(p =>
-      p.team.toLowerCase().includes(q) ||
-      p.match.toLowerCase().includes(q) ||
-      p.market.toLowerCase().includes(q)
-    );
+  if (!history || history.length === 0) {
+    historyBody.innerHTML = `
+      <tr>
+        <td colspan="10" style="text-align:center;">No history available.</td>
+      </tr>
+    `;
+    return;
+  }
 
-    renderPicks(filtered);
+  let rows = "";
+
+  history.forEach((h) => {
+    const date = h.date || "";
+    const eventTime = h.event_time || "";
+    const sport = h.sport || "";
+    const match = h.match || "";
+    const bet = `${h.team || ""} (${h.market || ""})`;
+    const price = h.price ?? "";
+    const stake = Number(h.stake || 0).toFixed(2);
+    const result = h.result || "";
+    const profit = Number(h.profit ?? h.actual_profit ?? 0).toFixed(2);
+    const bankrollAfter = Number(h.bankroll_after || 0).toFixed(2);
+
+    rows += `
+      <tr>
+        <td>${date}</td>
+        <td>${eventTime}</td>
+        <td>${sport}</td>
+        <td>${match}</td>
+        <td>${bet}</td>
+        <td>${price}</td>
+        <td>${stake}</td>
+        <td>${result}</td>
+        <td>${profit}</td>
+        <td>${bankrollAfter}</td>
+      </tr>
+    `;
   });
+
+  historyBody.innerHTML = rows;
 }
 
-
-// ---------------------------------------------------------------------------
-//  LAST UPDATED
-// ---------------------------------------------------------------------------
-
-function updateLastUpdated(meta) {
-  const el = document.getElementById("last-updated-value");
-  if (!el) return;
-
-  el.textContent = meta?.generated_at || new Date().toISOString();
-}
-
-
-// ---------------------------------------------------------------------------
-//  MAIN LOAD
-// ---------------------------------------------------------------------------
-
-fetch("data.json")
-  .then(r => r.json())
-  .then(data => {
-    const picks = data.picks || [];     // ← FIXED
-    const meta = data.meta || {};       // ← For timestamp
-
-    renderPicks(picks);
-    setupSearch(picks);
-    updateLastUpdated(meta);
-  })
-  .catch(err => console.error("Failed to load data.json:", err));
+loadSmartPicks();
 
