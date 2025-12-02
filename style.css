@@ -423,3 +423,60 @@ h1, h2, h3 {
   }
 }
 
+/* --- Layout Improvements --- */
+#summary, #top10, #analytics {
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 16px;
+  margin: 12px 0;
+  border-radius: 10px;
+  border: 1px solid #e1e1e1;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Pick Card Enhancements */
+.pick-card h3 {
+  margin-top: 0;
+}
+
+.market-tag {
+  background: #4a63ff;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-left: 6px;
+}
+
+/* Summary + Analytics Cards */
+.summary-card, .analytics-card {
+  border-left: 4px solid #4a63ff;
+}
+
+/* Nice collapsible reasoning */
+details {
+  margin-top: 10px;
+  cursor: pointer;
+}
+details summary {
+  font-weight: bold;
+  color: #4a63ff;
+  cursor: pointer;
+}
+
+/* Improve typography */
+body {
+  font-family: system-ui, Arial;
+  padding: 20px;
+  background: #fafafa;
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: "Inter", system-ui, sans-serif;
+  color: #333;
+}
+
