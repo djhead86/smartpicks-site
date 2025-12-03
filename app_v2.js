@@ -29,6 +29,48 @@ function setupTabs() {
   });
 }
 
+/* ========= SCORE TICKER: LIVE SCORES ========= */
+
+const SCORES_URL = `data/scores.json?ts=${Date.now()}`;
+
+async function loadScoresTicker() {
+  try {
+    const res = await fetch(SCORES_URL, { cache: "no-store" });
+    const json = await res.json();
+
+    if (!json.scores || json.scores.length === 0) {
+      document.getElementById("ticker-content").textContent =
+        "No live games at the moment.";
+      return;
+    }
+
+    const parts = json.scores.map((s) => {
+      return `${sportEmoji(s.sport)} ${s.away} ${s.away_score} – ${s.home_score} ${s.home} (${s.status})`;
+    });
+
+    document.getElementById("ticker-content").textContent = parts.join("   •   ");
+  } catch (err) {
+    console.error("[TICKER] Failed to load scoreboard:", err);
+    document.getElementById("ticker-content").textContent =
+      "Scores unavailable.";
+  }
+}
+
+function sportEmoji(sport) {
+  if (!sport) return "🏆";
+  if (sport.includes("nba")) return "🏀";
+  if (sport.includes("nfl")) return "🏈";
+  if (sport.includes("soccer") || sport.includes("epl")) return "⚽";
+  if (sport.includes("nhl")) return "🏒";
+  return "🎯";
+}
+
+// Load ticker immediately + every 2 min
+loadScoresTicker();
+setInterval(loadScoresTicker, 120000);
+
+
+
 /* ========= LOAD & ENRICH DATA ========= */
 
 async function loadData() {
