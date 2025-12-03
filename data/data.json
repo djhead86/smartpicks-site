@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 11:25:55 UTC",
+  "last_updated": "2025-12-03 11:40:41 UTC",
   "open_bets": [
     {
       "timestamp": "12/03/25 00:15",
@@ -274,20 +274,35 @@
       "status": "open",
       "result": "",
       "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 04:40",
+      "sport": "icehockey_nhl",
+      "event": "Utah Mammoth @ Anaheim Ducks",
+      "market": "totals",
+      "team": "over",
+      "line": "6.5",
+      "odds": "-110",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 04:40",
+      "sport": "icehockey_nhl",
+      "event": "Winnipeg Jets @ Montr\u00e9al Canadiens",
+      "market": "totals",
+      "team": "under",
+      "line": "6.0",
+      "odds": "107",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
     }
   ],
   "todays_picks": [
-    {
-      "sport": "soccer_epl",
-      "event": "Aston Villa @ Brighton and Hove Albion",
-      "market": "totals",
-      "team": "over",
-      "line": 2.5,
-      "odds": -110,
-      "score": 0.8742,
-      "win_probability": 0.6289,
-      "game_time": "2025-12-03 12:30:00"
-    },
     {
       "sport": "soccer_epl",
       "event": "Crystal Palace @ Burnley",
@@ -295,8 +310,8 @@
       "team": "over",
       "line": 2.25,
       "odds": -110,
-      "score": 0.8742,
-      "win_probability": 0.6289,
+      "score": 0.8771,
+      "win_probability": 0.6298,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -306,8 +321,8 @@
       "team": "over",
       "line": 2.25,
       "odds": -110,
-      "score": 0.8742,
-      "win_probability": 0.6289,
+      "score": 0.8771,
+      "win_probability": 0.6298,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -317,8 +332,19 @@
       "team": "Chelsea",
       "line": -0.5,
       "odds": -110,
-      "score": 0.8657,
-      "win_probability": 0.6264,
+      "score": 0.8684,
+      "win_probability": 0.6272,
+      "game_time": "2025-12-03 13:15:00"
+    },
+    {
+      "sport": "soccer_epl",
+      "event": "Chelsea @ Leeds United",
+      "market": "totals",
+      "team": "under",
+      "line": 2.5,
+      "odds": 110,
+      "score": 0.8684,
+      "win_probability": 0.5939,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -328,8 +354,8 @@
       "team": "Milwaukee Bucks",
       "line": 0.0,
       "odds": 150,
-      "score": 0.8543,
-      "win_probability": 0.5363,
+      "score": 0.856,
+      "win_probability": 0.5368,
       "game_time": "2025-12-03 18:11:00"
     },
     {
@@ -339,8 +365,8 @@
       "team": "Dallas Mavericks",
       "line": 0.0,
       "odds": 150,
-      "score": 0.8522,
-      "win_probability": 0.5357,
+      "score": 0.8538,
+      "win_probability": 0.5361,
       "game_time": "2025-12-03 18:30:00"
     },
     {
@@ -350,8 +376,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.8282,
-      "win_probability": 0.5818,
+      "score": 0.8304,
+      "win_probability": 0.5824,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -361,8 +387,8 @@
       "team": "Los Angeles Clippers",
       "line": 0.0,
       "odds": 140,
-      "score": 0.8278,
-      "win_probability": 0.54,
+      "score": 0.8295,
+      "win_probability": 0.5405,
       "game_time": "2025-12-03 17:40:00"
     },
     {
@@ -372,31 +398,9 @@
       "team": "Cleveland Cavaliers",
       "line": -10.5,
       "odds": -110,
-      "score": 0.8267,
-      "win_probability": 0.6147,
+      "score": 0.8289,
+      "win_probability": 0.6153,
       "game_time": "2025-12-03 17:10:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
-      "market": "totals",
-      "team": "over",
-      "line": 6.5,
-      "odds": 110,
-      "score": 0.8237,
-      "win_probability": 0.5805,
-      "game_time": "2025-12-03 17:30:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
-      "market": "totals",
-      "team": "under",
-      "line": 5.5,
-      "odds": 112,
-      "score": 0.8071,
-      "win_probability": 0.5723,
-      "game_time": "2025-12-03 17:30:00"
     },
     {
       "sport": "icehockey_nhl",
@@ -405,8 +409,30 @@
       "team": "over",
       "line": 6.0,
       "odds": -108,
-      "score": 0.8071,
-      "win_probability": 0.6056,
+      "score": 0.8092,
+      "win_probability": 0.6062,
+      "game_time": "2025-12-03 17:30:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Utah Mammoth @ Anaheim Ducks",
+      "market": "totals",
+      "team": "over",
+      "line": 6.5,
+      "odds": -110,
+      "score": 0.8052,
+      "win_probability": 0.6082,
+      "game_time": "2025-12-03 20:00:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Winnipeg Jets @ Montr\u00e9al Canadiens",
+      "market": "totals",
+      "team": "under",
+      "line": 6.0,
+      "odds": 107,
+      "score": 0.8009,
+      "win_probability": 0.5784,
       "game_time": "2025-12-03 17:30:00"
     }
   ],
