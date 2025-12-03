@@ -1,9 +1,9 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 00:39:23",
+  "last_updated": "2025-12-03 00:44:22",
   "open_bets": [
     {
-      "timestamp": "2025-12-03 00:39:23",
+      "timestamp": "2025-12-03 00:44:22",
       "sport": "basketball_nba",
       "event": "Portland Trail Blazers @ Toronto Raptors",
       "market": "h2h",
@@ -16,59 +16,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
+      "timestamp": "2025-12-03 00:44:22",
       "sport": "basketball_nba",
       "event": "Memphis Grizzlies @ San Antonio Spurs",
       "market": "h2h",
@@ -81,33 +29,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Memphis Grizzlies @ San Antonio Spurs",
-      "market": "h2h",
-      "team": "San Antonio Spurs",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
-      "sport": "basketball_nba",
-      "event": "Memphis Grizzlies @ San Antonio Spurs",
-      "market": "h2h",
-      "team": "San Antonio Spurs",
-      "line": 0,
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:39:23",
+      "timestamp": "2025-12-03 00:44:22",
       "sport": "americanfootball_nfl",
       "event": "Tennessee Titans @ Cleveland Browns",
       "market": "h2h",
@@ -120,13 +42,91 @@
       "pnl": ""
     },
     {
-      "timestamp": "2025-12-03 00:39:23",
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "americanfootball_nfl",
+      "event": "Indianapolis Colts @ Seattle Seahawks",
+      "market": "h2h",
+      "team": "Seattle Seahawks",
+      "line": 0,
+      "odds": "-200",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "icehockey_nhl",
+      "event": "Toronto Maple Leafs @ Florida Panthers",
+      "market": "spreads",
+      "team": "Toronto Maple Leafs",
+      "line": 1.5,
+      "odds": "-200",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "icehockey_nhl",
+      "event": "Minnesota Wild @ Edmonton Oilers",
+      "market": "spreads",
+      "team": "Minnesota Wild",
+      "line": 1.5,
+      "odds": "-200",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "basketball_nba",
+      "event": "Memphis Grizzlies @ San Antonio Spurs",
+      "market": "h2h",
+      "team": "San Antonio Spurs",
+      "line": 0,
+      "odds": "-198",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
       "sport": "americanfootball_nfl",
       "event": "Tennessee Titans @ Cleveland Browns",
       "market": "h2h",
       "team": "Cleveland Browns",
       "line": 0,
-      "odds": "-200",
+      "odds": "-198",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "icehockey_nhl",
+      "event": "Washington Capitals @ San Jose Sharks",
+      "market": "spreads",
+      "team": "San Jose Sharks",
+      "line": 1.5,
+      "odds": "-198",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "2025-12-03 00:44:22",
+      "sport": "americanfootball_nfl",
+      "event": "Indianapolis Colts @ Seattle Seahawks",
+      "market": "h2h",
+      "team": "Seattle Seahawks",
+      "line": 0,
+      "odds": "-197",
       "bet_amount": "2.00",
       "status": "open",
       "result": "",
@@ -142,67 +142,7 @@
       "line": 0,
       "odds": -200,
       "score": 0.3333,
-      "game_time": "2025-12-03 00:41:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 00:41:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 00:41:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 00:41:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Portland Trail Blazers @ Toronto Raptors",
-      "market": "h2h",
-      "team": "Toronto Raptors",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 00:41:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Memphis Grizzlies @ San Antonio Spurs",
-      "market": "h2h",
-      "team": "San Antonio Spurs",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 01:10:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Memphis Grizzlies @ San Antonio Spurs",
-      "market": "h2h",
-      "team": "San Antonio Spurs",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 01:10:00"
+      "game_time": "2025-12-03 00:42:00"
     },
     {
       "sport": "basketball_nba",
@@ -226,13 +166,73 @@
     },
     {
       "sport": "americanfootball_nfl",
+      "event": "Indianapolis Colts @ Seattle Seahawks",
+      "market": "h2h",
+      "team": "Seattle Seahawks",
+      "line": 0,
+      "odds": -200,
+      "score": 0.3333,
+      "game_time": "2025-12-14 21:25:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Toronto Maple Leafs @ Florida Panthers",
+      "market": "spreads",
+      "team": "Toronto Maple Leafs",
+      "line": 1.5,
+      "odds": -200,
+      "score": 0.3333,
+      "game_time": "2025-12-03 00:38:36"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Minnesota Wild @ Edmonton Oilers",
+      "market": "spreads",
+      "team": "Minnesota Wild",
+      "line": 1.5,
+      "odds": -200,
+      "score": 0.3333,
+      "game_time": "2025-12-03 02:10:00"
+    },
+    {
+      "sport": "basketball_nba",
+      "event": "Memphis Grizzlies @ San Antonio Spurs",
+      "market": "h2h",
+      "team": "San Antonio Spurs",
+      "line": 0,
+      "odds": -198,
+      "score": 0.3289,
+      "game_time": "2025-12-03 01:10:00"
+    },
+    {
+      "sport": "americanfootball_nfl",
       "event": "Tennessee Titans @ Cleveland Browns",
       "market": "h2h",
       "team": "Cleveland Browns",
       "line": 0,
-      "odds": -200,
-      "score": 0.3333,
+      "odds": -198,
+      "score": 0.3289,
       "game_time": "2025-12-07 18:00:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Washington Capitals @ San Jose Sharks",
+      "market": "spreads",
+      "team": "San Jose Sharks",
+      "line": 1.5,
+      "odds": -198,
+      "score": 0.3289,
+      "game_time": "2025-12-04 03:00:00"
+    },
+    {
+      "sport": "americanfootball_nfl",
+      "event": "Indianapolis Colts @ Seattle Seahawks",
+      "market": "h2h",
+      "team": "Seattle Seahawks",
+      "line": 0,
+      "odds": -197,
+      "score": 0.3266,
+      "game_time": "2025-12-14 21:25:00"
     }
   ]
 }
