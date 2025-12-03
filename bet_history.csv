@@ -24,3 +24,5 @@ timestamp,sport,event,market,team,line,odds,bet_amount,status,result,pnl
 12/03/25 04:40,icehockey_nhl,Winnipeg Jets @ Montréal Canadiens,totals,under,6.0,107,2.00,open,,
 12/03/25 13:54,basketball_nba,Denver Nuggets @ Indiana Pacers,totals,over,237.0,-110,2.00,open,,
 12/03/25 13:54,basketball_nba,San Antonio Spurs @ Orlando Magic,totals,over,236.0,-110,2.00,open,,
+12/03/25 16:28,soccer_epl,West Ham United @ Manchester United,h2h,Manchester United,0.0,-210,2.00,open,,
+12/03/25 16:28,americanfootball_nfl,Dallas Cowboys @ Detroit Lions,h2h,Dallas Cowboys,0.0,140,2.00,open,,
