@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 08:30:09 UTC",
+  "last_updated": "2025-12-03 09:12:33 UTC",
   "open_bets": [
     {
       "timestamp": "12/03/25 00:15",
@@ -222,6 +222,32 @@
       "status": "open",
       "result": "",
       "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 02:12",
+      "sport": "basketball_nba",
+      "event": "Portland Trail Blazers @ Cleveland Cavaliers",
+      "market": "totals",
+      "team": "over",
+      "line": "239.0",
+      "odds": "-110",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 02:12",
+      "sport": "icehockey_nhl",
+      "event": "Washington Capitals @ San Jose Sharks",
+      "market": "totals",
+      "team": "over",
+      "line": "6.5",
+      "odds": "110",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
     }
   ],
   "todays_picks": [
@@ -232,8 +258,19 @@
       "team": "under",
       "line": 2.5,
       "odds": 110,
-      "score": 0.8429,
-      "win_probability": 0.5862,
+      "score": 0.8499,
+      "win_probability": 0.5883,
+      "game_time": "2025-12-03 12:30:00"
+    },
+    {
+      "sport": "soccer_epl",
+      "event": "Aston Villa @ Brighton and Hove Albion",
+      "market": "totals",
+      "team": "over",
+      "line": 2.5,
+      "odds": -110,
+      "score": 0.8499,
+      "win_probability": 0.6217,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -243,8 +280,8 @@
       "team": "Burnley",
       "line": 0.75,
       "odds": -110,
-      "score": 0.8429,
-      "win_probability": 0.6195,
+      "score": 0.8499,
+      "win_probability": 0.6217,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -254,19 +291,8 @@
       "team": "Chelsea",
       "line": -0.5,
       "odds": -110,
-      "score": 0.8357,
-      "win_probability": 0.6174,
-      "game_time": "2025-12-03 13:15:00"
-    },
-    {
-      "sport": "soccer_epl",
-      "event": "Sunderland @ Liverpool",
-      "market": "totals",
-      "team": "under",
-      "line": 3.0,
-      "odds": -110,
-      "score": 0.8357,
-      "win_probability": 0.6174,
+      "score": 0.8425,
+      "win_probability": 0.6194,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -275,21 +301,10 @@
       "market": "h2h",
       "team": "Dallas Mavericks",
       "line": 0.0,
-      "odds": 152,
-      "score": 0.8282,
-      "win_probability": 0.5262,
+      "odds": 150,
+      "score": 0.8383,
+      "win_probability": 0.5315,
       "game_time": "2025-12-03 18:30:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Detroit Pistons @ Milwaukee Bucks",
-      "market": "h2h",
-      "team": "Milwaukee Bucks",
-      "line": 0.0,
-      "odds": 146,
-      "score": 0.824,
-      "win_probability": 0.5317,
-      "game_time": "2025-12-03 18:11:00"
     },
     {
       "sport": "icehockey_nhl",
@@ -298,8 +313,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.8038,
-      "win_probability": 0.5745,
+      "score": 0.8094,
+      "win_probability": 0.5761,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -309,8 +324,8 @@
       "team": "Cleveland Cavaliers",
       "line": -10.0,
       "odds": -110,
-      "score": 0.8025,
-      "win_probability": 0.6074,
+      "score": 0.808,
+      "win_probability": 0.6091,
       "game_time": "2025-12-03 17:10:00"
     },
     {
@@ -320,20 +335,20 @@
       "team": "Portland Trail Blazers",
       "line": 10.0,
       "odds": -110,
-      "score": 0.8025,
-      "win_probability": 0.6074,
+      "score": 0.808,
+      "win_probability": 0.6091,
       "game_time": "2025-12-03 17:10:00"
     },
     {
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
+      "sport": "basketball_nba",
+      "event": "Portland Trail Blazers @ Cleveland Cavaliers",
       "market": "totals",
       "team": "over",
-      "line": 6.5,
-      "odds": 110,
-      "score": 0.8,
-      "win_probability": 0.5733,
-      "game_time": "2025-12-03 17:30:00"
+      "line": 239.0,
+      "odds": -110,
+      "score": 0.808,
+      "win_probability": 0.6091,
+      "game_time": "2025-12-03 17:10:00"
     },
     {
       "sport": "icehockey_nhl",
@@ -342,8 +357,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 112,
-      "score": 0.7834,
-      "win_probability": 0.5652,
+      "score": 0.7887,
+      "win_probability": 0.5668,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -353,9 +368,20 @@
       "team": "over",
       "line": 6.0,
       "odds": -108,
-      "score": 0.7834,
-      "win_probability": 0.5985,
+      "score": 0.7887,
+      "win_probability": 0.6001,
       "game_time": "2025-12-03 17:30:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Washington Capitals @ San Jose Sharks",
+      "market": "totals",
+      "team": "over",
+      "line": 6.5,
+      "odds": 110,
+      "score": 0.7871,
+      "win_probability": 0.5695,
+      "game_time": "2025-12-03 20:00:00"
     }
   ],
   "new_picks_generated": true,
@@ -368,5 +394,7 @@
   "streak": {
     "current": 0,
     "best": 0
-  }
+  },
+  "bankroll_history": [],
+  "market_roi": {}
 }
