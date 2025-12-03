@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <title>SmartPicksGPT v2 Dashboard</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js for exposure charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- ONLY ONE SCRIPT -->
-  <script defer src="app.js?v=9"></script>
+  <!-- Single app entrypoint -->
+  <script defer src="app.js?v=2"></script>
 </head>
 
 <body>
@@ -29,8 +31,11 @@
   </nav>
 
   <main class="tab-container">
+    <!-- Filled by JS -->
     <section id="summary" class="tab-content active"></section>
+
     <section id="picks" class="tab-content"></section>
+
     <section id="analytics" class="tab-content">
       <div class="section-title">Exposure & Analytics</div>
       <div class="analytics-grid">
