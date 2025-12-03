@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 07:15:36 UTC",
+  "last_updated": "2025-12-03 07:20:28 UTC",
   "open_bets": [
     {
       "timestamp": "12/03/25 00:15",
@@ -157,6 +157,19 @@
       "status": "open",
       "result": "",
       "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 00:20",
+      "sport": "soccer_epl",
+      "event": "Brentford @ Arsenal",
+      "market": "totals",
+      "team": "under",
+      "line": "2.75",
+      "odds": "-112",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
     }
   ],
   "todays_picks": [
@@ -167,19 +180,8 @@
       "team": "under",
       "line": 2.5,
       "odds": 110,
-      "score": 0.8311,
-      "win_probability": 0.5827,
-      "game_time": "2025-12-03 12:30:00"
-    },
-    {
-      "sport": "soccer_epl",
-      "event": "Aston Villa @ Brighton and Hove Albion",
-      "market": "totals",
-      "team": "over",
-      "line": 2.5,
-      "odds": -110,
-      "score": 0.8311,
-      "win_probability": 0.616,
+      "score": 0.8319,
+      "win_probability": 0.5829,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -189,8 +191,8 @@
       "team": "Burnley",
       "line": 0.75,
       "odds": -110,
-      "score": 0.8311,
-      "win_probability": 0.616,
+      "score": 0.8319,
+      "win_probability": 0.6162,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -200,8 +202,8 @@
       "team": "under",
       "line": 3.0,
       "odds": -110,
-      "score": 0.8244,
-      "win_probability": 0.614,
+      "score": 0.8251,
+      "win_probability": 0.6142,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -211,9 +213,20 @@
       "team": "Dallas Mavericks",
       "line": 0.0,
       "odds": 152,
-      "score": 0.8213,
-      "win_probability": 0.5242,
+      "score": 0.8217,
+      "win_probability": 0.5243,
       "game_time": "2025-12-03 18:30:00"
+    },
+    {
+      "sport": "soccer_epl",
+      "event": "Brentford @ Arsenal",
+      "market": "totals",
+      "team": "under",
+      "line": 2.75,
+      "odds": -112,
+      "score": 0.8152,
+      "win_probability": 0.6144,
+      "game_time": "2025-12-03 12:30:00"
     },
     {
       "sport": "basketball_nba",
@@ -222,8 +235,8 @@
       "team": "Los Angeles Clippers",
       "line": 0.0,
       "odds": 141,
-      "score": 0.8048,
-      "win_probability": 0.5319,
+      "score": 0.8053,
+      "win_probability": 0.532,
       "game_time": "2025-12-03 17:40:00"
     },
     {
@@ -233,8 +246,8 @@
       "team": "Milwaukee Bucks",
       "line": 0.0,
       "odds": 141,
-      "score": 0.802,
-      "win_probability": 0.5311,
+      "score": 0.8024,
+      "win_probability": 0.5312,
       "game_time": "2025-12-03 18:11:00"
     },
     {
@@ -244,8 +257,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.7946,
-      "win_probability": 0.5717,
+      "score": 0.7951,
+      "win_probability": 0.5719,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -255,8 +268,8 @@
       "team": "Cleveland Cavaliers",
       "line": -10.0,
       "odds": -110,
-      "score": 0.7933,
-      "win_probability": 0.6047,
+      "score": 0.7939,
+      "win_probability": 0.6048,
       "game_time": "2025-12-03 17:10:00"
     },
     {
@@ -266,8 +279,8 @@
       "team": "over",
       "line": 6.5,
       "odds": 110,
-      "score": 0.791,
-      "win_probability": 0.5706,
+      "score": 0.7916,
+      "win_probability": 0.5708,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -277,8 +290,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 112,
-      "score": 0.7743,
-      "win_probability": 0.5625,
+      "score": 0.7749,
+      "win_probability": 0.5627,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -288,8 +301,8 @@
       "team": "over",
       "line": 6.0,
       "odds": -108,
-      "score": 0.7743,
-      "win_probability": 0.5958,
+      "score": 0.7749,
+      "win_probability": 0.5959,
       "game_time": "2025-12-03 17:30:00"
     }
   ],
