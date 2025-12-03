@@ -1,28 +1,13 @@
 timestamp,sport,event,market,team,line,odds,bet_amount,status,result,pnl
-2025-12-03 00:44:22,basketball_nba,Portland Trail Blazers @ Toronto Raptors,h2h,Toronto Raptors,0,-200,2.00,closed,won,4.00
-2025-12-03 00:44:22,basketball_nba,Memphis Grizzlies @ San Antonio Spurs,h2h,San Antonio Spurs,0,-200,2.00,closed,won,4.00
-2025-12-03 00:44:22,americanfootball_nfl,Tennessee Titans @ Cleveland Browns,h2h,Cleveland Browns,0,-200,2.00,open,,
-2025-12-03 00:44:22,americanfootball_nfl,Indianapolis Colts @ Seattle Seahawks,h2h,Seattle Seahawks,0,-200,2.00,open,,
-2025-12-03 00:44:22,icehockey_nhl,Toronto Maple Leafs @ Florida Panthers,spreads,Toronto Maple Leafs,1.5,-200,2.00,closed,won,4.00
-2025-12-03 00:44:22,icehockey_nhl,Minnesota Wild @ Edmonton Oilers,spreads,Minnesota Wild,1.5,-200,2.00,closed,won,4.00
-2025-12-03 00:44:22,icehockey_nhl,Washington Capitals @ San Jose Sharks,spreads,San Jose Sharks,1.5,-198,2.00,open,,
-2025-12-03 00:48:08,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,h2h,Buffalo Sabres,0,9,2.00,open,,
-2025-12-03 00:48:08,icehockey_nhl,Dallas Stars @ New Jersey Devils,totals,under,5.5,23,2.00,open,,
-2025-12-03 00:48:08,icehockey_nhl,Toronto Maple Leafs @ Florida Panthers,h2h,Toronto Maple Leafs,0,24,2.00,closed,won,0.48
-2025-12-03 00:48:08,icehockey_nhl,Minnesota Wild @ Edmonton Oilers,totals,under,6.0,24,2.00,closed,won,0.48
-2025-12-03 00:48:08,icehockey_nhl,Calgary Flames @ Nashville Predators,totals,over,6.0,30,2.00,closed,push,0.00
-2025-12-03 00:48:08,americanfootball_nfl,Green Bay Packers @ Denver Broncos,h2h,Denver Broncos,0,51,2.00,open,,
-2025-12-03 05:51:53,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,h2h,Buffalo Sabres,0,7,2.17,open,,
-2025-12-03 05:51:53,americanfootball_nfl,Miami Dolphins @ New York Jets,spreads,Miami Dolphins,-3.0,10,2.17,open,,
-2025-12-03 05:51:53,icehockey_nhl,Washington Capitals @ Los Angeles Kings,totals,over,4.5,42,2.17,closed,lost,-2.17
-12/02/25 23:56,soccer_epl,Brentford @ Arsenal,totals,under,2.5,110,2.00,open,,
-12/02/25 23:56,soccer_epl,Crystal Palace @ Burnley,spreads,Burnley,0.75,-110,2.00,open,,
-12/02/25 23:56,soccer_epl,Sunderland @ Liverpool,totals,under,3.0,-110,2.00,open,,
-12/02/25 23:56,basketball_nba,Miami Heat @ Dallas Mavericks,h2h,Dallas Mavericks,0.0,152,2.00,open,,
-12/02/25 23:56,soccer_epl,Crystal Palace @ Burnley,totals,over,2.25,-112,2.00,open,,
-12/02/25 23:56,basketball_nba,Los Angeles Clippers @ Atlanta Hawks,h2h,Los Angeles Clippers,0.0,141,2.00,open,,
-12/02/25 23:56,basketball_nba,Detroit Pistons @ Milwaukee Bucks,h2h,Milwaukee Bucks,0.0,141,2.00,open,,
-12/02/25 23:56,basketball_nba,Portland Trail Blazers @ Cleveland Cavaliers,spreads,Cleveland Cavaliers,-10.0,-110,2.00,open,,
-12/02/25 23:56,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,totals,over,6.5,110,2.00,open,,
-12/02/25 23:56,icehockey_nhl,Washington Capitals @ San Jose Sharks,totals,over,6.5,110,2.00,open,,
-12/02/25 23:56,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,totals,under,5.5,112,2.00,open,,
+12/03/25 00:15,soccer_epl,Brentford @ Arsenal,totals,under,2.5,110,2.00,open,,
+12/03/25 00:15,soccer_epl,Aston Villa @ Brighton and Hove Albion,totals,over,2.5,-110,2.00,open,,
+12/03/25 00:15,soccer_epl,Crystal Palace @ Burnley,spreads,Burnley,0.75,-110,2.00,open,,
+12/03/25 00:15,soccer_epl,Sunderland @ Liverpool,totals,under,3.0,-110,2.00,open,,
+12/03/25 00:15,basketball_nba,Miami Heat @ Dallas Mavericks,h2h,Dallas Mavericks,0.0,152,2.00,open,,
+12/03/25 00:15,basketball_nba,Los Angeles Clippers @ Atlanta Hawks,h2h,Los Angeles Clippers,0.0,141,2.00,open,,
+12/03/25 00:15,basketball_nba,Detroit Pistons @ Milwaukee Bucks,h2h,Milwaukee Bucks,0.0,141,2.00,open,,
+12/03/25 00:15,icehockey_nhl,Dallas Stars @ New Jersey Devils,totals,under,5.5,110,2.00,open,,
+12/03/25 00:15,basketball_nba,Portland Trail Blazers @ Cleveland Cavaliers,spreads,Cleveland Cavaliers,-10.0,-110,2.00,open,,
+12/03/25 00:15,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,totals,over,6.5,110,2.00,open,,
+12/03/25 00:15,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,totals,under,5.5,112,2.00,open,,
+12/03/25 00:15,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,totals,over,6.0,-108,2.00,open,,

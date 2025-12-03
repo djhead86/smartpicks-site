@@ -1,113 +1,9 @@
 {
-  "bankroll": 214.79,
-  "last_updated": "2025-12-03 06:56:52 UTC",
+  "bankroll": 200.0,
+  "last_updated": "2025-12-03 07:15:36 UTC",
   "open_bets": [
     {
-      "timestamp": "2025-12-03 00:44:22",
-      "sport": "americanfootball_nfl",
-      "event": "Tennessee Titans @ Cleveland Browns",
-      "market": "h2h",
-      "team": "Cleveland Browns",
-      "line": "0",
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:44:22",
-      "sport": "americanfootball_nfl",
-      "event": "Indianapolis Colts @ Seattle Seahawks",
-      "market": "h2h",
-      "team": "Seattle Seahawks",
-      "line": "0",
-      "odds": "-200",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:44:22",
-      "sport": "icehockey_nhl",
-      "event": "Washington Capitals @ San Jose Sharks",
-      "market": "spreads",
-      "team": "San Jose Sharks",
-      "line": "1.5",
-      "odds": "-198",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:48:08",
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
-      "market": "h2h",
-      "team": "Buffalo Sabres",
-      "line": "0",
-      "odds": "9",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:48:08",
-      "sport": "icehockey_nhl",
-      "event": "Dallas Stars @ New Jersey Devils",
-      "market": "totals",
-      "team": "under",
-      "line": "5.5",
-      "odds": "23",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 00:48:08",
-      "sport": "americanfootball_nfl",
-      "event": "Green Bay Packers @ Denver Broncos",
-      "market": "h2h",
-      "team": "Denver Broncos",
-      "line": "0",
-      "odds": "51",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 05:51:53",
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
-      "market": "h2h",
-      "team": "Buffalo Sabres",
-      "line": "0",
-      "odds": "7",
-      "bet_amount": "2.17",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "2025-12-03 05:51:53",
-      "sport": "americanfootball_nfl",
-      "event": "Miami Dolphins @ New York Jets",
-      "market": "spreads",
-      "team": "Miami Dolphins",
-      "line": "-3.0",
-      "odds": "10",
-      "bet_amount": "2.17",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "soccer_epl",
       "event": "Brentford @ Arsenal",
       "market": "totals",
@@ -120,7 +16,20 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
+      "sport": "soccer_epl",
+      "event": "Aston Villa @ Brighton and Hove Albion",
+      "market": "totals",
+      "team": "over",
+      "line": "2.5",
+      "odds": "-110",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 00:15",
       "sport": "soccer_epl",
       "event": "Crystal Palace @ Burnley",
       "market": "spreads",
@@ -133,7 +42,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "soccer_epl",
       "event": "Sunderland @ Liverpool",
       "market": "totals",
@@ -146,7 +55,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "basketball_nba",
       "event": "Miami Heat @ Dallas Mavericks",
       "market": "h2h",
@@ -159,20 +68,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
-      "sport": "soccer_epl",
-      "event": "Crystal Palace @ Burnley",
-      "market": "totals",
-      "team": "over",
-      "line": "2.25",
-      "odds": "-112",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "basketball_nba",
       "event": "Los Angeles Clippers @ Atlanta Hawks",
       "market": "h2h",
@@ -185,7 +81,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "basketball_nba",
       "event": "Detroit Pistons @ Milwaukee Bucks",
       "market": "h2h",
@@ -198,7 +94,20 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
+      "sport": "icehockey_nhl",
+      "event": "Dallas Stars @ New Jersey Devils",
+      "market": "totals",
+      "team": "under",
+      "line": "5.5",
+      "odds": "110",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 00:15",
       "sport": "basketball_nba",
       "event": "Portland Trail Blazers @ Cleveland Cavaliers",
       "market": "spreads",
@@ -211,7 +120,7 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "icehockey_nhl",
       "event": "Buffalo Sabres @ Philadelphia Flyers",
       "market": "totals",
@@ -224,26 +133,26 @@
       "pnl": ""
     },
     {
-      "timestamp": "12/02/25 23:56",
-      "sport": "icehockey_nhl",
-      "event": "Washington Capitals @ San Jose Sharks",
-      "market": "totals",
-      "team": "over",
-      "line": "6.5",
-      "odds": "110",
-      "bet_amount": "2.00",
-      "status": "open",
-      "result": "",
-      "pnl": ""
-    },
-    {
-      "timestamp": "12/02/25 23:56",
+      "timestamp": "12/03/25 00:15",
       "sport": "icehockey_nhl",
       "event": "Buffalo Sabres @ Philadelphia Flyers",
       "market": "totals",
       "team": "under",
       "line": "5.5",
       "odds": "112",
+      "bet_amount": "2.00",
+      "status": "open",
+      "result": "",
+      "pnl": ""
+    },
+    {
+      "timestamp": "12/03/25 00:15",
+      "sport": "icehockey_nhl",
+      "event": "Buffalo Sabres @ Philadelphia Flyers",
+      "market": "totals",
+      "team": "over",
+      "line": "6.0",
+      "odds": "-108",
       "bet_amount": "2.00",
       "status": "open",
       "result": "",
@@ -258,8 +167,19 @@
       "team": "under",
       "line": 2.5,
       "odds": 110,
-      "score": 0.8283,
-      "win_probability": 0.5818,
+      "score": 0.8311,
+      "win_probability": 0.5827,
+      "game_time": "2025-12-03 12:30:00"
+    },
+    {
+      "sport": "soccer_epl",
+      "event": "Aston Villa @ Brighton and Hove Albion",
+      "market": "totals",
+      "team": "over",
+      "line": 2.5,
+      "odds": -110,
+      "score": 0.8311,
+      "win_probability": 0.616,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -269,8 +189,8 @@
       "team": "Burnley",
       "line": 0.75,
       "odds": -110,
-      "score": 0.8283,
-      "win_probability": 0.6152,
+      "score": 0.8311,
+      "win_probability": 0.616,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -280,8 +200,8 @@
       "team": "under",
       "line": 3.0,
       "odds": -110,
-      "score": 0.8217,
-      "win_probability": 0.6132,
+      "score": 0.8244,
+      "win_probability": 0.614,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -291,20 +211,9 @@
       "team": "Dallas Mavericks",
       "line": 0.0,
       "odds": 152,
-      "score": 0.8196,
-      "win_probability": 0.5237,
+      "score": 0.8213,
+      "win_probability": 0.5242,
       "game_time": "2025-12-03 18:30:00"
-    },
-    {
-      "sport": "soccer_epl",
-      "event": "Crystal Palace @ Burnley",
-      "market": "totals",
-      "team": "over",
-      "line": 2.25,
-      "odds": -112,
-      "score": 0.8116,
-      "win_probability": 0.6133,
-      "game_time": "2025-12-03 12:30:00"
     },
     {
       "sport": "basketball_nba",
@@ -313,8 +222,8 @@
       "team": "Los Angeles Clippers",
       "line": 0.0,
       "odds": 141,
-      "score": 0.8031,
-      "win_probability": 0.5314,
+      "score": 0.8048,
+      "win_probability": 0.5319,
       "game_time": "2025-12-03 17:40:00"
     },
     {
@@ -324,8 +233,8 @@
       "team": "Milwaukee Bucks",
       "line": 0.0,
       "odds": 141,
-      "score": 0.8003,
-      "win_probability": 0.5305,
+      "score": 0.802,
+      "win_probability": 0.5311,
       "game_time": "2025-12-03 18:11:00"
     },
     {
@@ -335,8 +244,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.7923,
-      "win_probability": 0.571,
+      "score": 0.7946,
+      "win_probability": 0.5717,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -346,8 +255,8 @@
       "team": "Cleveland Cavaliers",
       "line": -10.0,
       "odds": -110,
-      "score": 0.7911,
-      "win_probability": 0.604,
+      "score": 0.7933,
+      "win_probability": 0.6047,
       "game_time": "2025-12-03 17:10:00"
     },
     {
@@ -357,20 +266,9 @@
       "team": "over",
       "line": 6.5,
       "odds": 110,
-      "score": 0.7888,
-      "win_probability": 0.57,
+      "score": 0.791,
+      "win_probability": 0.5706,
       "game_time": "2025-12-03 17:30:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Washington Capitals @ San Jose Sharks",
-      "market": "totals",
-      "team": "over",
-      "line": 6.5,
-      "odds": 110,
-      "score": 0.7724,
-      "win_probability": 0.5651,
-      "game_time": "2025-12-03 20:00:00"
     },
     {
       "sport": "icehockey_nhl",
@@ -379,31 +277,31 @@
       "team": "under",
       "line": 5.5,
       "odds": 112,
-      "score": 0.7721,
-      "win_probability": 0.5618,
+      "score": 0.7743,
+      "win_probability": 0.5625,
+      "game_time": "2025-12-03 17:30:00"
+    },
+    {
+      "sport": "icehockey_nhl",
+      "event": "Buffalo Sabres @ Philadelphia Flyers",
+      "market": "totals",
+      "team": "over",
+      "line": 6.0,
+      "odds": -108,
+      "score": 0.7743,
+      "win_probability": 0.5958,
       "game_time": "2025-12-03 17:30:00"
     }
   ],
   "new_picks_generated": true,
   "stats": {
-    "total_bets": 8,
-    "win_pct": 85.71428571428571,
-    "roi": 91.4656771799629,
-    "by_sport": {
-      "basketball_nba": {
-        "bets": 2,
-        "win_pct": 100.0,
-        "roi": 200.0
-      },
-      "icehockey_nhl": {
-        "bets": 6,
-        "win_pct": 80.0,
-        "roi": 55.79293344289237
-      }
-    }
+    "total_bets": 0,
+    "win_pct": 0.0,
+    "roi": 0.0,
+    "by_sport": {}
   },
   "streak": {
     "current": 0,
-    "best": 6
+    "best": 0
   }
 }
