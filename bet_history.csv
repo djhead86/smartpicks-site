@@ -14,4 +14,4 @@ timestamp,sport,event,market,team,line,odds,bet_amount,status,result,pnl
 2025-12-03 00:48:08,americanfootball_nfl,Green Bay Packers @ Denver Broncos,h2h,Denver Broncos,0,51,2.00,open,,
 2025-12-03 05:51:53,icehockey_nhl,Buffalo Sabres @ Philadelphia Flyers,h2h,Buffalo Sabres,0,7,2.17,open,,
 2025-12-03 05:51:53,americanfootball_nfl,Miami Dolphins @ New York Jets,spreads,Miami Dolphins,-3.0,10,2.17,open,,
-2025-12-03 05:51:53,icehockey_nhl,Washington Capitals @ Los Angeles Kings,totals,over,4.5,42,2.17,open,,
+2025-12-03 05:51:53,icehockey_nhl,Washington Capitals @ Los Angeles Kings,totals,over,4.5,42,2.17,closed,lost,-2.17
