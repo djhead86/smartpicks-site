@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SmartPicksGPT Dashboard</title>
+  <title>SmartPicksGPT v2 Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="app.js?v=4"></script>
-  <script src="tabs.js?v=4"></script>
 
-  <script defer src="app.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Main app (defer so DOM is ready) -->
+  <script defer src="app.js?v=2"></script>
 </head>
 
 <body>
@@ -25,15 +26,47 @@
   <nav class="tab-bar">
     <button class="tab-button active" data-tab="summary">Summary</button>
     <button class="tab-button" data-tab="picks">Today’s Picks</button>
-    <button class="tab-button" data-tab="analytics">Analytics</button>
-    <button class="tab-button" data-tab="history">Bet History</button>
+    <button class="tab-button" data-tab="analytics">Exposure & Analytics</button>
+    <button class="tab-button" data-tab="history">Open Bets</button>
   </nav>
 
   <main class="tab-container">
-    <section id="summary" class="tab-content active"></section>
-    <section id="picks" class="tab-content"></section>
-    <section id="analytics" class="tab-content"></section>
-    <section id="history" class="tab-content"></section>
+    <!-- SUMMARY TAB -->
+    <section id="summary" class="tab-content active">
+      <!-- Filled by app.js -->
+    </section>
+
+    <!-- PICKS TAB -->
+    <section id="picks" class="tab-content">
+      <!-- Filled by app.js -->
+    </section>
+
+    <!-- ANALYTICS TAB -->
+    <section id="analytics" class="tab-content">
+      <div class="section-title">Exposure & Analytics</div>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3>Risk by Sport (Open Bets)</h3>
+          <div class="chart-wrapper">
+            <canvas id="chartStakeBySport"></canvas>
+          </div>
+          <div id="sport-legend" class="small-metrics-grid"></div>
+        </div>
+
+        <div class="analytics-card">
+          <h3>Market Mix (Open Bets)</h3>
+          <div class="chart-wrapper">
+            <canvas id="chartMarketMix"></canvas>
+          </div>
+          <div id="market-legend" class="small-metrics-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section id="history" class="tab-content">
+      <!-- Filled by app.js -->
+    </section>
   </main>
 
   <footer class="footer">
@@ -41,4 +74,3 @@
   </footer>
 </body>
 </html>
-

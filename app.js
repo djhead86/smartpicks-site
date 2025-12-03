@@ -1,7 +1,7 @@
-// smartpicks-site/app.js
-// Minimal frontend wired to smart_picks v0.1.7 JSON
+// SmartPicksGPT v2 frontend
+// Fully wired to current data.json schema and adds EV, edge, exposure, charts
 
-const DATA_URL = "data/data.json?ts=${Date.now()}";
+const DATA_URL = `data/data.json?ts=${Date.now()}`;
 
 document.addEventListener("DOMContentLoaded", () => {
   setupTabs();
@@ -28,12 +28,14 @@ function setupTabs() {
   });
 }
 
-/* ========= LOAD DATA.JSON ========= */
+/* ========= LOAD & ENRICH DATA ========= */
 
 async function loadData() {
   try {
     const res = await fetch(DATA_URL, { cache: "no-store" });
-    const data = await res.json();
+    const raw = await res.json();
+
+    const data = enrichData(raw);
 
     renderSummaryTab(data);
     renderPicksTab(data);
@@ -42,29 +44,114 @@ async function loadData() {
     setLastUpdated(data.last_updated);
   } catch (err) {
     console.error("Failed to load data.json", err);
-    document.getElementById("summary").innerHTML =
-      "<p class='muted'>Failed to load SmartPicks data.json.</p>";
+    const summary = document.getElementById("summary");
+    if (summary) {
+      summary.innerHTML =
+        "<p class='muted'>Failed to load SmartPicks data.json.</p>";
+    }
   }
 }
 
-/* ========= HELPERS ========= */
+/**
+ * Enrich the backend JSON with:
+ * - implied probability, decimal odds, EV, edge, confidence
+ * - pick groups (by game)
+ * - exposure by sport & market
+ */
+function enrichData(data) {
+  const clone = structuredClone(data);
 
-function normalizeSport(sport) {
-  const map = {
-    basketball_nba: "NBA",
-    americanfootball_nfl: "NFL",
-    icehockey_nhl: "NHL",
-  };
-  return map[sport] || (sport ? sport.toUpperCase() : "Unknown");
+  const picks = clone.todays_picks || [];
+  const open = clone.open_bets || [];
+
+  // ---- Enrich picks with EV + edge + implied prob + confidence ----
+  const pickGroups = {};
+  picks.forEach((p) => {
+    const oddsNum = toNumber(p.odds);
+    const dec = americanToDecimal(oddsNum);
+    const implied = impliedProbFromAmerican(oddsNum);
+    const winProb = isFinite(p.win_probability)
+      ? p.win_probability
+      : null;
+
+    let edge = null;
+    let evUnits = null;
+    if (winProb !== null && isFinite(dec) && dec > 1) {
+      edge = winProb - implied;
+      evUnits = winProb * (dec - 1) - (1 - winProb);
+    }
+
+    p._decimal_odds = dec;
+    p._implied_prob = implied;
+    p._edge = edge;
+    p._ev_units = evUnits;
+    p._confidence = computeConfidence(p.score, edge);
+
+    const key = `${p.sport || "unknown"}__${p.event || "Unknown Event"}`;
+    if (!pickGroups[key]) {
+      pickGroups[key] = {
+        sport: p.sport || "unknown",
+        event: p.event || "Unknown Event",
+        game_time: p.game_time || "TBD",
+        picks: [],
+      };
+    }
+    pickGroups[key].picks.push(p);
+  });
+
+  clone._pick_groups = Object.values(pickGroups);
+
+  // ---- Enrich open bets with implied prob + payout ----
+  let totalStakeOpen = 0;
+  const sportRisk = {};
+  const marketMix = {};
+
+  open.forEach((b) => {
+    const stake = toNumber(b.bet_amount);
+    const oddsNum = toNumber(b.odds);
+    const dec = americanToDecimal(oddsNum);
+    const implied = impliedProbFromAmerican(oddsNum);
+
+    totalStakeOpen += stake;
+
+    const sportKey = b.sport || "unknown";
+    sportRisk[sportKey] = (sportRisk[sportKey] || 0) + stake;
+
+    const mktKey = b.market || "other";
+    marketMix[mktKey] = (marketMix[mktKey] || 0) + 1;
+
+    b._decimal_odds = dec;
+    b._implied_prob = implied;
+    b._potential_payout =
+      isFinite(dec) && dec > 0 ? stake * dec : null;
+  });
+
+  clone._total_stake_open = totalStakeOpen;
+  clone._sport_risk = sportRisk;
+  clone._market_mix = marketMix;
+
+  return clone;
 }
 
-function normalizeMarket(m) {
-  const map = {
-    h2h: "Moneyline",
-    spreads: "Spread",
-    totals: "Over/Under",
-  };
-  return map[m] || (m ? m.toUpperCase() : "—");
+/* ========= MATH HELPERS ========= */
+
+function toNumber(v, fallback = 0) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function americanToDecimal(odds) {
+  if (!Number.isFinite(odds) || odds === 0) return null;
+  if (odds > 0) return 1 + odds / 100;
+  return 1 + 100 / Math.abs(odds);
+}
+
+function impliedProbFromAmerican(odds) {
+  if (!Number.isFinite(odds) || odds === 0) return 0;
+  if (odds > 0) {
+    return 100 / (odds + 100);
+  }
+  return Math.abs(odds) / (Math.abs(odds) + 100);
 }
 
 function formatAmericanOdds(price) {
@@ -82,6 +169,25 @@ function formatMoney(x) {
   return x >= 0 ? `+$${x.toFixed(2)}` : `-$${Math.abs(x).toFixed(2)}`;
 }
 
+function normalizeSport(sport) {
+  const map = {
+    basketball_nba: "NBA",
+    americanfootball_nfl: "NFL",
+    icehockey_nhl: "NHL",
+    soccer_epl: "EPL",
+  };
+  return map[sport] || (sport ? sport.toUpperCase() : "Unknown");
+}
+
+function normalizeMarket(m) {
+  const map = {
+    h2h: "Moneyline",
+    spreads: "Spread",
+    totals: "Over/Under",
+  };
+  return map[m] || (m ? m.toUpperCase() : "—";
+}
+
 function classifyScoreBadge(score) {
   if (!Number.isFinite(score)) return "badge-ev-neutral";
   if (score > 0.05) return "badge-ev-positive";
@@ -89,23 +195,42 @@ function classifyScoreBadge(score) {
   return "badge-ev-neutral";
 }
 
+/**
+ * Very simple "confidence" heuristic:
+ * combines model score + edge into 1–5.
+ */
+function computeConfidence(score, edge) {
+  if (!Number.isFinite(score)) score = 0;
+  if (!Number.isFinite(edge)) edge = 0;
+
+  const sNorm = (score - 0.75) / 0.1; // rough
+  const eNorm = edge / 0.05; // 5% edge is big
+  let c = (sNorm + eNorm) / 2;
+  c = Math.max(0, Math.min(1.5, c));
+
+  const scaled = 1 + c * 4; // 1–5
+  return Math.round(scaled);
+}
+
 /* ========= SUMMARY TAB ========= */
 
 function renderSummaryTab(data) {
   const section = document.getElementById("summary");
+  if (!section) return;
 
   const stats = data.stats || {};
   const streak = data.streak || {};
 
-  const bankroll = data.bankroll ?? stats.bankroll ?? 0;
-  const wins = stats.wins || 0;
-  const losses = stats.losses || 0;
-  const pushes = stats.pushes || 0;
-  const totalBets = stats.lifetime_bets || wins + losses + pushes;
+  const bankroll = data.bankroll ?? 0;
+  const totalBets = stats.total_bets || 0;
+  const winPct = stats.win_pct || 0;
+  const roi = stats.roi || 0;
 
-  const winRate = stats.win_rate ?? (totalBets ? wins / totalBets : 0);
-  const roi = stats.lifetime_roi ?? 0;
   const currentStreak = streak.current ?? 0;
+  const bestStreak = streak.best ?? 0;
+
+  const openCount = (data.open_bets || []).length;
+  const totalStakeOpen = data._total_stake_open || 0;
 
   const streakLabel =
     currentStreak > 0
@@ -114,53 +239,81 @@ function renderSummaryTab(data) {
       ? `L${Math.abs(currentStreak)}`
       : "Even";
 
+  const sportRiskEntries = Object.entries(data._sport_risk || {}).sort(
+    (a, b) => b[1] - a[1]
+  );
+
   section.innerHTML = `
-    <div class="section-title">Bankroll & Performance</div>
+    <div class="section-title">Bankroll & Engine Snapshot</div>
 
     <div class="summary-grid">
       <div class="metric-card">
         <div class="metric-label">Bankroll</div>
         <div class="metric-value">$${bankroll.toFixed(2)}</div>
-        <div class="metric-sub">Starting from $${(stats.bankroll_start || 200).toFixed(2)}</div>
+        <div class="metric-sub">Live bankroll from engine</div>
       </div>
 
       <div class="metric-card">
-        <div class="metric-label">Record</div>
-        <div class="metric-value">${wins}-${losses}-${pushes}</div>
-        <div class="metric-sub">Total bets: ${totalBets}</div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-label">Win Rate</div>
-        <div class="metric-value">${formatPct(winRate)}</div>
+        <div class="metric-label">Total Bets Tracked</div>
+        <div class="metric-value">${totalBets}</div>
+        <div class="metric-sub">Win rate: ${formatPct(winPct)}</div>
       </div>
 
       <div class="metric-card">
         <div class="metric-label">Lifetime ROI</div>
         <div class="metric-value">${formatPct(roi)}</div>
+        <div class="metric-sub">Based on graded bets only</div>
       </div>
 
       <div class="metric-card">
         <div class="metric-label">Current Streak</div>
         <div class="metric-value">${streakLabel}</div>
-        <div class="metric-sub">
-          Best: W${streak.max_win_streak ?? 0} / Worst: L${Math.abs(
-    streak.max_loss_streak ?? 0
-  )}
-        </div>
+        <div class="metric-sub">Best streak: W${bestStreak}</div>
       </div>
 
       <div class="metric-card">
         <div class="metric-label">Open Bets</div>
-        <div class="metric-value">${(data.open_bets || []).length}</div>
-        <div class="metric-sub">${data.new_picks_generated ? "New picks added this run" : "No new picks this run"}</div>
+        <div class="metric-value">${openCount}</div>
+        <div class="metric-sub">Total stake: $${totalStakeOpen.toFixed(2)}</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Engine State</div>
+        <div class="metric-value">${
+          data.new_picks_generated ? "New picks ✅" : "No new picks"
+        }</div>
+        <div class="metric-sub">
+          SmartPicksGPT grades results, updates bankroll, and proposes a small set of value plays.
+        </div>
       </div>
     </div>
 
+    ${
+      sportRiskEntries.length
+        ? `
+    <div class="section-title" style="margin-top:20px;">Risk by Sport (Open Bets)</div>
+    <div class="summary-grid">
+      ${sportRiskEntries
+        .slice(0, 4)
+        .map(
+          ([sport, stake]) => `
+        <div class="metric-card metric-card-compact">
+          <div class="metric-label">${normalizeSport(sport)}</div>
+          <div class="metric-value">$${stake.toFixed(2)}</div>
+          <div class="metric-sub">Open stake</div>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+    `
+        : ""
+    }
+
     <div class="summary-blurb">
-      SmartPicksGPT is a small, disciplined engine that grades past bets, updates bankroll,
-      and proposes a limited set of value plays based on odds, injuries, and simple risk rules.
-      For educational use only.
+      SmartPicksGPT is an experimental, disciplined betting engine. It is designed to
+      keep bet sizing small, focus on EV-positive spots, and control volatility.
+      This dashboard surfaces edge, exposure, and risk profiles from the underlying JSON.
     </div>
   `;
 }
@@ -169,135 +322,233 @@ function renderSummaryTab(data) {
 
 function renderPicksTab(data) {
   const section = document.getElementById("picks");
-  const picks = data.todays_picks || [];
+  if (!section) return;
 
-  // === 72-HOUR TIME FILTER ===
-  const now = new Date();
-  const MAX_HOURS = 72;
-
-  const filtered = picks.filter(p => {
-    const gt = new Date(p.game_time);
-    const hoursAhead = (gt - now) / (1000 * 60 * 60);
-    return hoursAhead >= 0 && hoursAhead <= MAX_HOURS;
-  });
-
-  if (!filtered.length) {
+  const groups = data._pick_groups || [];
+  if (!groups.length) {
     section.innerHTML = `
       <p class="muted">
-        No picks scheduled in the next 72 hours.
+        No SmartPicks for the current slate. When the engine generates new value plays,
+        they will appear here grouped by game.
       </p>`;
     return;
   }
 
-  // === RENDER PICK CARDS ===
+  // Sort groups by earliest game time
+  groups.sort((a, b) => {
+    const ta = new Date(a.game_time || 0).getTime();
+    const tb = new Date(b.game_time || 0).getTime();
+    return ta - tb;
+  });
+
   section.innerHTML = `
-    <div class="section-title">Upcoming Picks (Next 72 Hours)</div>
+    <div class="section-title">Today’s SmartPicks (Grouped by Game)</div>
     <div class="picks-grid">
-      ${filtered
-        .map((p, i) => {
-          const match = p.event || p.event_name || "";
-          const when = p.game_time || "TBD";
-          const prob = Number.isFinite(p.win_probability)
-            ? (p.win_probability * 100).toFixed(1) + "%"
-            : "—";
-
-          return `
-            <article class="pick-card">
-              <div class="pick-header">
-                <div>
-                  <div class="pick-rank">#${i + 1}</div>
-                  <div class="pick-main">
-                    ${p.team}
-                    <span class="pick-match">${match}</span>
-                  </div>
-                </div>
-                <div class="pick-rank">${normalizeMarket(p.market)}</div>
-              </div>
-
-              <div class="pick-match">${when}</div>
-
-              <div class="pick-meta-row">
-                <span class="badge badge-sport">${normalizeSport(p.sport)}</span>
-                <span class="badge badge-price">Odds: ${formatAmericanOdds(
-                  p.odds
-                )}</span>
-                <span class="badge ${classifyScoreBadge(
-                  p.score
-                )}">Score: ${p.score.toFixed(3)}</span>
-                <span class="badge badge-price">Win prob: ${prob}</span>
-              </div>
-
-              <p class="pick-reason">
-                Simple value signal based on probability edges and conservative risk rules.
-              </p>
-            </article>
-          `;
-        })
+      ${groups
+        .map((g) => renderPickGroupCard(g))
         .join("")}
     </div>
   `;
 }
 
+function renderPickGroupCard(group) {
+  const when = group.game_time || "TBD";
+  const sportLabel = normalizeSport(group.sport);
 
-/* ========= ANALYTICS TAB ========= */
+  // Sort picks in this game by score descending
+  const picks = [...group.picks].sort((a, b) => b.score - a.score);
 
-function renderAnalyticsTab(data) {
-  const section = document.getElementById("analytics");
-  const stats = data.stats || {};
-  const breakdown = stats.sport_breakdown || {};
+  return `
+    <article class="pick-card pick-group-card">
+      <header class="pick-group-header">
+        <div>
+          <div class="pick-main">${group.event}</div>
+          <div class="pick-match">${sportLabel} &bull; ${when}</div>
+        </div>
+        <div class="pick-group-tag">SmartPicks Stack</div>
+      </header>
 
-  const rows = Object.entries(breakdown).map(([sport, s]) => {
-    const roi = Number.isFinite(s.roi) ? (s.roi * 100).toFixed(1) + "%" : "—";
-    const stake = Number.isFinite(s.stake) ? `$${s.stake.toFixed(2)}` : "—";
-    const pnl = Number.isFinite(s.pnl) ? formatMoney(s.pnl) : "—";
+      <div class="pick-rows">
+        ${picks.map(renderPickRow).join("")}
+      </div>
+    </article>
+  `;
+}
 
-    return `
-      <tr>
-        <td>${normalizeSport(sport)}</td>
-        <td>${s.wins}</td>
-        <td>${s.losses}</td>
-        <td>${s.pushes}</td>
-        <td>${stake}</td>
-        <td>${pnl}</td>
-        <td>${roi}</td>
-      </tr>
-    `;
-  });
+function renderPickRow(p) {
+  const oddsNum = toNumber(p.odds);
+  const implied = p._implied_prob;
+  const winProb = p.win_probability;
+  const edge = p._edge;
+  const evUnits = p._ev_units;
+  const confidence = p._confidence;
 
-  section.innerHTML = `
-    <div class="section-title">Sport Breakdown</div>
+  const confidenceLabel = "★".repeat(confidence || 1);
 
-    <div class="analytics-card">
-      <div class="table-wrapper">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Sport</th>
-              <th>W</th>
-              <th>L</th>
-              <th>P</th>
-              <th>Staked</th>
-              <th>PnL</th>
-              <th>ROI</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${
-              rows.length
-                ? rows.join("")
-                : `<tr><td colspan="7" class="muted">No graded bets yet.</td></tr>`
-            }
-          </tbody>
-        </table>
+  return `
+    <div class="pick-row">
+      <div class="pick-row-main">
+        <div>
+          <div class="pick-row-title">
+            ${p.team} (${normalizeMarket(p.market)}) ${p.line != null ? `@ ${p.line}` : ""}
+          </div>
+          <div class="pick-row-sub">
+            Odds ${formatAmericanOdds(oddsNum)} &bull;
+            Model win: ${formatPct(winProb)} &bull;
+            Implied: ${formatPct(implied)}
+          </div>
+        </div>
+        <div class="pick-row-right">
+          <span class="confidence-pill">Conf: ${confidenceLabel}</span>
+        </div>
+      </div>
+
+      <div class="pick-row-meta">
+        <span class="badge ${
+          classifyScoreBadge(edge || 0)
+        }">Edge: ${Number.isFinite(edge) ? (edge * 100).toFixed(1) + "%" : "—"}</span>
+        <span class="badge badge-price">
+          EV (1u): ${
+            Number.isFinite(evUnits) ? evUnits.toFixed(3) + "u" : "—"
+          }
+        </span>
+        <span class="badge badge-sport">Score: ${p.score.toFixed(4)}</span>
       </div>
     </div>
   `;
 }
 
-/* ========= HISTORY TAB ========= */
+/* ========= ANALYTICS TAB ========= */
+
+let stakeBySportChart = null;
+let marketMixChart = null;
+
+function renderAnalyticsTab(data) {
+  const sportRisk = data._sport_risk || {};
+  const marketMix = data._market_mix || {};
+
+  const sportCanvas = document.getElementById("chartStakeBySport");
+  const marketCanvas = document.getElementById("chartMarketMix");
+
+  // --- Risk by sport (bar chart) ---
+  if (sportCanvas && Object.keys(sportRisk).length) {
+    const labels = Object.keys(sportRisk).map((s) => normalizeSport(s));
+    const values = Object.values(sportRisk);
+
+    if (stakeBySportChart) {
+      stakeBySportChart.destroy();
+    }
+
+    stakeBySportChart = new Chart(sportCanvas.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Open Stake ($)",
+            data: values,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#cbd5f5" },
+          },
+          y: {
+            ticks: { color: "#cbd5f5" },
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+
+    const legendEl = document.getElementById("sport-legend");
+    if (legendEl) {
+      legendEl.innerHTML = labels
+        .map(
+          (label, idx) => `
+        <div class="small-metric">
+          <strong>${label}</strong><br />
+          $${values[idx].toFixed(2)} open
+        </div>
+      `
+        )
+        .join("");
+    }
+  } else {
+    const legendEl = document.getElementById("sport-legend");
+    if (legendEl) {
+      legendEl.innerHTML =
+        "<span class='muted'>No open bets to chart.</span>";
+    }
+  }
+
+  // --- Market mix (pie chart) ---
+  if (marketCanvas && Object.keys(marketMix).length) {
+    const labels = Object.keys(marketMix).map((m) => normalizeMarket(m));
+    const values = Object.values(marketMix);
+
+    if (marketMixChart) {
+      marketMixChart.destroy();
+    }
+
+    marketMixChart = new Chart(marketCanvas.getContext("2d"), {
+      type: "pie",
+      data: {
+        labels,
+        datasets: [
+          {
+            data: values,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#cbd5f5",
+            },
+          },
+        },
+      },
+    });
+
+    const legendEl = document.getElementById("market-legend");
+    if (legendEl) {
+      legendEl.innerHTML = labels
+        .map(
+          (label, idx) => `
+        <div class="small-metric">
+          <strong>${label}</strong><br />
+          ${values[idx]} open bet(s)
+        </div>
+      `
+        )
+        .join("");
+    }
+  } else {
+    const legendEl = document.getElementById("market-legend");
+    if (legendEl) {
+      legendEl.innerHTML =
+        "<span class='muted'>No open bets to chart.</span>";
+    }
+  }
+}
+
+/* ========= HISTORY / OPEN BETS TAB ========= */
 
 function renderHistoryTab(data) {
   const section = document.getElementById("history");
+  if (!section) return;
+
   const open = data.open_bets || [];
 
   if (!open.length) {
@@ -309,8 +560,37 @@ function renderHistoryTab(data) {
     return;
   }
 
+  const rows = open
+    .map((r) => {
+      const oddsNum = toNumber(r.odds);
+      const implied = r._implied_prob;
+      const payout = r._potential_payout;
+      const stake = toNumber(r.bet_amount);
+
+      return `
+        <tr>
+          <td>${r.timestamp || "—"}</td>
+          <td>${normalizeSport(r.sport)}</td>
+          <td>${r.event}</td>
+          <td>${normalizeMarket(r.market)}</td>
+          <td>${r.team}</td>
+          <td>${r.line ?? "—"}</td>
+          <td>${formatAmericanOdds(oddsNum)}</td>
+          <td>$${stake.toFixed(2)}</td>
+          <td>${formatPct(implied)}</td>
+          <td>${
+            Number.isFinite(payout)
+              ? "$" + payout.toFixed(2)
+              : "—"
+          }</td>
+          <td>${r.status || "open"}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
   section.innerHTML = `
-    <div class="section-title">Open Bets</div>
+    <div class="section-title">Open Bets (Raw Feed)</div>
 
     <div class="table-wrapper">
       <table class="history-table">
@@ -324,25 +604,13 @@ function renderHistoryTab(data) {
             <th>Line</th>
             <th>Odds</th>
             <th>Stake</th>
+            <th>Implied</th>
+            <th>Potential Payout</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          ${open
-            .map((r) => {
-              return `
-              <tr>
-                <td>${r.timestamp || "—"}</td>
-                <td>${normalizeSport(r.sport)}</td>
-                <td>${r.event}</td>
-                <td>${normalizeMarket(r.market)}</td>
-                <td>${r.team}</td>
-                <td>${r.line ?? 0}</td>
-                <td>${formatAmericanOdds(Number(r.odds))}</td>
-                <td>$${Number(r.bet_amount || 0).toFixed(2)}</td>
-              </tr>
-            `;
-            })
-            .join("")}
+          ${rows}
         </tbody>
       </table>
     </div>
