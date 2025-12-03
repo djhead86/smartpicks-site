@@ -14,6 +14,7 @@ import requests
 CONFIG_FILE = "config.json"
 HISTORY_FILE = "bet_history.csv"
 DATA_FILE = "data.json"
+CLEANUP_FLAG = "cleanup_done.flag"
 
 SPORTS = {
     "basketball_nba": "NBA",
@@ -62,6 +63,8 @@ def read_history():
 
 def write_history(rows):
     if not rows:
+        # if no rows, still ensure header exists
+        ensure_history_file()
         return
     with open(HISTORY_FILE, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=rows[0].keys())
@@ -70,10 +73,58 @@ def write_history(rows):
 
 
 def normalize_str(s: str) -> str:
-    """Lowercase, strip whitespace, collapse spaces."""
+    """Lowercase, strip whitespace, collapse internal spaces."""
     if s is None:
         return ""
     return " ".join(str(s).strip().lower().split())
+
+
+# -------------------------------------------------------------
+# ONE-TIME HISTORY CLEANUP
+# -------------------------------------------------------------
+
+def cleanup_history_once():
+    """Run exactly once to remove duplicate bets from old runs.
+
+    Duplicates are defined as rows sharing the same
+    (sport, event, market, team) after normalization.
+    We keep the first occurrence (oldest) and drop later ones.
+    """
+    if os.path.exists(CLEANUP_FLAG):
+        return
+
+    if not os.path.exists(HISTORY_FILE):
+        # nothing to clean, but mark cleanup as done
+        with open(CLEANUP_FLAG, "w") as f:
+            f.write("no history to clean\n")
+        return
+
+    rows = read_history()
+    if not rows:
+        with open(CLEANUP_FLAG, "w") as f:
+            f.write("empty history\n")
+        return
+
+    seen = set()
+    cleaned = []
+
+    for r in rows:
+        key = (
+            normalize_str(r.get("sport")),
+            normalize_str(r.get("event")),
+            normalize_str(r.get("market")),
+            normalize_str(r.get("team")),
+        )
+        if key in seen:
+            # drop duplicate from older buggy runs
+            continue
+        seen.add(key)
+        cleaned.append(r)
+
+    write_history(cleaned)
+
+    with open(CLEANUP_FLAG, "w") as f:
+        f.write(f"cleanup completed at {datetime.now(timezone.utc)}\n")
 
 
 # -------------------------------------------------------------
@@ -108,7 +159,7 @@ def parse_score(game, team):
         if s.get("name") == team:
             try:
                 return int(s.get("score"))
-            except:
+            except Exception:
                 return 0
     return 0
 
@@ -258,7 +309,7 @@ def fetch_all_odds(api_key):
             if resp.status_code != 200:
                 continue
             games = resp.json()
-        except:
+        except Exception:
             continue
 
         for g in games:
@@ -274,7 +325,7 @@ def fetch_all_odds(api_key):
             try:
                 commence = g["commence_time"]
                 game_time = datetime.fromisoformat(commence.replace("Z", "+00:00"))
-            except:
+            except Exception:
                 game_time = None
 
             for bm in g.get("bookmakers", []):
@@ -290,7 +341,7 @@ def fetch_all_odds(api_key):
 
                         try:
                             odds_val = int(odds_val)
-                        except:
+                        except Exception:
                             continue
 
                         if abs(odds_val) > MAX_ODDS:
@@ -344,7 +395,6 @@ def fetch_all_odds(api_key):
             rec = agg[norm_key]
             rec["odds_sum"] += b["odds"]
             rec["odds_count"] += 1
-
             if rec["time"] is None and b["time"] is not None:
                 rec["time"] = b["time"]
 
@@ -397,6 +447,9 @@ def main():
 
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
+    # One-time cleanup of old duplicate rows
+    cleanup_history_once()
+
     # 1) Grade open bets
     history = read_history()
     history, delta = grade_open_bets(api_key, history)
@@ -406,12 +459,11 @@ def main():
     open_bets = [r for r in history if r.get("status") == "open"]
     open_count = len(open_bets)
 
-    # 2) DECISION: generate new picks only if below threshold
+    # 2) Decide whether to generate new picks
     allow_new_picks = open_count < MAX_OPEN_BETS
     picks = []
 
     if allow_new_picks:
-        # Fetch and filter new odds
         bets = fetch_all_odds(api_key)
 
         scored = []
@@ -423,15 +475,19 @@ def main():
 
         scored.sort(key=lambda x: x["score"], reverse=True)
 
-        # Only fill remaining slots
+        # Only fill remaining slots up to MAX_OPEN_BETS
         slots = MAX_OPEN_BETS - open_count
         picks = scored[:slots]
 
-        # Deduplicate logging
+        # Build set of existing open bet keys to avoid duplicates
         existing_open_keys = {
             (
-                r["sport"], r["event"], r["market"],
-                r["team"], str(r["line"]), str(r["odds"])
+                normalize_str(r["sport"]),
+                normalize_str(r["event"]),
+                normalize_str(r["market"]),
+                normalize_str(r["team"]),
+                round(float(r["line"] or 0), 2),
+                int(float(r["odds"])),
             )
             for r in history
             if r["status"] == "open"
@@ -441,8 +497,12 @@ def main():
 
         for p in picks:
             key = (
-                p["sport"], p["event"], p["market"],
-                p["team"], str(p["line"]), str(p["odds"])
+                normalize_str(p["sport"]),
+                normalize_str(p["event"]),
+                normalize_str(p["market"]),
+                normalize_str(p["team"]),
+                round(float(p["line"] or 0), 2),
+                int(p["odds"]),
             )
             if key in existing_open_keys:
                 continue
@@ -468,7 +528,10 @@ def main():
     json_picks = []
     for p in picks:
         t = p["time"]
-        t = t.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M:%S") if isinstance(t, datetime) else None
+        t_str = None
+        if isinstance(t, datetime):
+            t_str = t.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
         json_picks.append({
             "sport": p["sport"],
             "event": p["event"],
@@ -477,7 +540,7 @@ def main():
             "line": p["line"],
             "odds": p["odds"],
             "score": round(p["score"], 4),
-            "game_time": t,
+            "game_time": t_str,
         })
 
     output = {
