@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 07:58:31 UTC",
+  "last_updated": "2025-12-03 08:06:37 UTC",
   "open_bets": [
     {
       "timestamp": "12/03/25 00:15",
@@ -206,8 +206,8 @@
       "team": "under",
       "line": 2.5,
       "odds": 110,
-      "score": 0.8378,
-      "win_probability": 0.5847,
+      "score": 0.8391,
+      "win_probability": 0.5851,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -217,8 +217,8 @@
       "team": "Burnley",
       "line": 0.75,
       "odds": -110,
-      "score": 0.8378,
-      "win_probability": 0.618,
+      "score": 0.8391,
+      "win_probability": 0.6184,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -228,8 +228,8 @@
       "team": "under",
       "line": 3.0,
       "odds": -110,
-      "score": 0.8308,
-      "win_probability": 0.6159,
+      "score": 0.832,
+      "win_probability": 0.6163,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -239,8 +239,8 @@
       "team": "Brighton and Hove Albion",
       "line": -0.5,
       "odds": 109,
-      "score": 0.8295,
-      "win_probability": 0.5838,
+      "score": 0.8308,
+      "win_probability": 0.5842,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -250,20 +250,9 @@
       "team": "Dallas Mavericks",
       "line": 0.0,
       "odds": 152,
-      "score": 0.8252,
-      "win_probability": 0.5253,
+      "score": 0.8259,
+      "win_probability": 0.5256,
       "game_time": "2025-12-03 18:30:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Los Angeles Clippers @ Atlanta Hawks",
-      "market": "h2h",
-      "team": "Los Angeles Clippers",
-      "line": 0.0,
-      "odds": 141,
-      "score": 0.8089,
-      "win_probability": 0.5331,
-      "game_time": "2025-12-03 17:40:00"
     },
     {
       "sport": "basketball_nba",
@@ -271,10 +260,21 @@
       "market": "h2h",
       "team": "Milwaukee Bucks",
       "line": 0.0,
-      "odds": 141,
-      "score": 0.806,
-      "win_probability": 0.5322,
+      "odds": 146,
+      "score": 0.8217,
+      "win_probability": 0.5311,
       "game_time": "2025-12-03 18:11:00"
+    },
+    {
+      "sport": "basketball_nba",
+      "event": "Los Angeles Clippers @ Atlanta Hawks",
+      "market": "h2h",
+      "team": "Los Angeles Clippers",
+      "line": 0.0,
+      "odds": 140,
+      "score": 0.8067,
+      "win_probability": 0.5337,
+      "game_time": "2025-12-03 17:40:00"
     },
     {
       "sport": "icehockey_nhl",
@@ -283,8 +283,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.7998,
-      "win_probability": 0.5733,
+      "score": 0.8008,
+      "win_probability": 0.5736,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -294,8 +294,8 @@
       "team": "Cleveland Cavaliers",
       "line": -10.0,
       "odds": -110,
-      "score": 0.7986,
-      "win_probability": 0.6062,
+      "score": 0.7996,
+      "win_probability": 0.6065,
       "game_time": "2025-12-03 17:10:00"
     },
     {
@@ -305,8 +305,8 @@
       "team": "over",
       "line": 6.5,
       "odds": 110,
-      "score": 0.7961,
-      "win_probability": 0.5722,
+      "score": 0.7971,
+      "win_probability": 0.5725,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -316,8 +316,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 112,
-      "score": 0.7794,
-      "win_probability": 0.564,
+      "score": 0.7804,
+      "win_probability": 0.5643,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -327,8 +327,8 @@
       "team": "over",
       "line": 6.0,
       "odds": -108,
-      "score": 0.7794,
-      "win_probability": 0.5973,
+      "score": 0.7804,
+      "win_probability": 0.5976,
       "game_time": "2025-12-03 17:30:00"
     }
   ],
