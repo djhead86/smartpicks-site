@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+SmartPicks v0.1.7-clean
+
+Goal:
+- Simple, disciplined betting analytics engine.
+- Safe bankroll growth from $200 → $2000.
+- No scope creep, minimal architecture, single-file script.
+"""
 
 import csv
 import json
@@ -7,9 +15,9 @@ import subprocess
 from datetime import datetime, timezone
 import requests
 
-# -------------------------------------------------------------
-# CONFIG
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 1: CONFIG / CONSTANTS
+# ============================================================
 
 CONFIG_FILE = "config.json"
 HISTORY_FILE = "bet_history.csv"
@@ -24,17 +32,16 @@ SPORTS = {
 
 MARKETS = ["h2h", "spreads", "totals"]
 
-MAX_ODDS = 200
-TOP_N = 10
-MAX_OPEN_BETS = 10
+MAX_ODDS = 200           # Ignore absurd lines beyond this
+MAX_OPEN_BETS = 10       # Hard cap on simultaneous open bets
 
 INJURY_HEAVY_PENALTY = 0.30
 INJURY_LIGHT_PENALTY = 0.15
 
 
-# -------------------------------------------------------------
-# HELPERS
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 2: BASIC HELPERS
+# ============================================================
 
 def load_config():
     with open(CONFIG_FILE, "r") as f:
@@ -42,6 +49,7 @@ def load_config():
 
 
 def ensure_history_file():
+    """Ensure bet_history.csv exists with the correct header."""
     if not os.path.exists(HISTORY_FILE):
         with open(HISTORY_FILE, "w", newline="") as f:
             writer = csv.writer(f)
@@ -52,6 +60,7 @@ def ensure_history_file():
 
 
 def read_history():
+    """Read all rows from bet_history.csv into a list of dicts."""
     ensure_history_file()
     rows = []
     with open(HISTORY_FILE, "r") as f:
@@ -62,8 +71,9 @@ def read_history():
 
 
 def write_history(rows):
+    """Rewrite bet_history.csv with the given rows."""
     if not rows:
-        # if no rows, still ensure header exists
+        # If no rows, still ensure header exists
         ensure_history_file()
         return
     with open(HISTORY_FILE, "w", newline="") as f:
@@ -72,29 +82,39 @@ def write_history(rows):
         writer.writerows(rows)
 
 
-def normalize_str(s: str) -> str:
+def normalize_str(s):
     """Lowercase, strip whitespace, collapse internal spaces."""
     if s is None:
         return ""
     return " ".join(str(s).strip().lower().split())
 
 
-# -------------------------------------------------------------
-# ONE-TIME HISTORY CLEANUP
-# -------------------------------------------------------------
+def safe_float(x, default=0.0):
+    """Convert to float safely; fall back to default on error."""
+    try:
+        return float(x)
+    except Exception:
+        return default
+
+
+# ============================================================
+# SECTION 3: ONE-TIME HISTORY CLEANUP
+# ============================================================
 
 def cleanup_history_once():
-    """Run exactly once to remove duplicate bets from old runs.
+    """
+    Run exactly once to remove duplicate bets from old runs.
 
     Duplicates are defined as rows sharing the same
     (sport, event, market, team) after normalization.
     We keep the first occurrence (oldest) and drop later ones.
+    This is purely to clean up messy history from early versions.
     """
     if os.path.exists(CLEANUP_FLAG):
         return
 
     if not os.path.exists(HISTORY_FILE):
-        # nothing to clean, but mark cleanup as done
+        # Nothing to clean, but mark cleanup as done
         with open(CLEANUP_FLAG, "w") as f:
             f.write("no history to clean\n")
         return
@@ -116,7 +136,7 @@ def cleanup_history_once():
             normalize_str(r.get("team")),
         )
         if key in seen:
-            # drop duplicate from older buggy runs
+            # Drop duplicate from older buggy runs
             continue
         seen.add(key)
         cleaned.append(r)
@@ -127,11 +147,12 @@ def cleanup_history_once():
         f.write(f"cleanup completed at {datetime.now(timezone.utc)}\n")
 
 
-# -------------------------------------------------------------
-# GRADING PREVIOUS BETS
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 4: GRADING PREVIOUS BETS
+# ============================================================
 
 def fetch_scores(api_key, sport, days=3):
+    """Fetch recent scores for a given sport from The Odds API."""
     url = f"https://api.the-odds-api.com/v4/sports/{sport}/scores"
     params = {"apiKey": api_key, "daysFrom": days}
     try:
@@ -144,6 +165,7 @@ def fetch_scores(api_key, sport, days=3):
 
 
 def index_scores(scores):
+    """Index scores by 'away @ home' event string."""
     idx = {}
     for g in scores:
         away = g.get("away_team")
@@ -154,6 +176,7 @@ def index_scores(scores):
 
 
 def parse_score(game, team):
+    """Get the final score for a given team from a score object."""
     scores = game.get("scores", [])
     for s in scores:
         if s.get("name") == team:
@@ -165,10 +188,13 @@ def parse_score(game, team):
 
 
 def grade_open_bets(api_key, history):
+    """
+    Update open bets with results where games are completed.
+    Does not return bankroll; we compute bankroll from total PnL later.
+    """
     if not history:
-        return history, 0.0
+        return history
 
-    bankroll_delta = 0.0
     open_by_sport = {}
 
     for r in history:
@@ -194,8 +220,8 @@ def grade_open_bets(api_key, history):
 
             market = row["market"]
             team = row["team"]
-            odds = float(row["odds"])
-            stake = float(row["bet_amount"])
+            odds = safe_float(row["odds"])
+            stake = safe_float(row["bet_amount"])
 
             result = None
             pnl = 0.0
@@ -210,7 +236,7 @@ def grade_open_bets(api_key, history):
                     pnl = -stake
 
             elif market == "spreads":
-                line = float(row["line"])
+                line = safe_float(row["line"])
                 diff = (away_score - home_score) if team == away else (home_score - away_score)
                 adj = diff + line
                 if adj > 0:
@@ -223,7 +249,7 @@ def grade_open_bets(api_key, history):
                     pnl = -stake
 
             elif market == "totals":
-                line = float(row["line"])
+                line = safe_float(row["line"])
                 total = away_score + home_score
                 if team == "over":
                     if total > line:
@@ -248,16 +274,16 @@ def grade_open_bets(api_key, history):
                 row["status"] = "closed"
                 row["result"] = result
                 row["pnl"] = f"{pnl:.2f}"
-                bankroll_delta += pnl
 
-    return history, bankroll_delta
+    return history
 
 
-# -------------------------------------------------------------
-# INJURY DATA
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 5: INJURY DATA
+# ============================================================
 
 def fetch_event_meta(api_key, sport):
+    """Fetch event metadata (including injuries if available)."""
     url = f"https://api.the-odds-api.com/v4/sports/{sport}/events"
     try:
         resp = requests.get(url, params={"apiKey": api_key}, timeout=10)
@@ -270,6 +296,10 @@ def fetch_event_meta(api_key, sport):
 
 
 def injury_penalty(meta, team):
+    """
+    Compute a penalty factor based on injury status for the given team.
+    This reduces both the score and effective win probability.
+    """
     injuries = meta.get("injuries")
     if not isinstance(injuries, list):
         return 0.0
@@ -286,11 +316,15 @@ def injury_penalty(meta, team):
     return penalty
 
 
-# -------------------------------------------------------------
-# FETCH + NORMALIZE + AVG ODDS
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 6: FETCH + NORMALIZE + AVERAGE ODDS
+# ============================================================
 
 def fetch_all_odds(api_key):
+    """
+    Fetch odds for all configured sports and markets, normalize,
+    and aggregate across bookmakers via average odds.
+    """
     raw = []
 
     for sport in SPORTS.keys():
@@ -415,34 +449,181 @@ def fetch_all_odds(api_key):
     return deduped
 
 
-# -------------------------------------------------------------
-# SCORING
-# -------------------------------------------------------------
+# ============================================================
+# SECTION 7: SCORING + WIN PROBABILITY
+# ============================================================
 
-def implied_ev(odds):
+def implied_prob(odds):
+    """Convert American odds to implied probability (0–1)."""
+    odds = int(odds)
     if odds == 0:
         return 0.0
     if odds < 0:
-        p = abs(odds) / (abs(odds) + 100)
-    else:
-        p = 100 / (odds + 100)
+        return abs(odds) / (abs(odds) + 100)
+    return 100 / (odds + 100)
+
+
+def implied_ev(odds):
+    """A very simple EV-like score from implied probability."""
+    p = implied_prob(odds)
     return 2 * p - 1
 
 
 def score_bet(b):
+    """
+    Score a bet:
+    - Start with implied EV from odds.
+    - Subtract injury penalty.
+    """
     base = implied_ev(b["odds"])
     inj = injury_penalty(b["meta"], b["team"])
     return base - inj
 
 
-# -------------------------------------------------------------
-# MAIN EXECUTION
-# -------------------------------------------------------------
+def adjusted_win_probability(b):
+    """
+    Implied win probability adjusted by injury penalty, clamped to [0, 1].
+    """
+    p = implied_prob(b["odds"])
+    inj = injury_penalty(b["meta"], b["team"])
+    adj = p * max(0.0, 1.0 - inj)
+    return max(0.0, min(1.0, adj))
+
+
+# ============================================================
+# SECTION 8: ANALYTICS – STATS + STREAK
+# ============================================================
+
+def compute_stats(history, base_bankroll):
+    """
+    Compute lifetime stats and ROI from closed bets.
+    Returns a dict with:
+    - lifetime_bets
+    - wins, losses, pushes
+    - win_rate
+    - lifetime_roi
+    - sport_breakdown
+    - bankroll (base_bankroll + total_pnl)
+    """
+    closed = [
+        r for r in history
+        if r.get("status") == "closed" and r.get("result") in ("won", "lost", "push")
+    ]
+
+    total_bets = len(closed)
+    total_stake = sum(safe_float(r.get("bet_amount")) for r in closed)
+    total_pnl = sum(safe_float(r.get("pnl")) for r in closed)
+
+    wins = sum(1 for r in closed if r.get("result") == "won")
+    losses = sum(1 for r in closed if r.get("result") == "lost")
+    pushes = sum(1 for r in closed if r.get("result") == "push")
+
+    denom = wins + losses
+    win_rate = (wins / denom) if denom > 0 else 0.0
+    roi = (total_pnl / total_stake) if total_stake > 0 else 0.0
+
+    sport_breakdown = {}
+    for r in closed:
+        s = r.get("sport", "unknown")
+        sb = sport_breakdown.setdefault(s, {
+            "wins": 0,
+            "losses": 0,
+            "pushes": 0,
+            "stake": 0.0,
+            "pnl": 0.0,
+            "roi": 0.0,
+        })
+        sb["stake"] += safe_float(r.get("bet_amount"))
+        sb["pnl"] += safe_float(r.get("pnl"))
+        if r.get("result") == "won":
+            sb["wins"] += 1
+        elif r.get("result") == "lost":
+            sb["losses"] += 1
+        elif r.get("result") == "push":
+            sb["pushes"] += 1
+
+    for s, sb in sport_breakdown.items():
+        if sb["stake"] > 0:
+            sb["roi"] = sb["pnl"] / sb["stake"]
+        else:
+            sb["roi"] = 0.0
+
+    bankroll = base_bankroll + total_pnl
+
+    return {
+        "lifetime_bets": total_bets,
+        "wins": wins,
+        "losses": losses,
+        "pushes": pushes,
+        "win_rate": round(win_rate, 4),
+        "lifetime_roi": round(roi, 4),
+        "sport_breakdown": sport_breakdown,
+        "bankroll": round(bankroll, 2),
+    }
+
+
+def compute_streak(history):
+    """
+    Compute current streak and max win/loss streaks from closed bets.
+    current:
+      - positive => consecutive wins
+      - negative => consecutive losses
+      - zero => neutral/no data
+    """
+    closed = [
+        r for r in history
+        if r.get("status") == "closed" and r.get("result") in ("won", "lost", "push")
+    ]
+    if not closed:
+        return {"current": 0, "max_win_streak": 0, "max_loss_streak": 0}
+
+    def parse_ts(r):
+        try:
+            return datetime.fromisoformat(r.get("timestamp"))
+        except Exception:
+            return datetime.min
+
+    closed_sorted = sorted(closed, key=parse_ts)
+
+    current = 0
+    max_win = 0
+    max_loss = 0
+
+    for r in closed_sorted:
+        result = r.get("result")
+        if result == "won":
+            if current >= 0:
+                current += 1
+            else:
+                current = 1
+            if current > max_win:
+                max_win = current
+        elif result == "lost":
+            if current <= 0:
+                current -= 1
+            else:
+                current = -1
+            if current < max_loss:
+                max_loss = current
+        else:
+            # push -> do not reset streak, but don't extend it
+            continue
+
+    return {
+        "current": current,
+        "max_win_streak": max_win,
+        "max_loss_streak": max_loss,
+    }
+
+
+# ============================================================
+# SECTION 9: MAIN EXECUTION
+# ============================================================
 
 def main():
     config = load_config()
     api_key = config["ODDS_API_KEY"]
-    bankroll = float(config["BASE_BANKROLL"])
+    base_bankroll = float(config["BASE_BANKROLL"])
     stake_fraction = float(config["UNIT_FRACTION"])
 
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
@@ -452,14 +633,21 @@ def main():
 
     # 1) Grade open bets
     history = read_history()
-    history, delta = grade_open_bets(api_key, history)
-    bankroll += delta
+    history = grade_open_bets(api_key, history)
 
-    # Count open bets
+    # 2) Compute bankroll from full history PnL
+    total_pnl = sum(
+        safe_float(r.get("pnl"))
+        for r in history
+        if r.get("pnl") not in (None, "", " ")
+    )
+    bankroll = base_bankroll + total_pnl
+
+    # 3) Count open bets
     open_bets = [r for r in history if r.get("status") == "open"]
     open_count = len(open_bets)
 
-    # 2) Decide whether to generate new picks
+    # 4) Decide whether to generate new picks
     allow_new_picks = open_count < MAX_OPEN_BETS
     picks = []
 
@@ -521,10 +709,14 @@ def main():
                 "pnl": "",
             })
 
-    # Write updated history
+    # 5) Write updated history
     write_history(history)
 
-    # Build JSON
+    # 6) Compute analytics
+    stats = compute_stats(history, base_bankroll)
+    streak = compute_streak(history)
+
+    # 7) Build JSON picks
     json_picks = []
     for p in picks:
         t = p["time"]
@@ -540,21 +732,24 @@ def main():
             "line": p["line"],
             "odds": p["odds"],
             "score": round(p["score"], 4),
+            "win_probability": round(adjusted_win_probability(p), 4),
             "game_time": t_str,
         })
 
     output = {
-        "bankroll": round(bankroll, 2),
+        "bankroll": stats["bankroll"],
         "last_updated": ts,
         "open_bets": [r for r in history if r["status"] == "open"],
         "todays_picks": json_picks,
         "new_picks_generated": allow_new_picks,
+        "stats": stats,
+        "streak": streak,
     }
 
     with open(DATA_FILE, "w") as f:
         json.dump(output, f, indent=2)
 
-    # Git push
+    # 8) Git push
     try:
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"SmartPicks update {ts}"], check=True)

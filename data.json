@@ -1,6 +1,6 @@
 {
   "bankroll": 216.96,
-  "last_updated": "2025-12-03 05:51:53",
+  "last_updated": "2025-12-03 06:07:52",
   "open_bets": [
     {
       "timestamp": "2025-12-03 00:44:22",
@@ -86,7 +86,7 @@
       "event": "Buffalo Sabres @ Philadelphia Flyers",
       "market": "h2h",
       "team": "Buffalo Sabres",
-      "line": 0,
+      "line": "0",
       "odds": "7",
       "bet_amount": "2.17",
       "status": "open",
@@ -99,7 +99,7 @@
       "event": "Miami Dolphins @ New York Jets",
       "market": "spreads",
       "team": "Miami Dolphins",
-      "line": -3.0,
+      "line": "-3.0",
       "odds": "10",
       "bet_amount": "2.17",
       "status": "open",
@@ -112,7 +112,7 @@
       "event": "Washington Capitals @ Los Angeles Kings",
       "market": "totals",
       "team": "over",
-      "line": 4.5,
+      "line": "4.5",
       "odds": "42",
       "bet_amount": "2.17",
       "status": "open",
@@ -129,38 +129,41 @@
       "line": 0,
       "odds": 7,
       "score": 0.8692,
+      "win_probability": 0.9346,
       "game_time": "2025-12-04 00:30:00"
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "event": "Miami Dolphins @ New York Jets",
-      "market": "spreads",
-      "team": "Miami Dolphins",
-      "line": -3.0,
-      "odds": 10,
-      "score": 0.8182,
-      "game_time": "2025-12-07 18:00:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Washington Capitals @ Los Angeles Kings",
-      "market": "totals",
-      "team": "over",
-      "line": 4.5,
-      "odds": 42,
-      "score": 0.4085,
-      "game_time": "2025-12-03 03:41:18"
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "event": "Tennessee Titans @ Cleveland Browns",
-      "market": "h2h",
-      "team": "Cleveland Browns",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-07 18:00:00"
     }
   ],
-  "new_picks_generated": true
+  "new_picks_generated": true,
+  "stats": {
+    "lifetime_bets": 7,
+    "wins": 6,
+    "losses": 0,
+    "pushes": 1,
+    "win_rate": 1.0,
+    "lifetime_roi": 1.2114,
+    "sport_breakdown": {
+      "basketball_nba": {
+        "wins": 2,
+        "losses": 0,
+        "pushes": 0,
+        "stake": 4.0,
+        "pnl": 8.0,
+        "roi": 2.0
+      },
+      "icehockey_nhl": {
+        "wins": 4,
+        "losses": 0,
+        "pushes": 1,
+        "stake": 10.0,
+        "pnl": 8.96,
+        "roi": 0.8960000000000001
+      }
+    },
+    "bankroll": 216.96
+  },
+  "streak": {
+    "current": 6,
+    "max_win_streak": 6,
+    "max_loss_streak": 0
+  }
 }
