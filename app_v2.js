@@ -1,5 +1,6 @@
 // SmartPicksGPT v2 frontend
-// Fully wired to current data.json schema and adds EV, edge, exposure, charts
+// Works with current data.json: bankroll, open_bets, todays_picks,
+// stats: { total_bets, win_pct, roi, by_sport }, streak: { current, best }
 
 const DATA_URL = `data/data.json?ts=${Date.now()}`;
 
@@ -53,30 +54,31 @@ async function loadData() {
 }
 
 /**
- * Enrich the backend JSON with:
- * - implied probability, decimal odds, EV, edge, confidence
- * - pick groups (by game)
- * - exposure by sport & market
+ * Enrich backend JSON with:
+ * - implied prob, decimal odds, EV, edge, confidence for picks
+ * - grouped picks by game
+ * - exposure by sport & market from open_bets
  */
 function enrichData(data) {
-  const clone = structuredClone(data);
+  const clone = structuredClone ? structuredClone(data) : JSON.parse(JSON.stringify(data));
 
   const picks = clone.todays_picks || [];
   const open = clone.open_bets || [];
 
-  // ---- Enrich picks with EV + edge + implied prob + confidence ----
+  // ---- Enrich picks ----
   const pickGroups = {};
+
   picks.forEach((p) => {
     const oddsNum = toNumber(p.odds);
     const dec = americanToDecimal(oddsNum);
     const implied = impliedProbFromAmerican(oddsNum);
-    const winProb = isFinite(p.win_probability)
+    const winProb = Number.isFinite(p.win_probability)
       ? p.win_probability
       : null;
 
     let edge = null;
     let evUnits = null;
-    if (winProb !== null && isFinite(dec) && dec > 1) {
+    if (winProb !== null && Number.isFinite(dec) && dec > 1) {
       edge = winProb - implied;
       evUnits = winProb * (dec - 1) - (1 - winProb);
     }
@@ -101,7 +103,7 @@ function enrichData(data) {
 
   clone._pick_groups = Object.values(pickGroups);
 
-  // ---- Enrich open bets with implied prob + payout ----
+  // ---- Enrich open bets ----
   let totalStakeOpen = 0;
   const sportRisk = {};
   const marketMix = {};
@@ -114,16 +116,16 @@ function enrichData(data) {
 
     totalStakeOpen += stake;
 
-    const sportKey = b.sport || "unknown";
-    sportRisk[sportKey] = (sportRisk[sportKey] || 0) + stake;
+    const sKey = b.sport || "unknown";
+    sportRisk[sKey] = (sportRisk[sKey] || 0) + stake;
 
-    const mktKey = b.market || "other";
-    marketMix[mktKey] = (marketMix[mktKey] || 0) + 1;
+    const mKey = b.market || "other";
+    marketMix[mKey] = (marketMix[mKey] || 0) + 1;
 
     b._decimal_odds = dec;
     b._implied_prob = implied;
     b._potential_payout =
-      isFinite(dec) && dec > 0 ? stake * dec : null;
+      Number.isFinite(dec) && dec > 0 ? stake * dec : null;
   });
 
   clone._total_stake_open = totalStakeOpen;
@@ -185,7 +187,7 @@ function normalizeMarket(m) {
     spreads: "Spread",
     totals: "Over/Under",
   };
-  return map[m] || (m ? m.toUpperCase() : "—";
+  return map[m] || (m ? m.toUpperCase() : "—");
 }
 
 function classifyScoreBadge(score) {
@@ -196,14 +198,13 @@ function classifyScoreBadge(score) {
 }
 
 /**
- * Very simple "confidence" heuristic:
- * combines model score + edge into 1–5.
+ * Simple confidence heuristic: combines model score + edge into 1–5 stars.
  */
 function computeConfidence(score, edge) {
   if (!Number.isFinite(score)) score = 0;
   if (!Number.isFinite(edge)) edge = 0;
 
-  const sNorm = (score - 0.75) / 0.1; // rough
+  const sNorm = (score - 0.75) / 0.1; // rough range tuning
   const eNorm = edge / 0.05; // 5% edge is big
   let c = (sNorm + eNorm) / 2;
   c = Math.max(0, Math.min(1.5, c));
@@ -344,9 +345,7 @@ function renderPicksTab(data) {
   section.innerHTML = `
     <div class="section-title">Today’s SmartPicks (Grouped by Game)</div>
     <div class="picks-grid">
-      ${groups
-        .map((g) => renderPickGroupCard(g))
-        .join("")}
+      ${groups.map(renderPickGroupCard).join("")}
     </div>
   `;
 }
@@ -363,7 +362,7 @@ function renderPickGroupCard(group) {
       <header class="pick-group-header">
         <div>
           <div class="pick-main">${group.event}</div>
-          <div class="pick-match">${sportLabel} &bull; ${when}</div>
+          <div class="pick-match">${sportLabel} • ${when}</div>
         </div>
         <div class="pick-group-tag">SmartPicks Stack</div>
       </header>
@@ -381,20 +380,22 @@ function renderPickRow(p) {
   const winProb = p.win_probability;
   const edge = p._edge;
   const evUnits = p._ev_units;
-  const confidence = p._confidence;
+  const confidence = p._confidence || 1;
 
-  const confidenceLabel = "★".repeat(confidence || 1);
+  const confidenceLabel = "★".repeat(confidence);
 
   return `
     <div class="pick-row">
       <div class="pick-row-main">
         <div>
           <div class="pick-row-title">
-            ${p.team} (${normalizeMarket(p.market)}) ${p.line != null ? `@ ${p.line}` : ""}
+            ${p.team} (${normalizeMarket(p.market)})${
+    p.line != null ? ` @ ${p.line}` : ""
+  }
           </div>
           <div class="pick-row-sub">
-            Odds ${formatAmericanOdds(oddsNum)} &bull;
-            Model win: ${formatPct(winProb)} &bull;
+            Odds ${formatAmericanOdds(oddsNum)} •
+            Model win: ${formatPct(winProb)} •
             Implied: ${formatPct(implied)}
           </div>
         </div>
@@ -408,9 +409,7 @@ function renderPickRow(p) {
           classifyScoreBadge(edge || 0)
         }">Edge: ${Number.isFinite(edge) ? (edge * 100).toFixed(1) + "%" : "—"}</span>
         <span class="badge badge-price">
-          EV (1u): ${
-            Number.isFinite(evUnits) ? evUnits.toFixed(3) + "u" : "—"
-          }
+          EV (1u): ${Number.isFinite(evUnits) ? evUnits.toFixed(3) + "u" : "—"}
         </span>
         <span class="badge badge-sport">Score: ${p.score.toFixed(4)}</span>
       </div>
@@ -579,9 +578,7 @@ function renderHistoryTab(data) {
           <td>$${stake.toFixed(2)}</td>
           <td>${formatPct(implied)}</td>
           <td>${
-            Number.isFinite(payout)
-              ? "$" + payout.toFixed(2)
-              : "—"
+            Number.isFinite(payout) ? "$" + payout.toFixed(2) : "—"
           }</td>
           <td>${r.status || "open"}</td>
         </tr>
