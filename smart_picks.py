@@ -23,14 +23,16 @@ SPORTS = {
 
 MARKETS = ["h2h", "spreads", "totals"]
 
-MAX_ODDS = 200          # avoid huge juice
-TOP_N = 10              # up to 10 picks per run
+MAX_ODDS = 200
+TOP_N = 10
+MAX_OPEN_BETS = 10
+
 INJURY_HEAVY_PENALTY = 0.30
 INJURY_LIGHT_PENALTY = 0.15
 
 
 # -------------------------------------------------------------
-# BASIC HELPERS
+# HELPERS
 # -------------------------------------------------------------
 
 def load_config():
@@ -68,7 +70,7 @@ def write_history(rows):
 
 
 def normalize_str(s: str) -> str:
-    """Lowercase, strip, collapse internal whitespace."""
+    """Lowercase, strip whitespace, collapse spaces."""
     if s is None:
         return ""
     return " ".join(str(s).strip().lower().split())
@@ -106,24 +108,22 @@ def parse_score(game, team):
         if s.get("name") == team:
             try:
                 return int(s.get("score"))
-            except Exception:
+            except:
                 return 0
     return 0
 
 
 def grade_open_bets(api_key, history):
-    """Grade all open bets and return (updated_history, bankroll_delta)."""
     if not history:
         return history, 0.0
 
     bankroll_delta = 0.0
-
-    # Group open bets by sport
     open_by_sport = {}
+
     for r in history:
         if r.get("status") == "open":
-            sport = r["sport"]
-            open_by_sport.setdefault(sport, []).append(r)
+            s = r["sport"]
+            open_by_sport.setdefault(s, []).append(r)
 
     for sport, rows in open_by_sport.items():
         scores = fetch_scores(api_key, sport)
@@ -137,6 +137,7 @@ def grade_open_bets(api_key, history):
 
             away = game["away_team"]
             home = game["home_team"]
+
             away_score = parse_score(game, away)
             home_score = parse_score(game, home)
 
@@ -182,7 +183,7 @@ def grade_open_bets(api_key, history):
                     else:
                         result = "lost"
                         pnl = -stake
-                else:  # under
+                else:
                     if total < line:
                         result = "won"
                         pnl = stake * (abs(odds) / 100)
@@ -235,18 +236,14 @@ def injury_penalty(meta, team):
 
 
 # -------------------------------------------------------------
-# FETCH ODDS + NORMALIZED DEDUPE (AVG ODDS)
+# FETCH + NORMALIZE + AVG ODDS
 # -------------------------------------------------------------
 
 def fetch_all_odds(api_key):
-    """
-    Fetch odds from The Odds API for all sports and markets,
-    then normalize and aggregate duplicates (averaging odds across books).
-    """
-    raw_bets = []
+    raw = []
 
     for sport in SPORTS.keys():
-        meta_index = fetch_event_meta(api_key, sport)
+        meta_idx = fetch_event_meta(api_key, sport)
 
         url = f"https://api.the-odds-api.com/v4/sports/{sport}/odds"
         params = {
@@ -261,7 +258,7 @@ def fetch_all_odds(api_key):
             if resp.status_code != 200:
                 continue
             games = resp.json()
-        except Exception:
+        except:
             continue
 
         for g in games:
@@ -270,20 +267,20 @@ def fetch_all_odds(api_key):
             if not away or not home:
                 continue
 
-            event_label = f"{away} @ {home}"
-            event_id = g.get("id")
-            meta = meta_index.get(event_id, {})
+            event = f"{away} @ {home}"
+            ev_id = g.get("id")
+            meta = meta_idx.get(ev_id, {})
 
-            commence = g.get("commence_time")
             try:
+                commence = g["commence_time"]
                 game_time = datetime.fromisoformat(commence.replace("Z", "+00:00"))
-            except Exception:
+            except:
                 game_time = None
 
             for bm in g.get("bookmakers", []):
                 for mkt in bm.get("markets", []):
-                    market_key = mkt.get("key")
-                    if market_key not in MARKETS:
+                    key = mkt.get("key")
+                    if key not in MARKETS:
                         continue
 
                     for o in mkt.get("outcomes", []):
@@ -293,7 +290,7 @@ def fetch_all_odds(api_key):
 
                         try:
                             odds_val = int(odds_val)
-                        except Exception:
+                        except:
                             continue
 
                         if abs(odds_val) > MAX_ODDS:
@@ -302,17 +299,17 @@ def fetch_all_odds(api_key):
                         team = o.get("name", "")
                         line = o.get("point", 0)
 
-                        if market_key == "totals":
+                        if key == "totals":
                             nm = normalize_str(team)
                             if nm.startswith("over"):
                                 team = "over"
                             elif nm.startswith("under"):
                                 team = "under"
 
-                        raw_bets.append({
+                        raw.append({
                             "sport": sport,
-                            "event": event_label,
-                            "market": market_key,
+                            "event": event,
+                            "market": key,
                             "team": team,
                             "line": line,
                             "odds": odds_val,
@@ -320,9 +317,9 @@ def fetch_all_odds(api_key):
                             "meta": meta,
                         })
 
-    # --- NORMALIZE & AGGREGATE (Average odds across books) ---
+    # Aggregate by normalized key → average odds
     agg = {}
-    for b in raw_bets:
+    for b in raw:
         norm_key = (
             normalize_str(b["sport"]),
             normalize_str(b["event"]),
@@ -347,15 +344,14 @@ def fetch_all_odds(api_key):
             rec = agg[norm_key]
             rec["odds_sum"] += b["odds"]
             rec["odds_count"] += 1
-            # choose earliest game time if both present
+
             if rec["time"] is None and b["time"] is not None:
                 rec["time"] = b["time"]
 
-    # Build final list with averaged odds
-    deduped_bets = []
+    deduped = []
     for rec in agg.values():
         avg_odds = int(round(rec["odds_sum"] / rec["odds_count"]))
-        deduped_bets.append({
+        deduped.append({
             "sport": rec["sport"],
             "event": rec["event"],
             "market": rec["market"],
@@ -366,7 +362,7 @@ def fetch_all_odds(api_key):
             "meta": rec["meta"],
         })
 
-    return deduped_bets
+    return deduped
 
 
 # -------------------------------------------------------------
@@ -374,99 +370,105 @@ def fetch_all_odds(api_key):
 # -------------------------------------------------------------
 
 def implied_ev(odds):
-    """Simple EV-like score based on implied probability."""
     if odds == 0:
         return 0.0
     if odds < 0:
         p = abs(odds) / (abs(odds) + 100)
     else:
         p = 100 / (odds + 100)
-    return 2 * p - 1  # maps [0,1] -> [-1,1]
+    return 2 * p - 1
 
 
-def score_bet(bet):
-    base = implied_ev(bet["odds"])
-    inj = injury_penalty(bet["meta"], bet["team"])
-    # fatigue placeholder = 0.0 for now
+def score_bet(b):
+    base = implied_ev(b["odds"])
+    inj = injury_penalty(b["meta"], b["team"])
     return base - inj
 
 
 # -------------------------------------------------------------
-# MAIN
+# MAIN EXECUTION
 # -------------------------------------------------------------
 
 def main():
     config = load_config()
     api_key = config["ODDS_API_KEY"]
     bankroll = float(config["BASE_BANKROLL"])
-    unit_fraction = float(config["UNIT_FRACTION"])
+    stake_fraction = float(config["UNIT_FRACTION"])
 
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-    # 1) Grade existing open bets
+    # 1) Grade open bets
     history = read_history()
     history, delta = grade_open_bets(api_key, history)
     bankroll += delta
 
-    # 2) Fetch odds and aggregate
-    bets = fetch_all_odds(api_key)
+    # Count open bets
+    open_bets = [r for r in history if r.get("status") == "open"]
+    open_count = len(open_bets)
 
-    # 3) Score and filter safe-ish bets
-    scored = []
-    for b in bets:
-        s = score_bet(b)
-        if s > 0:
-            b["score"] = s
-            scored.append(b)
+    # 2) DECISION: generate new picks only if below threshold
+    allow_new_picks = open_count < MAX_OPEN_BETS
+    picks = []
 
-    scored.sort(key=lambda x: x["score"], reverse=True)
-    picks = scored[:TOP_N]
+    if allow_new_picks:
+        # Fetch and filter new odds
+        bets = fetch_all_odds(api_key)
 
-    # 4) Prevent logging duplicates into history
-    existing_open = {
-        (
-            r["sport"], r["event"], r["market"],
-            r["team"], str(r["line"]), str(r["odds"])
-        )
-        for r in history
-        if r.get("status") == "open"
-    }
+        scored = []
+        for b in bets:
+            s = score_bet(b)
+            if s > 0:
+                b["score"] = s
+                scored.append(b)
 
-    stake = bankroll * unit_fraction if picks else 0.0
+        scored.sort(key=lambda x: x["score"], reverse=True)
 
-    for p in picks:
-        key = (
-            p["sport"], p["event"], p["market"],
-            p["team"], str(p["line"]), str(p["odds"])
-        )
-        if key in existing_open:
-            continue
+        # Only fill remaining slots
+        slots = MAX_OPEN_BETS - open_count
+        picks = scored[:slots]
 
-        history.append({
-            "timestamp": ts,
-            "sport": p["sport"],
-            "event": p["event"],
-            "market": p["market"],
-            "team": p["team"],
-            "line": p["line"],
-            "odds": str(p["odds"]),
-            "bet_amount": f"{stake:.2f}",
-            "status": "open",
-            "result": "",
-            "pnl": "",
-        })
+        # Deduplicate logging
+        existing_open_keys = {
+            (
+                r["sport"], r["event"], r["market"],
+                r["team"], str(r["line"]), str(r["odds"])
+            )
+            for r in history
+            if r["status"] == "open"
+        }
 
+        stake = bankroll * stake_fraction if picks else 0.0
+
+        for p in picks:
+            key = (
+                p["sport"], p["event"], p["market"],
+                p["team"], str(p["line"]), str(p["odds"])
+            )
+            if key in existing_open_keys:
+                continue
+
+            history.append({
+                "timestamp": ts,
+                "sport": p["sport"],
+                "event": p["event"],
+                "market": p["market"],
+                "team": p["team"],
+                "line": p["line"],
+                "odds": str(p["odds"]),
+                "bet_amount": f"{stake:.2f}",
+                "status": "open",
+                "result": "",
+                "pnl": "",
+            })
+
+    # Write updated history
     write_history(history)
 
-    # 5) Build JSON-safe picks
+    # Build JSON
     json_picks = []
     for p in picks:
-        game_time_str = None
-        if isinstance(p["time"], datetime):
-            game_time_str = p["time"].astimezone(timezone.utc).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-
+        t = p["time"]
+        t = t.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M:%S") if isinstance(t, datetime) else None
         json_picks.append({
             "sport": p["sport"],
             "event": p["event"],
@@ -475,7 +477,7 @@ def main():
             "line": p["line"],
             "odds": p["odds"],
             "score": round(p["score"], 4),
-            "game_time": game_time_str,
+            "game_time": t,
         })
 
     output = {
@@ -483,12 +485,13 @@ def main():
         "last_updated": ts,
         "open_bets": [r for r in history if r["status"] == "open"],
         "todays_picks": json_picks,
+        "new_picks_generated": allow_new_picks,
     }
 
     with open(DATA_FILE, "w") as f:
         json.dump(output, f, indent=2)
 
-    # 6) Git add/commit/push (non-fatal)
+    # Git push
     try:
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"SmartPicks update {ts}"], check=True)

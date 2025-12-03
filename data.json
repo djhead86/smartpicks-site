@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 00:48:08",
+  "last_updated": "2025-12-03 01:00:10",
   "open_bets": [
     {
       "timestamp": "2025-12-03 00:44:22",
@@ -138,7 +138,7 @@
       "event": "Buffalo Sabres @ Philadelphia Flyers",
       "market": "h2h",
       "team": "Buffalo Sabres",
-      "line": 0,
+      "line": "0",
       "odds": "9",
       "bet_amount": "2.00",
       "status": "open",
@@ -151,7 +151,7 @@
       "event": "Dallas Stars @ New Jersey Devils",
       "market": "totals",
       "team": "under",
-      "line": 5.5,
+      "line": "5.5",
       "odds": "23",
       "bet_amount": "2.00",
       "status": "open",
@@ -164,7 +164,7 @@
       "event": "Toronto Maple Leafs @ Florida Panthers",
       "market": "h2h",
       "team": "Toronto Maple Leafs",
-      "line": 0,
+      "line": "0",
       "odds": "24",
       "bet_amount": "2.00",
       "status": "open",
@@ -177,7 +177,7 @@
       "event": "Minnesota Wild @ Edmonton Oilers",
       "market": "totals",
       "team": "under",
-      "line": 6.0,
+      "line": "6.0",
       "odds": "24",
       "bet_amount": "2.00",
       "status": "open",
@@ -190,7 +190,7 @@
       "event": "Calgary Flames @ Nashville Predators",
       "market": "totals",
       "team": "over",
-      "line": 6.0,
+      "line": "6.0",
       "odds": "30",
       "bet_amount": "2.00",
       "status": "open",
@@ -203,7 +203,7 @@
       "event": "Green Bay Packers @ Denver Broncos",
       "market": "h2h",
       "team": "Denver Broncos",
-      "line": 0,
+      "line": "0",
       "odds": "51",
       "bet_amount": "2.00",
       "status": "open",
@@ -216,7 +216,7 @@
       "event": "Indianapolis Colts @ Seattle Seahawks",
       "market": "h2h",
       "team": "Seattle Seahawks",
-      "line": 0,
+      "line": "0",
       "odds": "-194",
       "bet_amount": "2.00",
       "status": "open",
@@ -224,106 +224,6 @@
       "pnl": ""
     }
   ],
-  "todays_picks": [
-    {
-      "sport": "icehockey_nhl",
-      "event": "Buffalo Sabres @ Philadelphia Flyers",
-      "market": "h2h",
-      "team": "Buffalo Sabres",
-      "line": 0,
-      "odds": 9,
-      "score": 0.8349,
-      "game_time": "2025-12-04 00:30:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Dallas Stars @ New Jersey Devils",
-      "market": "totals",
-      "team": "under",
-      "line": 5.5,
-      "odds": 23,
-      "score": 0.626,
-      "game_time": "2025-12-04 00:00:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Toronto Maple Leafs @ Florida Panthers",
-      "market": "h2h",
-      "team": "Toronto Maple Leafs",
-      "line": 0,
-      "odds": 24,
-      "score": 0.6129,
-      "game_time": "2025-12-03 00:38:36"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Minnesota Wild @ Edmonton Oilers",
-      "market": "totals",
-      "team": "under",
-      "line": 6.0,
-      "odds": 24,
-      "score": 0.6129,
-      "game_time": "2025-12-03 02:10:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Calgary Flames @ Nashville Predators",
-      "market": "totals",
-      "team": "over",
-      "line": 6.0,
-      "odds": 30,
-      "score": 0.5385,
-      "game_time": "2025-12-03 01:10:00"
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "event": "Tennessee Titans @ Cleveland Browns",
-      "market": "h2h",
-      "team": "Cleveland Browns",
-      "line": 0,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-07 18:00:00"
-    },
-    {
-      "sport": "icehockey_nhl",
-      "event": "Minnesota Wild @ Edmonton Oilers",
-      "market": "spreads",
-      "team": "Minnesota Wild",
-      "line": 1.5,
-      "odds": -200,
-      "score": 0.3333,
-      "game_time": "2025-12-03 02:10:00"
-    },
-    {
-      "sport": "basketball_nba",
-      "event": "Memphis Grizzlies @ San Antonio Spurs",
-      "market": "h2h",
-      "team": "San Antonio Spurs",
-      "line": 0,
-      "odds": -198,
-      "score": 0.3289,
-      "game_time": "2025-12-03 01:10:00"
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "event": "Green Bay Packers @ Denver Broncos",
-      "market": "h2h",
-      "team": "Denver Broncos",
-      "line": 0,
-      "odds": 51,
-      "score": 0.3245,
-      "game_time": "2025-12-14 21:25:00"
-    },
-    {
-      "sport": "americanfootball_nfl",
-      "event": "Indianapolis Colts @ Seattle Seahawks",
-      "market": "h2h",
-      "team": "Seattle Seahawks",
-      "line": 0,
-      "odds": -194,
-      "score": 0.3197,
-      "game_time": "2025-12-14 21:25:00"
-    }
-  ]
+  "todays_picks": [],
+  "new_picks_generated": false
 }
