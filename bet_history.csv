@@ -14,3 +14,5 @@ timestamp,sport,event,market,team,line,odds,bet_amount,status,result,pnl
 12/03/25 00:20,soccer_epl,Brentford @ Arsenal,totals,under,2.75,-112,2.00,open,,
 12/03/25 00:24,soccer_epl,Crystal Palace @ Burnley,totals,over,2.25,-112,2.00,open,,
 12/03/25 00:55,soccer_epl,Aston Villa @ Brighton and Hove Albion,spreads,Brighton and Hove Albion,-0.5,109,2.00,open,,
+12/03/25 01:30,soccer_epl,Chelsea @ Leeds United,spreads,Chelsea,-0.5,-110,2.00,open,,
+12/03/25 01:30,basketball_nba,Portland Trail Blazers @ Cleveland Cavaliers,spreads,Portland Trail Blazers,10.0,-110,2.00,open,,
