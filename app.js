@@ -1,7 +1,7 @@
 // smartpicks-site/app.js
 // Minimal frontend wired to smart_picks v0.1.7 JSON
 
-const DATA_URL = "data.json";
+const DATA_URL = "data/data.json?ts=${Date.now()}";
 
 document.addEventListener("DOMContentLoaded", () => {
   setupTabs();
@@ -171,15 +171,29 @@ function renderPicksTab(data) {
   const section = document.getElementById("picks");
   const picks = data.todays_picks || [];
 
-  if (!picks.length) {
-    section.innerHTML = `<p class="muted">No picks generated this run.</p>`;
+  // === 72-HOUR TIME FILTER ===
+  const now = new Date();
+  const MAX_HOURS = 72;
+
+  const filtered = picks.filter(p => {
+    const gt = new Date(p.game_time);
+    const hoursAhead = (gt - now) / (1000 * 60 * 60);
+    return hoursAhead >= 0 && hoursAhead <= MAX_HOURS;
+  });
+
+  if (!filtered.length) {
+    section.innerHTML = `
+      <p class="muted">
+        No picks scheduled in the next 72 hours.
+      </p>`;
     return;
   }
 
+  // === RENDER PICK CARDS ===
   section.innerHTML = `
-    <div class="section-title">Today’s Picks</div>
+    <div class="section-title">Upcoming Picks (Next 72 Hours)</div>
     <div class="picks-grid">
-      ${picks
+      ${filtered
         .map((p, i) => {
           const match = p.event || p.event_name || "";
           const when = p.game_time || "TBD";
@@ -188,42 +202,42 @@ function renderPicksTab(data) {
             : "—";
 
           return `
-          <article class="pick-card">
-            <div class="pick-header">
-              <div>
-                <div class="pick-rank">#${i + 1}</div>
-                <div class="pick-main">
-                  ${p.team}
-                  <span class="pick-match">${match}</span>
+            <article class="pick-card">
+              <div class="pick-header">
+                <div>
+                  <div class="pick-rank">#${i + 1}</div>
+                  <div class="pick-main">
+                    ${p.team}
+                    <span class="pick-match">${match}</span>
+                  </div>
                 </div>
+                <div class="pick-rank">${normalizeMarket(p.market)}</div>
               </div>
-              <div class="pick-rank">${normalizeMarket(p.market)}</div>
-            </div>
 
-            <div class="pick-match">${when}</div>
+              <div class="pick-match">${when}</div>
 
-            <div class="pick-meta-row">
-              <span class="badge badge-sport">${normalizeSport(p.sport)}</span>
-              <span class="badge badge-price">Odds: ${formatAmericanOdds(
-                p.odds
-              )}</span>
-              <span class="badge ${classifyScoreBadge(
-                p.score
-              )}">Score: ${p.score.toFixed(3)}</span>
-              <span class="badge badge-price">Win prob: ${prob}</span>
-            </div>
+              <div class="pick-meta-row">
+                <span class="badge badge-sport">${normalizeSport(p.sport)}</span>
+                <span class="badge badge-price">Odds: ${formatAmericanOdds(
+                  p.odds
+                )}</span>
+                <span class="badge ${classifyScoreBadge(
+                  p.score
+                )}">Score: ${p.score.toFixed(3)}</span>
+                <span class="badge badge-price">Win prob: ${prob}</span>
+              </div>
 
-            <p class="pick-reason">
-              Simple value signal based on implied probability, injury adjustment,
-              and conservative risk rules.
-            </p>
-          </article>
-        `;
+              <p class="pick-reason">
+                Simple value signal based on probability edges and conservative risk rules.
+              </p>
+            </article>
+          `;
         })
         .join("")}
     </div>
   `;
 }
+
 
 /* ========= ANALYTICS TAB ========= */
 
