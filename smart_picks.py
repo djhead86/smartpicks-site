@@ -121,6 +121,20 @@ def load_config() -> Dict[str, Any]:
 
     return cfg
 
+def event_already_bet(event_name: str, bet_history: List[Dict], current_candidates: List[Dict]) -> bool:
+    """Returns True if this event already exists in past or current bets."""
+    
+    # Check historical bets
+    for row in bet_history:
+        if row.get("event") == event_name:
+            return True
+
+    # Check bets being built in this run
+    for bet in current_candidates:
+        if bet.get("event") == event_name:
+            return True
+
+    return False
 
 def american_to_implied_prob(odds: int) -> float:
     """Convert American odds to implied probability (no vig removed)."""
@@ -897,17 +911,37 @@ def append_new_bets(
     unit_amount: float,
 ) -> int:
     """
-    Append picks to bet_history, avoiding duplicates by key.
+    Append picks to bet_history, enforcing an event-level lock so we never
+    create multiple open bets for the same game. Also avoids exact duplicates
+    by key for extra safety.
     Returns number of new bets added.
     """
+    # Build a set of existing open-bet keys (sport, event, market, team, line)
     existing_keys = build_existing_open_bet_keys(rows)
+
+    # Build a set of events that already have at least one OPEN bet.
+    # Once a bet is open for an event, we will not add any further bets
+    # for that event until it is resolved.
+    existing_open_events = {
+        r.get("event", "")
+        for r in rows
+        if r.get("status", "").lower() == "open" and r.get("event", "")
+    }
+
     now_str = datetime.now().strftime("%m/%d/%y %H:%M")
 
     added = 0
     for c in picks:
+        # Strict event-level deduplication: skip if this event already has an open bet
+        if c.event in existing_open_events:
+            log(f"[DEDUP] Skipping event already locked: {c.event}")
+            continue
+
         key = (c.sport, c.event, c.market, c.team, str(c.line))
         if key in existing_keys:
+            # Already have this exact bet open; skip
             continue
+
         row = {
             "timestamp": now_str,
             "sport": c.sport,
@@ -923,14 +957,16 @@ def append_new_bets(
         }
         rows.append(row)
         existing_keys.add(key)
+        existing_open_events.add(c.event)
         added += 1
 
     if added > 0:
         log(f"[NEW] Added {added} new bets to bet_history.")
     else:
-        log("[NEW] No new bets added (all picks already open).")
+        log("[NEW] No new bets added (all picks already open or deduplicated).")
 
     return added
+
 
 
 # ---------------------------------------------------------------------------
