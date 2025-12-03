@@ -421,13 +421,24 @@ function renderPickRow(p) {
 
 let stakeBySportChart = null;
 let marketMixChart = null;
+let bankrollChart = null;
+let evHistChart = null;
+let roiMarketChart = null;
 
 function renderAnalyticsTab(data) {
   const sportRisk = data._sport_risk || {};
   const marketMix = data._market_mix || {};
+  const bankrollHistory = Array.isArray(data.bankroll_history)
+    ? data.bankroll_history
+    : [];
+  const marketRoi = data.market_roi || {};
+  const picks = data.todays_picks || [];
 
   const sportCanvas = document.getElementById("chartStakeBySport");
   const marketCanvas = document.getElementById("chartMarketMix");
+  const bankrollCanvas = document.getElementById("chartBankroll");
+  const evCanvas = document.getElementById("chartEvHistogram");
+  const roiMarketCanvas = document.getElementById("chartRoiByMarket");
 
   // --- Risk by sport (bar chart) ---
   if (sportCanvas && Object.keys(sportRisk).length) {
@@ -458,11 +469,14 @@ function renderAnalyticsTab(data) {
         },
         scales: {
           x: {
-            ticks: { color: "#cbd5f5" },
+            ticks: {
+              color: "#cbd5f5",
+            },
           },
           y: {
-            ticks: { color: "#cbd5f5" },
-            beginAtZero: true,
+            ticks: {
+              color: "#cbd5f5",
+            },
           },
         },
       },
@@ -470,18 +484,18 @@ function renderAnalyticsTab(data) {
 
     const legendEl = document.getElementById("sport-legend");
     if (legendEl) {
-      legendEl.innerHTML = labels
-        .map(
-          (label, idx) => `
-        <div class="small-metric">
-          <strong>${label}</strong><br />
-          $${values[idx].toFixed(2)} open
-        </div>
-      `
-        )
+      legendEl.innerHTML = Object.entries(sportRisk)
+        .map(([sport, stake]) => {
+          return `
+            <div class="mini-stat-row">
+              <span>${normalizeSport(sport)}</span>
+              <span>$${stake.toFixed(2)}</span>
+            </div>
+          `;
+        })
         .join("");
     }
-  } else {
+  } else if (sportCanvas) {
     const legendEl = document.getElementById("sport-legend");
     if (legendEl) {
       legendEl.innerHTML =
@@ -522,25 +536,174 @@ function renderAnalyticsTab(data) {
 
     const legendEl = document.getElementById("market-legend");
     if (legendEl) {
-      legendEl.innerHTML = labels
-        .map(
-          (label, idx) => `
-        <div class="small-metric">
-          <strong>${label}</strong><br />
-          ${values[idx]} open bet(s)
-        </div>
-      `
-        )
+      legendEl.innerHTML = Object.entries(marketMix)
+        .map(([market, stake]) => {
+          return `
+            <div class="mini-stat-row">
+              <span>${normalizeMarket(market)}</span>
+              <span>$${stake.toFixed(2)}</span>
+            </div>
+          `;
+        })
         .join("");
     }
-  } else {
+  } else if (marketCanvas) {
     const legendEl = document.getElementById("market-legend");
     if (legendEl) {
       legendEl.innerHTML =
         "<span class='muted'>No open bets to chart.</span>";
     }
   }
+
+  // --- Bankroll over time (line chart) ---
+  if (bankrollCanvas && bankrollHistory.length > 1) {
+    const labels = bankrollHistory.map((p) => p.time || "");
+    const values = bankrollHistory.map((p) => p.bankroll || 0);
+
+    if (bankrollChart) {
+      bankrollChart.destroy();
+    }
+
+    bankrollChart = new Chart(bankrollCanvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Bankroll",
+            data: values,
+            tension: 0.25,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "#cbd5f5" },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#cbd5f5" },
+          },
+          y: {
+            ticks: { color: "#cbd5f5" },
+          },
+        },
+      },
+    });
+  }
+
+  // --- EV per pick (bar chart) ---
+  if (evCanvas && picks.length) {
+    const labels = [];
+    const values = [];
+
+    picks.forEach((p, idx) => {
+      const oddsNum = toNumber(p.odds);
+      const dec = americanToDecimal(oddsNum);
+      const winProb = Number.isFinite(p.win_probability)
+        ? p.win_probability
+        : null;
+
+      if (!dec || winProb === null) return;
+
+      // Real EV per unit stake using model vs implied:
+      // EV = p * (decimal - 1) - (1 - p)
+      const ev = winProb * (dec - 1) - (1 - winProb);
+      const evPct = ev * 100;
+
+      labels.push(`#${idx + 1}`);
+      values.push(evPct);
+    });
+
+    if (labels.length) {
+      if (evHistChart) {
+        evHistChart.destroy();
+      }
+
+      evHistChart = new Chart(evCanvas.getContext("2d"), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "EV per unit stake (%)",
+              data: values,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: "#cbd5f5" },
+            },
+          },
+          scales: {
+            x: {
+              ticks: { color: "#cbd5f5" },
+            },
+            y: {
+              ticks: {
+                color: "#cbd5f5",
+                callback: (v) =>
+                  `${(typeof v === "number" ? v.toFixed(0) : v)}%`,
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  // --- ROI by market (bar chart) ---
+  if (roiMarketCanvas && Object.keys(marketRoi).length) {
+    const labels = Object.keys(marketRoi).map((m) => normalizeMarket(m));
+    const values = Object.values(marketRoi).map((info) =>
+      Number.isFinite(info.roi) ? info.roi : 0
+    );
+
+    if (roiMarketChart) {
+      roiMarketChart.destroy();
+    }
+
+    roiMarketChart = new Chart(roiMarketCanvas.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "ROI by market (%)",
+            data: values,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "#cbd5f5" },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#cbd5f5" },
+          },
+          y: {
+            ticks: {
+              color: "#cbd5f5",
+              callback: (v) =>
+                `${(typeof v === "number" ? v.toFixed(0) : v)}%`,
+            },
+          },
+        },
+      },
+    });
+  }
 }
+
 
 /* ========= HISTORY / OPEN BETS TAB ========= */
 

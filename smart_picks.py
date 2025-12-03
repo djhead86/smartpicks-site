@@ -585,30 +585,58 @@ def resolve_open_bets(rows: List[Dict[str, Any]], api_key: str) -> None:
 # Stats + streaks + JSON
 # ---------------------------------------------------------------------------
 
-def compute_stats(rows: List[Dict[str, Any]], base_bankroll: float) -> Tuple[Dict[str, Any], float, Dict[str, int]]:
+
+def compute_stats(
+    rows: List[Dict[str, Any]],
+    base_bankroll: float,
+) -> Tuple[
+    Dict[str, Any],            # stats_dict
+    float,                     # bankroll
+    Dict[str, int],            # streak_dict
+    List[Dict[str, Any]],      # bankroll_history
+    Dict[str, Dict[str, float]]  # market_roi
+]:
     """
-    Returns (stats_dict, bankroll, streak_dict)
-    stats_dict matches the shape currently used in data.json:
-      {
-        "total_bets": int,
-        "win_pct": float,
-        "roi": float,
-        "by_sport": {
-          "basketball_nba": {"bets": int, "win_pct": float, "roi": float},
+    Compute overall stats, bankroll, streaks, bankroll history, and ROI by market.
+
+    Returns:
+      stats_dict:
+        {
+          "total_bets": int,
+          "win_pct": float,   # percent 0–100
+          "roi": float,       # percent 0–100
+          "by_sport": {
+            "basketball_nba": {"bets": int, "win_pct": float, "roi": float},
+            ...
+          }
+        }
+
+      bankroll: base_bankroll + cumulative pnl of all closed bets.
+
+      streak_dict:
+        { "current": int, "best": int }
+
+      bankroll_history:
+        [
+          { "time": "YYYY-MM-DD HH:MM:SS", "bankroll": float },
+          ...
+        ]
+
+      market_roi:
+        {
+          "h2h":   {"bets": int, "wins": int, "losses": int, "pushes": int,
+                    "stake": float, "pnl": float, "roi": float},
+          "spreads": { ... },
+          "totals": { ... },
           ...
         }
-      }
-    streak_dict:
-      { "current": int, "best": int }  # win streaks
-    bankroll is base_bankroll + cumulative pnl of closed bets.
     """
-    closed = [r for r in rows if r.get("status", "").lower() == "closed"]
-    total_bets = len(closed)
-
-    total_staked = 0.0
-    total_pnl = 0.0
+    total_bets = 0
     wins = 0
     losses = 0
+    pushes = 0
+    total_staked = 0.0
+    total_pnl = 0.0
 
     by_sport: Dict[str, Dict[str, Any]] = defaultdict(lambda: {
         "bets": 0,
@@ -620,7 +648,7 @@ def compute_stats(rows: List[Dict[str, Any]], base_bankroll: float) -> Tuple[Dic
     sport_wins: Dict[str, int] = defaultdict(int)
     sport_losses: Dict[str, int] = defaultdict(int)
 
-    # For streak, we need closed bets in chronological order
+    # For bankroll history & streaks, only use closed (graded) bets
     def parse_ts(ts_str: str) -> datetime:
         for fmt in ("%m/%d/%y %H:%M", "%Y-%m-%d %H:%M:%S"):
             try:
@@ -629,15 +657,36 @@ def compute_stats(rows: List[Dict[str, Any]], base_bankroll: float) -> Tuple[Dic
                 continue
         return datetime.utcnow()
 
-    closed_sorted = sorted(
-        closed,
-        key=lambda r: parse_ts(r.get("timestamp", "")),
-    )
+    closed = [
+        r
+        for r in rows
+        if r.get("status", "").lower() != "open"
+        and r.get("result", "")
+    ]
+    closed_sorted = sorted(closed, key=lambda r: parse_ts(r.get("timestamp", "")))
+
+    # Bankroll history
+    bankroll_history: List[Dict[str, Any]] = []
+    running_bankroll = base_bankroll
+
+    # Market-level aggregates
+    market_agg: Dict[str, Dict[str, Any]] = defaultdict(lambda: {
+        "bets": 0,
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "stake": 0.0,
+        "pnl": 0.0,
+    })
 
     current_streak = 0
     best_streak = 0
 
     for r in closed_sorted:
+        sport = r.get("sport", "").strip()
+        market = r.get("market", "").strip()
+        result = r.get("result", "").lower()
+
         try:
             stake = float(r.get("bet_amount", "0") or 0.0)
         except Exception:
@@ -647,33 +696,63 @@ def compute_stats(rows: List[Dict[str, Any]], base_bankroll: float) -> Tuple[Dic
         except Exception:
             pnl = 0.0
 
+        total_bets += 1
         total_staked += stake
         total_pnl += pnl
 
-        sport = r.get("sport", "unknown")
-        by_sport[sport]["bets"] += 1
-        sport_staked[sport] += stake
-        sport_pnl[sport] += pnl
+        # Sport-level aggregation
+        if sport:
+            info = by_sport[sport]
+            info["bets"] += 1
+            sport_staked[sport] += stake
+            sport_pnl[sport] += pnl
 
-        result = r.get("result", "").lower()
+        # Market-level aggregation
+        if market:
+            m = market_agg[market]
+            m["bets"] += 1
+            m["stake"] += stake
+            m["pnl"] += pnl
+
+        # Result-level accounting
         if result == "won":
             wins += 1
-            sport_wins[sport] += 1
+            if sport:
+                sport_wins[sport] += 1
+            if market:
+                market_agg[market]["wins"] += 1
             current_streak += 1
             best_streak = max(best_streak, current_streak)
         elif result == "lost":
             losses += 1
-            sport_losses[sport] += 1
+            if sport:
+                sport_losses[sport] += 1
+            if market:
+                market_agg[market]["losses"] += 1
             current_streak = 0
-        else:  # push
-            # Do not reset streak
+        elif result == "push":
+            pushes += 1
+            if market:
+                market_agg[market]["pushes"] += 1
+            # Push does not break streak
+        else:
+            # Unknown result, ignore for W/L but still included in bankroll
             pass
 
+        # Bankroll progression
+        ts = parse_ts(r.get("timestamp", ""))
+        running_bankroll += pnl
+        bankroll_history.append({
+            "time": ts.strftime("%Y-%m-%d %H:%M:%S"),
+            "bankroll": running_bankroll,
+        })
+
+    # Overall win rate and ROI
     win_pct = (wins / (wins + losses) * 100.0) if (wins + losses) > 0 else 0.0
     roi = (total_pnl / total_staked * 100.0) if total_staked > 0 else 0.0
 
+    # Per-sport ROI and win%
     for sport, info in by_sport.items():
-        bets = info["bets"]
         w = sport_wins[sport]
         l = sport_losses[sport]
         staked = sport_staked[sport]
@@ -682,19 +761,36 @@ def compute_stats(rows: List[Dict[str, Any]], base_bankroll: float) -> Tuple[Dic
         info["win_pct"] = (w / (w + l) * 100.0) if (w + l) > 0 else 0.0
         info["roi"] = (pnl_s / staked * 100.0) if staked > 0 else 0.0
 
-    bankroll = base_bankroll + total_pnl
-    stats_dict = {
+    bankroll = running_bankroll
+
+    stats_dict: Dict[str, Any] = {
         "total_bets": total_bets,
         "win_pct": win_pct,
         "roi": roi,
         "by_sport": dict(by_sport),
     }
-    streak_dict = {
+    streak_dict: Dict[str, int] = {
         "current": current_streak,
         "best": best_streak,
     }
 
-    return stats_dict, bankroll, streak_dict
+    # Finalize market ROI view
+    market_roi: Dict[str, Dict[str, float]] = {}
+    for market, agg in market_agg.items():
+        stake = float(agg["stake"] or 0.0)
+        pnl_val = float(agg["pnl"] or 0.0)
+        roi_m = (pnl_val / stake * 100.0) if stake > 0 else 0.0
+        market_roi[market] = {
+            "bets": int(agg["bets"]),
+            "wins": int(agg["wins"]),
+            "losses": int(agg["losses"]),
+            "pushes": int(agg["pushes"]),
+            "stake": stake,
+            "pnl": pnl_val,
+            "roi": roi_m,
+        }
+
+    return stats_dict, bankroll, streak_dict, bankroll_history, market_roi
 
 
 def select_top_picks(candidates: List[CandidateBet]) -> List[CandidateBet]:
@@ -715,16 +811,30 @@ def select_top_picks(candidates: List[CandidateBet]) -> List[CandidateBet]:
 
     return selected
 
-
 def update_data_json(
     rows: List[Dict[str, Any]],
     todays_picks: List[CandidateBet],
     base_bankroll: float,
     new_picks_generated: bool,
 ) -> None:
+    """
+    Build the dashboard payload and write data/data.json.
+
+    Adds:
+      - bankroll (current)
+      - stats (overall + by_sport)
+      - streak (current/best)
+      - bankroll_history (for charts)
+      - market_roi (ROI by market)
+      - open_bets
+      - todays_picks (with model score + win_probability)
+    """
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    stats, bankroll, streak = compute_stats(rows, base_bankroll)
+    stats, bankroll, streak, bankroll_history, market_roi = compute_stats(
+        rows,
+        base_bankroll,
+    )
 
     open_bets = [r for r in rows if r.get("status", "").lower() == "open"]
 
@@ -751,10 +861,14 @@ def update_data_json(
         "new_picks_generated": bool(new_picks_generated),
         "stats": stats,
         "streak": streak,
+        "bankroll_history": bankroll_history,
+        "market_roi": market_roi,
     }
 
     DATA_FILE.write_text(json.dumps(payload, indent=2))
     log(f"[DATA] Wrote dashboard JSON to {DATA_FILE}")
+
+
 
 
 # ---------------------------------------------------------------------------
