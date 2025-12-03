@@ -1,6 +1,6 @@
 {
   "bankroll": 200.0,
-  "last_updated": "2025-12-03 08:06:37 UTC",
+  "last_updated": "2025-12-03 08:24:25 UTC",
   "open_bets": [
     {
       "timestamp": "12/03/25 00:15",
@@ -206,8 +206,8 @@
       "team": "under",
       "line": 2.5,
       "odds": 110,
-      "score": 0.8391,
-      "win_probability": 0.5851,
+      "score": 0.8419,
+      "win_probability": 0.5859,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -217,8 +217,8 @@
       "team": "Burnley",
       "line": 0.75,
       "odds": -110,
-      "score": 0.8391,
-      "win_probability": 0.6184,
+      "score": 0.8419,
+      "win_probability": 0.6193,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -228,8 +228,8 @@
       "team": "under",
       "line": 3.0,
       "odds": -110,
-      "score": 0.832,
-      "win_probability": 0.6163,
+      "score": 0.8348,
+      "win_probability": 0.6171,
       "game_time": "2025-12-03 13:15:00"
     },
     {
@@ -239,8 +239,8 @@
       "team": "Brighton and Hove Albion",
       "line": -0.5,
       "odds": 109,
-      "score": 0.8308,
-      "win_probability": 0.5842,
+      "score": 0.8336,
+      "win_probability": 0.585,
       "game_time": "2025-12-03 12:30:00"
     },
     {
@@ -250,8 +250,8 @@
       "team": "Dallas Mavericks",
       "line": 0.0,
       "odds": 152,
-      "score": 0.8259,
-      "win_probability": 0.5256,
+      "score": 0.8276,
+      "win_probability": 0.5261,
       "game_time": "2025-12-03 18:30:00"
     },
     {
@@ -261,8 +261,8 @@
       "team": "Milwaukee Bucks",
       "line": 0.0,
       "odds": 146,
-      "score": 0.8217,
-      "win_probability": 0.5311,
+      "score": 0.8234,
+      "win_probability": 0.5316,
       "game_time": "2025-12-03 18:11:00"
     },
     {
@@ -272,8 +272,8 @@
       "team": "Los Angeles Clippers",
       "line": 0.0,
       "odds": 140,
-      "score": 0.8067,
-      "win_probability": 0.5337,
+      "score": 0.8085,
+      "win_probability": 0.5342,
       "game_time": "2025-12-03 17:40:00"
     },
     {
@@ -283,8 +283,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 110,
-      "score": 0.8008,
-      "win_probability": 0.5736,
+      "score": 0.8031,
+      "win_probability": 0.5743,
       "game_time": "2025-12-03 17:00:00"
     },
     {
@@ -294,8 +294,8 @@
       "team": "Cleveland Cavaliers",
       "line": -10.0,
       "odds": -110,
-      "score": 0.7996,
-      "win_probability": 0.6065,
+      "score": 0.8018,
+      "win_probability": 0.6072,
       "game_time": "2025-12-03 17:10:00"
     },
     {
@@ -305,8 +305,8 @@
       "team": "over",
       "line": 6.5,
       "odds": 110,
-      "score": 0.7971,
-      "win_probability": 0.5725,
+      "score": 0.7993,
+      "win_probability": 0.5731,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -316,8 +316,8 @@
       "team": "under",
       "line": 5.5,
       "odds": 112,
-      "score": 0.7804,
-      "win_probability": 0.5643,
+      "score": 0.7826,
+      "win_probability": 0.565,
       "game_time": "2025-12-03 17:30:00"
     },
     {
@@ -327,8 +327,8 @@
       "team": "over",
       "line": 6.0,
       "odds": -108,
-      "score": 0.7804,
-      "win_probability": 0.5976,
+      "score": 0.7826,
+      "win_probability": 0.5983,
       "game_time": "2025-12-03 17:30:00"
     }
   ],
