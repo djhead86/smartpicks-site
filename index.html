@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <title>SmartPicksGPT v2 Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Main app (defer so DOM is ready) -->
-  <script defer src="app.js?v=2"></script>
+  <!-- ONLY ONE SCRIPT -->
+  <script defer src="app.js?v=9"></script>
 </head>
 
 <body>
@@ -31,17 +29,8 @@
   </nav>
 
   <main class="tab-container">
-    <!-- SUMMARY TAB -->
-    <section id="summary" class="tab-content active">
-      <!-- Filled by app.js -->
-    </section>
-
-    <!-- PICKS TAB -->
-    <section id="picks" class="tab-content">
-      <!-- Filled by app.js -->
-    </section>
-
-    <!-- ANALYTICS TAB -->
+    <section id="summary" class="tab-content active"></section>
+    <section id="picks" class="tab-content"></section>
     <section id="analytics" class="tab-content">
       <div class="section-title">Exposure & Analytics</div>
       <div class="analytics-grid">
@@ -63,14 +52,11 @@
       </div>
     </section>
 
-    <!-- HISTORY TAB -->
-    <section id="history" class="tab-content">
-      <!-- Filled by app.js -->
-    </section>
+    <section id="history" class="tab-content"></section>
   </main>
 
   <footer class="footer">
-    <span>SmartPicksGPT &bull; Experimental betting analytics &bull; Not financial advice</span>
+    <span>SmartPicksGPT • Experimental analytics • Not financial advice</span>
   </footer>
 </body>
 </html>
