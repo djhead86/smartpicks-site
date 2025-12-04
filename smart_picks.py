@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """
-SmartPicks v3 – Full version with:
+SmartPicks v3.1
 
 - Multi-sport odds fetch (The Odds API)
 - Event-level deduplication (no new bets on already-bet events)
 - Rich bet_history.csv schema with automatic migration
 - Full grading for H2H, spreads, and totals
 - Analytics: ROI, winrate, per-sport stats, streaks, bankroll curve
-- Parlay builder from top picks
+- Simple parlay builder
 - JSON output: { generated, picks[], history[], analytics{} }
 
 Config:
 - Expects config.json in same directory, or uses sane defaults.
 - ODDS_API_KEY taken from environment or config.json.
-
-Author: ChatGPT + Daniel’s brain
 """
 
 import csv
@@ -23,19 +21,21 @@ import math
 import os
 import re
 import sys
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
-# ---------------------------
-# Paths & config
-# ---------------------------
+# -------------------------------------------------------------------
+# Paths & constants
+# -------------------------------------------------------------------
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_CONFIG_PATH = SCRIPT_DIR / "config.json"
+
+TIMEZONE_OFFSET_HOURS = -7  # MST-like display (internal is UTC)
 
 BET_HISTORY_COLUMNS = [
     "bet_id",
@@ -57,12 +57,12 @@ BET_HISTORY_COLUMNS = [
     "bankroll_after",
 ]
 
-TIMEZONE_OFFSET_HOURS = -7  # MST (no DST) for display; internal is UTC
+ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
 
 
-# ---------------------------
+# -------------------------------------------------------------------
 # Data models
-# ---------------------------
+# -------------------------------------------------------------------
 
 @dataclass
 class Config:
@@ -123,8 +123,8 @@ class CandidateBet:
     event_id: str
     sport: str
     match: str
-    team: str
-    market: str  # h2h, spreads, totals
+    team: str          # team name or "Over"/"Under"
+    market: str        # "h2h", "spreads", "totals"
     line: Optional[float]
     odds: int
     stake: float
@@ -136,7 +136,6 @@ class CandidateBet:
     smart_score: float
 
     def to_pick_payload(self) -> Dict[str, Any]:
-        # For JSON output (picks[])
         local_time = self.event_time_utc + timedelta(hours=TIMEZONE_OFFSET_HOURS)
         return {
             "event_id": self.event_id,
@@ -147,7 +146,7 @@ class CandidateBet:
             "line": self.line,
             "odds": self.odds,
             "stake": self.stake,
-            "event_time": self.event_time_utc.isoformat() + "Z",
+            "event_time": self.event_time_utc.isoformat().replace("+00:00", "Z"),
             "event_time_local": local_time.strftime("%Y-%m-%d %H:%M:%S"),
             "book": self.book,
             "implied_prob": round(self.implied_prob, 4),
@@ -157,22 +156,30 @@ class CandidateBet:
         }
 
 
-# ---------------------------
+# -------------------------------------------------------------------
 # Utility functions
-# ---------------------------
+# -------------------------------------------------------------------
+
+def ts_now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def ts_iso_z(dt: Optional[datetime] = None) -> str:
+    if dt is None:
+        dt = ts_now_utc()
+    return dt.replace(tzinfo=timezone.utc).isoformat().replace("+00:00", "Z")
+
 
 def american_to_decimal(odds: int) -> float:
     if odds > 0:
         return 1.0 + odds / 100.0
-    else:
-        return 1.0 + 100.0 / abs(odds)
+    return 1.0 + 100.0 / abs(odds)
 
 
 def implied_probability(odds: int) -> float:
     if odds > 0:
         return 100.0 / (odds + 100.0)
-    else:
-        return abs(odds) / (abs(odds) + 100.0)
+    return abs(odds) / (abs(odds) + 100.0)
 
 
 def compute_profit(stake: float, odds: int, outcome: str) -> float:
@@ -186,34 +193,18 @@ def compute_profit(stake: float, odds: int, outcome: str) -> float:
     return stake * (dec - 1.0)
 
 
-def ts_now_utc() -> datetime:
-    return datetime.now(timezone.utc)
-
-
-def ts_iso_z(dt: Optional[datetime] = None) -> str:
-    if dt is None:
-        dt = ts_now_utc()
-    return dt.replace(tzinfo=timezone.utc).isoformat().replace("+00:00", "Z")
-
-
 def make_bet_id(event_id: str, market: str, line: Optional[float], team: str) -> str:
     line_str = "" if line is None else str(line)
     raw = f"{event_id}_{market}_{line_str}_{team}".lower().replace(" ", "_")
     return re.sub(r"[^a-z0-9_]+", "", raw)
 
 
-# ---------------------------
+# -------------------------------------------------------------------
 # bet_history handling & migration
-# ---------------------------
+# -------------------------------------------------------------------
 
 def ensure_bet_history_schema(path: Path) -> List[Dict[str, Any]]:
-    """
-    Load bet_history.csv and transparently migrate it to the new schema.
-
-    - Adds: event_id, line, result_timestamp if missing.
-    - Keeps existing data.
-    - Returns list of dict rows with unified schema.
-    """
+    """Load bet_history.csv and transparently migrate it to the unified schema."""
     rows: List[Dict[str, Any]] = []
 
     if not path.exists():
@@ -229,14 +220,11 @@ def ensure_bet_history_schema(path: Path) -> List[Dict[str, Any]]:
             rows.append(row)
 
     if set(old_fieldnames) == set(BET_HISTORY_COLUMNS):
-        # Already in good shape
         return rows
 
     migrated_rows: List[Dict[str, Any]] = []
     for row in rows:
         new_row = {col: "" for col in BET_HISTORY_COLUMNS}
-
-        # Copy what we know
         new_row["bet_id"] = row.get("bet_id", "")
         new_row["timestamp"] = row.get("timestamp", "")
         new_row["date"] = row.get("date", "")
@@ -252,7 +240,6 @@ def ensure_bet_history_schema(path: Path) -> List[Dict[str, Any]]:
         new_row["profit"] = row.get("profit", "")
         new_row["bankroll_after"] = row.get("bankroll_after", "")
 
-        # Newer fields
         event_id = row.get("event_id")
         if not event_id:
             event_id = f"legacy_{row.get('sport','')}_{row.get('match','')}"
@@ -279,9 +266,9 @@ def append_bet_to_history(path: Path, bet: CandidateBet, bankroll_after: float) 
     rows = load_bet_history(path)
     now = ts_now_utc()
     now_iso = ts_iso_z(now)
-    date_str = now.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET_HOURS))).strftime(
-        "%m/%d/%y"
-    )
+    date_str = now.astimezone(
+        timezone(timedelta(hours=TIMEZONE_OFFSET_HOURS))
+    ).strftime("%m/%d/%y")
 
     line_str = "" if bet.line is None else str(bet.line)
 
@@ -312,12 +299,9 @@ def append_bet_to_history(path: Path, bet: CandidateBet, bankroll_after: float) 
         writer.writerows(rows)
 
 
-# ---------------------------
-# Odds & scores fetch
-# ---------------------------
-
-ODDS_BASE_URL = "https://api.the-odds-api.com/v4"
-
+# -------------------------------------------------------------------
+# HTTP helpers, odds & scores
+# -------------------------------------------------------------------
 
 def http_get(url: str, params: Dict[str, Any]) -> Any:
     try:
@@ -343,10 +327,7 @@ def fetch_odds_for_sport(sport: str, api_key: str) -> List[Dict[str, Any]]:
 
 def fetch_scores_for_sport(sport: str, api_key: str, days_from: int) -> List[Dict[str, Any]]:
     url = f"{ODDS_BASE_URL}/sports/{sport}/scores"
-    params = {
-        "apiKey": api_key,
-        "daysFrom": str(days_from),
-    }
+    params = {"apiKey": api_key, "daysFrom": str(days_from)}
     print(f"[SCORES] GET {url}")
     return http_get(url, params)
 
@@ -355,6 +336,8 @@ def build_scores_index(
     sports: List[str], api_key: str, days_from: int
 ) -> Dict[str, Dict[str, Any]]:
     by_event: Dict[str, Dict[str, Any]] = {}
+    if not api_key:
+        return by_event
     for sport in sports:
         scores = fetch_scores_for_sport(sport, api_key, days_from)
         for game in scores or []:
@@ -365,14 +348,11 @@ def build_scores_index(
     return by_event
 
 
-# ---------------------------
+# -------------------------------------------------------------------
 # Bet grading
-# ---------------------------
+# -------------------------------------------------------------------
 
 def grade_single_bet(bet_row: Dict[str, Any], score: Dict[str, Any]) -> str:
-    """
-    Return outcome: 'WIN', 'LOSS', 'PUSH', or 'PENDING'
-    """
     market = bet_row.get("market", "")
     team = bet_row.get("team", "")
     line_str = bet_row.get("line", "")
@@ -407,10 +387,7 @@ def grade_single_bet(bet_row: Dict[str, Any], score: Dict[str, Any]) -> str:
                 winner = away_team
             else:
                 return "PUSH"
-        if team == winner:
-            return "WIN"
-        else:
-            return "LOSS"
+        return "WIN" if team == winner else "LOSS"
 
     if market == "spreads" and line is not None:
         if team == home_team:
@@ -422,27 +399,24 @@ def grade_single_bet(bet_row: Dict[str, Any], score: Dict[str, Any]) -> str:
         adjusted = margin + line
         if adjusted > 0:
             return "WIN"
-        elif adjusted == 0:
+        if adjusted == 0:
             return "PUSH"
-        else:
-            return "LOSS"
+        return "LOSS"
 
     if market == "totals" and line is not None:
         lt = team.lower()
         if "over" in lt:
             if total_points > line:
                 return "WIN"
-            elif total_points == line:
+            if total_points == line:
                 return "PUSH"
-            else:
-                return "LOSS"
+            return "LOSS"
         if "under" in lt:
             if total_points < line:
                 return "WIN"
-            elif total_points == line:
+            if total_points == line:
                 return "PUSH"
-            else:
-                return "LOSS"
+            return "LOSS"
 
     return "PENDING"
 
@@ -473,14 +447,12 @@ def grade_open_bets(
         result = r.get("result", "")
         event_id = r.get("event_id", "")
 
-        # Already graded: recompute bankroll from stored profit
         if status != "OPEN" and result in ("WIN", "LOSS", "PUSH"):
             profit = float(r.get("profit", "0") or 0.0)
             bankroll += profit
             r["bankroll_after"] = f"{bankroll:.2f}"
             continue
 
-        # Need to try grading
         score = scores_by_event_id.get(event_id)
         if not score or not score.get("completed"):
             r["bankroll_after"] = f"{bankroll:.2f}"
@@ -499,7 +471,6 @@ def grade_open_bets(
         r["result_timestamp"] = ts_iso_z()
         r["bankroll_after"] = f"{bankroll:.2f}"
 
-    # Write back
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=BET_HISTORY_COLUMNS)
         writer.writeheader()
@@ -508,40 +479,23 @@ def grade_open_bets(
     return rows_sorted
 
 
-# ---------------------------
-# Candidate building & risk
-# ---------------------------
+# -------------------------------------------------------------------
+# Model & candidate generation
+# -------------------------------------------------------------------
 
 def naive_model_probability(impl_prob: float, market: str, sport: str) -> float:
-    """
-    Quick-and-dirty "model probability":
-    - Slight bias toward favorites (impl_prob > 0.5) to emulate sharp tilt
-    - Slight bias against huge dogs
-    This is intentionally simple; true model can replace this later.
-    """
     if impl_prob > 0.5:
         return min(impl_prob * 1.03, 0.99)
-    else:
-        return max(impl_prob * 0.97, 0.01)
+    return max(impl_prob * 0.97, 0.01)
 
 
 def compute_edge(impl_prob: float, model_prob: float, odds: int) -> float:
-    """
-    Expected value edge vs implied, using model probability and decimal odds.
-    EV = p * (decimal-1) - (1-p)
-    """
     dec = american_to_decimal(odds)
-    ev = model_prob * (dec - 1.0) - (1.0 - model_prob)
-    return ev
+    return model_prob * (dec - 1.0) - (1.0 - model_prob)
 
 
 def compute_smart_score(edge: float, model_prob: float, odds: int) -> float:
-    """
-    Convert EV + confidence into a 0-100 "Smart Score".
-    Very rough scaling:
-    - edge in [-0.1, 0.2] mapped to 0-100 with mild emphasis on high edge & decent probability.
-    """
-    base = (edge + 0.1) / 0.3  # normalize roughly [-0.1,0.2] to [0,1]
+    base = (edge + 0.1) / 0.3
     base = max(0.0, min(base, 1.0))
     conf = model_prob
     score = 100.0 * (0.7 * base + 0.3 * conf)
@@ -556,7 +510,6 @@ def build_candidates_from_odds(
         print("[ERROR] No API key. Cannot fetch odds.", file=sys.stderr)
         return []
 
-    # Build set of event_ids that already have OPEN bets (event-level dedup)
     open_event_ids = {
         r.get("event_id")
         for r in history_rows
@@ -572,7 +525,6 @@ def build_candidates_from_odds(
             if not event_id:
                 continue
 
-            # Event-level dedup: if we've ever bet this event and it's still open, skip
             if event_id in open_event_ids:
                 continue
 
@@ -588,10 +540,13 @@ def build_candidates_from_odds(
             except Exception:
                 event_time_utc = ts_now_utc()
 
+            # FILTER 1: Only games in next 24 hours
+            now_utc = ts_now_utc()
+            if not (now_utc <= event_time_utc <= now_utc + timedelta(hours=24)):
+                continue
+
             bookmakers = game.get("bookmakers") or []
-            # Build best lines by market/outcome
             best_by_market: Dict[Tuple[str, str], Tuple[int, str, Optional[float]]] = {}
-            # key: (market, outcome_key) → (odds, book, line)
 
             for bm in bookmakers:
                 book = bm.get("title", "Unknown")
@@ -602,7 +557,8 @@ def build_candidates_from_odds(
                         name = o.get("name")
                         price = int(o.get("price", 0))
                         point = o.get("point")
-                        line_val: Optional[float] = None
+
+                        line_val = None
                         if point not in (None, ""):
                             try:
                                 line_val = float(point)
@@ -610,17 +566,15 @@ def build_candidates_from_odds(
                                 line_val = None
 
                         if market_key == "h2h":
-                            # outcome key is team name
                             outcome_key = name
                         elif market_key == "spreads":
-                            outcome_key = name  # team
+                            outcome_key = name
                         elif market_key == "totals":
-                            outcome_key = name.lower()  # "Over"/"Under"
+                            outcome_key = name.lower()
                         else:
                             continue
 
                         key = (market_key, outcome_key)
-                        # We want "best" odds = highest absolute EV for now → simply highest decimal
                         current = best_by_market.get(key)
                         if current is None:
                             best_by_market[key] = (price, book, line_val)
@@ -629,7 +583,10 @@ def build_candidates_from_odds(
                             if american_to_decimal(price) > american_to_decimal(cur_price):
                                 best_by_market[key] = (price, book, line_val)
 
-            # Convert best_by_market to candidate list
+            # Convert to candidates
+            min_ev_rule = float(config.risk_rules.get("min_ev", 0.01))
+            min_ev = max(0.02, min_ev_rule)  # at least 2% edge
+
             for (market_key, outcome_key), (odds, book, line_val) in best_by_market.items():
                 if odds == 0:
                     continue
@@ -641,15 +598,25 @@ def build_candidates_from_odds(
                     team = outcome_key
                     market = "spreads"
                 elif market_key == "totals":
-                    team = outcome_key  # "Over" or "Under"
+                    team = outcome_key
                     market = "totals"
                 else:
+                    continue
+
+                # FILTER 2: Sweet-spot odds range
+                if odds < -300:
+                    continue
+                if odds > 500:
                     continue
 
                 impl_prob = implied_probability(odds)
                 model_prob = naive_model_probability(impl_prob, market, sport)
                 edge = compute_edge(impl_prob, model_prob, odds)
                 smart_score = compute_smart_score(edge, model_prob, odds)
+
+                # FILTER 3: Minimum EV
+                if edge < min_ev:
+                    continue
 
                 stake = float(config.risk_rules.get("unit_size", 2.0))
 
@@ -679,7 +646,6 @@ def filter_candidates(
     history_rows: List[Dict[str, Any]],
     config: Config,
 ) -> List[CandidateBet]:
-    min_ev = float(config.risk_rules.get("min_ev", 0.01))
     max_open = int(config.risk_rules.get("max_open_bets", 20))
     max_exposure_fraction = float(config.risk_rules.get("max_exposure_fraction", 0.10))
 
@@ -689,11 +655,8 @@ def filter_candidates(
     max_exposure = bankroll * max_exposure_fraction
     current_exposure = sum(float(r.get("stake", "0") or 0.0) for r in open_rows)
 
-    # Filter by EV
-    good = [c for c in candidates if c.edge >= min_ev]
-
-    # Sort by Smart Score descending
-    good.sort(key=lambda x: x.smart_score, reverse=True)
+    # Sort by Smart Score
+    good = sorted(candidates, key=lambda x: x.smart_score, reverse=True)
 
     selected: List[CandidateBet] = []
     for c in good:
@@ -705,22 +668,19 @@ def filter_candidates(
         open_count += 1
         current_exposure += c.stake
 
-    # Limit to a nice top N (e.g., 12)
     return selected[:12]
 
 
-# ---------------------------
-# Analytics
-# ---------------------------
+# -------------------------------------------------------------------
+# Analytics & parlays
+# -------------------------------------------------------------------
 
 def compute_bankroll_from_history(
     rows: List[Dict[str, Any]], starting_bankroll: float
 ) -> float:
     if not rows:
         return starting_bankroll
-    # We recompute from start to avoid drift
-    bankroll = starting_bankroll
-    # Sort by timestamp
+
     def parse_ts(r: Dict[str, Any]) -> datetime:
         ts = r.get("timestamp", "")
         try:
@@ -728,6 +688,7 @@ def compute_bankroll_from_history(
         except Exception:
             return datetime.min
 
+    bankroll = starting_bankroll
     for r in sorted(rows, key=parse_ts):
         status = r.get("status", "")
         result = r.get("result", "")
@@ -752,7 +713,6 @@ def compute_analytics(rows: List[Dict[str, Any]], starting_bankroll: float) -> D
             "parlays": [],
         }
 
-    # Chronological
     def parse_ts(r: Dict[str, Any]) -> datetime:
         ts = r.get("timestamp", "")
         try:
@@ -771,7 +731,7 @@ def compute_analytics(rows: List[Dict[str, Any]], starting_bankroll: float) -> D
     current_streak = 0
     max_win_streak = 0
     max_loss_streak = 0
-    last_streak_type: Optional[str] = None  # "WIN" or "LOSS"
+    last_streak_type: Optional[str] = None
 
     for r in rows_sorted:
         status = r.get("status", "")
@@ -806,7 +766,6 @@ def compute_analytics(rows: List[Dict[str, Any]], starting_bankroll: float) -> D
         if result == "WIN":
             wins += 1
             s["wins"] += 1
-            # streak
             if last_streak_type == "WIN":
                 current_streak += 1
             else:
@@ -829,12 +788,9 @@ def compute_analytics(rows: List[Dict[str, Any]], starting_bankroll: float) -> D
     overall_roi = (bankroll - starting_bankroll) / total_staked if total_staked > 0 else 0.0
 
     for sport, s in by_sport.items():
-        if s["staked"] > 0:
-            s["roi"] = s["profit"] / s["staked"]
-        else:
-            s["roi"] = 0.0
+        s["roi"] = s["profit"] / s["staked"] if s["staked"] > 0 else 0.0
 
-    analytics = {
+    return {
         "bankroll": round(bankroll, 2),
         "total_bets": total_bets,
         "wins": wins,
@@ -847,35 +803,23 @@ def compute_analytics(rows: List[Dict[str, Any]], starting_bankroll: float) -> D
             "max_win": max_win_streak,
             "max_loss": max_loss_streak,
         },
-        "parlays": [],  # filled later
+        "parlays": [],
     }
 
-    return analytics
-
-
-# ---------------------------
-# Parlay builder
-# ---------------------------
 
 def build_parlays_from_picks(picks: List[CandidateBet]) -> List[Dict[str, Any]]:
-    """
-    Simple parlay builder:
-    - Up to one pick per event
-    - Top 3–4 Smart Score legs
-    """
     if not picks:
         return []
 
-    # Unique by event_id
     seen_events = set()
-    unique_picks: List[CandidateBet] = []
+    unique: List[CandidateBet] = []
     for p in sorted(picks, key=lambda x: x.smart_score, reverse=True):
         if p.event_id in seen_events:
             continue
         seen_events.add(p.event_id)
-        unique_picks.append(p)
+        unique.append(p)
 
-    legs = unique_picks[:4]  # up to 4-leg parlay
+    legs = unique[:4]
     if len(legs) < 2:
         return []
 
@@ -887,19 +831,19 @@ def build_parlays_from_picks(picks: List[CandidateBet]) -> List[Dict[str, Any]]:
 
     implied_ev = approx_p * (total_dec - 1.0) - (1.0 - approx_p)
 
-    parlay = {
-        "legs": [leg.to_pick_payload() for leg in legs],
-        "combined_decimal_odds": round(total_dec, 3),
-        "approx_win_prob": round(approx_p, 4),
-        "approx_ev": round(implied_ev, 4),
-    }
+    return [
+        {
+            "legs": [leg.to_pick_payload() for leg in legs],
+            "combined_decimal_odds": round(total_dec, 3),
+            "approx_win_prob": round(approx_p, 4),
+            "approx_ev": round(implied_ev, 4),
+        }
+    ]
 
-    return [parlay]
 
-
-# ---------------------------
-# Main orchestration
-# ---------------------------
+# -------------------------------------------------------------------
+# Main
+# -------------------------------------------------------------------
 
 def main() -> None:
     config = Config.load(DEFAULT_CONFIG_PATH)
@@ -909,38 +853,26 @@ def main() -> None:
     print(f"[INFO] bet_history: {bet_history_path}")
     print(f"[INFO] data.json  : {data_output_path}")
 
-    # 1) Grade existing bets using scores
     scores_by_event = build_scores_index(
         config.sports, config.odds_api_key, config.days_from_scores
     )
-    graded_history = grade_open_bets(
-        bet_history_path, scores_by_event, config.starting_bankroll
-    )
+    grade_open_bets(bet_history_path, scores_by_event, config.starting_bankroll)
 
-    # Reload history (now graded)
     history_rows = load_bet_history(bet_history_path)
 
-    # 2) Build new candidates from odds, apply risk/dedup
     all_candidates = build_candidates_from_odds(config, history_rows)
     picks = filter_candidates(all_candidates, history_rows, config)
 
-    # 3) Append picks to bet_history, updating bankroll as we go
     bankroll = compute_bankroll_from_history(history_rows, config.starting_bankroll)
     for pick in picks:
-        bankroll_after = bankroll + 0.0  # bankroll doesn't change until graded
-        append_bet_to_history(bet_history_path, pick, bankroll_after)
+        append_bet_to_history(bet_history_path, pick, bankroll)
+        # bankroll stays the same until bets are graded
 
-    # Reload including newly added picks
     history_rows = load_bet_history(bet_history_path)
 
-    # 4) Compute analytics
     analytics = compute_analytics(history_rows, config.starting_bankroll)
+    analytics["parlays"] = build_parlays_from_picks(picks)
 
-    # 5) Build parlay suggestions from newly selected picks
-    parlays = build_parlays_from_picks(picks)
-    analytics["parlays"] = parlays
-
-    # 6) JSON payload: { generated, picks[], history[], analytics{} }
     payload = {
         "generated": ts_iso_z(),
         "picks": [p.to_pick_payload() for p in picks],
