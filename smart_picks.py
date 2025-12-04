@@ -85,6 +85,163 @@ def implied_probability(odds: int) -> float:
         return 100.0 / (odds + 100.0)
     return abs(odds) / (abs(odds) + 100.0)
 
+def fetch_scores_for_sport(
+    sport: str, api_key: str, days_from: int
+) -> Optional[List[Dict[str, Any]]]:
+    """
+    Uses The Odds API scores endpoint to pull recent results.
+    """
+    if not api_key:
+        return None
+
+    url = (
+        f"{ODDS_BASE_URL}/sports/{sport}/scores"
+        f"?apiKey={api_key}"
+        f"&daysFrom={days_from}"
+    )
+    try:
+        resp = requests.get(url, timeout=15)
+        if not resp.ok:
+            print(
+                f"[HTTP] Error {resp.status_code} fetching scores for {sport}: {resp.text[:200]}",
+                file=sys.stderr,
+            )
+            return None
+        return resp.json()
+    except Exception as e:
+        print(f"[HTTP] Exception fetching scores for {sport}: {e}", file=sys.stderr)
+        return None
+
+def _determine_outcome_from_scores(row: Dict[str, Any], event: Dict[str, Any]) -> Optional[str]:
+    """
+    Given a bet row and a scores event from The Odds API,
+    return 'win', 'loss', 'push' or None if we can't decide.
+    """
+    market = row.get("market")
+    team = row.get("team")
+    line_raw = row.get("line")
+    line = None
+    if line_raw not in (None, "", "None"):
+        try:
+            line = float(line_raw)
+        except ValueError:
+            line = None
+
+    home = event.get("home_team")
+    away = event.get("away_team")
+    scores_list = event.get("scores") or []
+
+    scores = {s.get("name"): s.get("score") for s in scores_list}
+    try:
+        home_score = float(scores.get(home))
+        away_score = float(scores.get(away))
+    except (TypeError, ValueError):
+        return None
+
+    # H2H
+    if market == "h2h":
+        if team == home:
+            if home_score > away_score:
+                return "win"
+            elif home_score < away_score:
+                return "loss"
+            else:
+                return "push"
+        elif team == away:
+            if away_score > home_score:
+                return "win"
+            elif away_score < home_score:
+                return "loss"
+            else:
+                return "push"
+        else:
+            return None
+
+    # Spreads: line is spread from perspective of 'team'
+    if market == "spreads" and line is not None:
+        if team == home:
+            margin = (home_score + line) - away_score
+        elif team == away:
+            margin = (away_score + line) - home_score
+        else:
+            return None
+
+        if margin > 0:
+            return "win"
+        elif abs(margin) < 1e-6:
+            return "push"
+        else:
+            return "loss"
+
+    # Totals: team is "over" or "under"
+    if market == "totals" and line is not None:
+        total = home_score + away_score
+        side = (team or "").lower()
+        if side == "over":
+            if total > line:
+                return "win"
+            elif abs(total - line) < 1e-6:
+                return "push"
+            else:
+                return "loss"
+        elif side == "under":
+            if total < line:
+                return "win"
+            elif abs(total - line) < 1e-6:
+                return "push"
+            else:
+                return "loss"
+
+    return None
+
+def auto_grade_from_scores(config: Config, history_rows: List[Dict[str, Any]]) -> None:
+    """
+    Look up any OPEN bets whose events have completed, and grade them.
+    Uses The Odds API scores endpoint.
+    """
+    api_key = config.odds_api_key
+    if not api_key:
+        return
+
+    open_rows = [r for r in history_rows if r.get("status") == "OPEN"]
+    if not open_rows:
+        return
+
+    sports_needed = {r.get("sport") for r in open_rows if r.get("sport")}
+    if not sports_needed:
+        return
+
+    # Build index: (sport, event_id) -> event json
+    scores_index: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for sport in sports_needed:
+        scores_json = fetch_scores_for_sport(sport, api_key, config.days_from_scores)
+        for ev in scores_json or []:
+            ev_id = ev.get("id")
+            if not ev_id:
+                continue
+            scores_index[(sport, ev_id)] = ev
+
+    changed = False
+    for row in open_rows:
+        key = (row.get("sport"), row.get("event_id"))
+        ev = scores_index.get(key)
+        if not ev:
+            continue
+        if not ev.get("completed"):
+            continue
+
+        outcome = _determine_outcome_from_scores(row, ev)
+        if not outcome:
+            continue
+
+        updated = apply_grade_to_bet(
+            history_rows, row["bet_id"], outcome, config.starting_bankroll
+        )
+        if updated:
+            changed = True
+
+    if changed:
+        print("[INFO] Auto-graded some open bets from scores.")
 
 # -------------------------------------------------------------------
 # Data models
@@ -632,10 +789,80 @@ def build_data_json(
 # Main
 # -------------------------------------------------------------------
 
+# -------------------------------------------------------------------
+# Manual Grading Utilities
+# -------------------------------------------------------------------
+
+def apply_grade_to_bet(history_rows: List[Dict[str, Any]],
+                       bet_id: str,
+                       outcome: str,
+                       starting_bankroll: float) -> bool:
+    """
+    Grades a specific bet in history_rows.
+    outcome must be 'win', 'loss', or 'push'.
+    Returns True if updated, False otherwise.
+    """
+
+    outcome = outcome.lower().strip()
+    if outcome not in ("win", "loss", "push"):
+        print(f"[ERROR] Invalid outcome: {outcome}")
+        return False
+
+    for row in history_rows:
+        if row.get("bet_id") == bet_id:
+            if row.get("status") == "CLOSED":
+                print(f"[WARN] Bet {bet_id} already closed.")
+                return False
+
+            odds = int(row.get("odds", "0"))
+            stake = float(row.get("stake", "0"))
+
+            # Profit calculation
+            if outcome == "win":
+                profit = round(stake * american_to_decimal(odds) - stake, 2)
+            elif outcome == "loss":
+                profit = -stake
+            else:  # push
+                profit = 0.0
+
+            row["status"] = "CLOSED"
+            row["result"] = outcome.upper()
+            row["profit"] = str(profit)
+            row["result_timestamp"] = ts_now_utc().isoformat()
+
+            print(f"[INFO] Bet {bet_id} graded as {outcome.upper()} (profit {profit:+.2f})")
+            return True
+
+    print(f"[ERROR] Bet ID not found: {bet_id}")
+    return False
+
+
+def grade_latest_open_bet(history_rows: List[Dict[str, Any]],
+                          outcome: str,
+                          starting_bankroll: float) -> Optional[str]:
+    """Grades the most recent OPEN bet."""
+    open_bets = [r for r in history_rows if r.get("status") == "OPEN"]
+    if not open_bets:
+        print("[WARN] No open bets to grade.")
+        return None
+
+    latest = sorted(open_bets, key=lambda r: r["timestamp"], reverse=True)[0]
+    bet_id = latest["bet_id"]
+
+    updated = apply_grade_to_bet(history_rows, bet_id, outcome, starting_bankroll)
+    if updated:
+        return bet_id
+    return None
+
+
+
 def main() -> None:
     config = Config.load(DEFAULT_CONFIG_PATH)
 
     history_rows = load_bet_history(config.bet_history_path)
+        # Auto-grade any resolvable open bets using live scores
+    auto_grade_from_scores(config, history_rows)
+
 
     # For now, we are not auto-resolving pending bets via scores to keep it stable.
     # (Your previous version did some of this; we can add it back carefully later.)
@@ -698,5 +925,68 @@ def main() -> None:
     print(f"[INFO] Wrote data JSON to {out_path}")
 
 
-if __name__ == "__main__":
-    main()
+# -------------------------------------------------------------------
+# Manual Grading Utilities
+# -------------------------------------------------------------------
+
+def apply_grade_to_bet(history_rows: List[Dict[str, Any]],
+                       bet_id: str,
+                       outcome: str,
+                       starting_bankroll: float) -> bool:
+    """
+    Grades a specific bet in history_rows.
+    outcome must be 'win', 'loss', or 'push'.
+    Returns True if updated, False otherwise.
+    """
+
+    outcome = outcome.lower().strip()
+    if outcome not in ("win", "loss", "push"):
+        print(f"[ERROR] Invalid outcome: {outcome}")
+        return False
+
+    for row in history_rows:
+        if row.get("bet_id") == bet_id:
+            if row.get("status") == "CLOSED":
+                print(f"[WARN] Bet {bet_id} already closed.")
+                return False
+
+            odds = int(row.get("odds", "0"))
+            stake = float(row.get("stake", "0"))
+
+            # Profit calculation
+            if outcome == "win":
+                profit = round(stake * american_to_decimal(odds) - stake, 2)
+            elif outcome == "loss":
+                profit = -stake
+            else:  # push
+                profit = 0.0
+
+            row["status"] = "CLOSED"
+            row["result"] = outcome.upper()
+            row["profit"] = str(profit)
+            row["result_timestamp"] = ts_now_utc().isoformat()
+
+            print(f"[INFO] Bet {bet_id} graded as {outcome.upper()} (profit {profit:+.2f})")
+            return True
+
+    print(f"[ERROR] Bet ID not found: {bet_id}")
+    return False
+
+
+def grade_latest_open_bet(history_rows: List[Dict[str, Any]],
+                          outcome: str,
+                          starting_bankroll: float) -> Optional[str]:
+    """Grades the most recent OPEN bet."""
+    open_bets = [r for r in history_rows if r.get("status") == "OPEN"]
+    if not open_bets:
+        print("[WARN] No open bets to grade.")
+        return None
+
+    latest = sorted(open_bets, key=lambda r: r["timestamp"], reverse=True)[0]
+    bet_id = latest["bet_id"]
+
+    updated = apply_grade_to_bet(history_rows, bet_id, outcome, starting_bankroll)
+    if updated:
+        return bet_id
+    return None
+

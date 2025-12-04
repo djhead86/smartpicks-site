@@ -143,6 +143,36 @@ function renderAll(data) {
   renderAnalyticsTab(analytics);
 }
 
+// ---------- Score Fetch Helper ----------
+
+def fetch_scores_for_sport(
+    sport: str, api_key: str, days_from: int
+) -> Optional[List[Dict[str, Any]]]:
+    """
+    Uses The Odds API scores endpoint to pull recent results.
+    """
+    if not api_key:
+        return None
+
+    url = (
+        f"{ODDS_BASE_URL}/sports/{sport}/scores"
+        f"?apiKey={api_key}"
+        f"&daysFrom={days_from}"
+    )
+    try:
+        resp = requests.get(url, timeout=15)
+        if not resp.ok:
+            print(
+                f"[HTTP] Error {resp.status_code} fetching scores for {sport}: {resp.text[:200]}",
+                file=sys.stderr,
+            )
+            return None
+        return resp.json()
+    except Exception as e:
+        print(f"[HTTP] Exception fetching scores for {sport}: {e}", file=sys.stderr)
+        return None
+
+
 // ---------- Summary Tab ----------
 
 function renderSummaryTab(picks, history, analytics) {
