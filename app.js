@@ -48,7 +48,9 @@ async function fetchLiveScores() {
         let tickerItems = [];
 
         for (const sport of sports) {
-            const url = `https://api.the-odds-api.com/v4/sports/${sport}/scores?apiKey=${ODDS_API_KEY}&daysFrom=2`;
+            // TODO: future: python pushes scores to data.json
+          return;
+
 
             const res = await fetch(url);
             if (!res.ok) continue;
