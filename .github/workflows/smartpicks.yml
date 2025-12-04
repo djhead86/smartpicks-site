@@ -1,12 +1,9 @@
-name: SmartPicks Auto-Generator
+name: SmartPicks Auto-Grade & Generate
 
 on:
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "0 * * * *"   # every hour
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   run-smartpicks:
@@ -24,23 +21,23 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          pip install requests pandas numpy
+          pip install requests
 
-      - name: Run SmartPicks generator
-        run: python3 smart_picks.py
+      - name: Run SmartPicks (auto-grade + generate)
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-
-      - name: Commit results
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add data/data.json || true
-          git commit -m "Auto-update: SmartPicks data" || true
+          cd smartpicks-site
+          python3 smart_picks.py
 
-      - name: Push
-        uses: ad-m/github-push-action@v0.6.0
+      - name: Commit updated data
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add smartpicks-site/bet_history.csv smartpicks-site/data.json
+          git commit -m "Auto update SmartPicks data" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-
