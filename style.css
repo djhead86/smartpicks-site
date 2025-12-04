@@ -521,3 +521,18 @@ body {
 .metric-card-compact {
   padding: 10px 12px;
 }
+
+.manual-grade {
+  margin-top: 4px;
+}
+
+.grade-btn {
+  margin-right: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.win-btn { background: #2ecc71; color: white; }
+.loss-btn { background: #e74c3c; color: white; }
+.push-btn { background: #95a5a6; color: white; }

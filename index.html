@@ -2,54 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SmartPicksGPT v2 Dashboard</title>
+  <title>SmartPicksGPT Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Chart.js for exposure charts -->
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Single app entrypoint (v2) -->
-  <script defer src="app_v2.js?v=1"></script>
 </head>
 
 <body>
 
-  <!-- 🔥 NEW LIVE SCORE TICKER -->
-  <div id="score-ticker" class="ticker">
-    <div id="ticker-content">Loading scores…</div>
-  </div>
-
+  <!-- ===================== -->
+  <!--     TOP NAV BAR       -->
+  <!-- ===================== -->
   <header class="top-bar">
     <div class="brand">
       <span class="logo-dot"></span>
       <span class="brand-text">SmartPicksGPT</span>
     </div>
-    <div class="header-meta">
-      <span id="last-updated" class="last-updated">Last update: —</span>
+
+    <div id="score-ticker" class="score-ticker">
+      Loading scores…
     </div>
   </header>
 
-  <nav class="tab-bar">
-    <button class="tab-button active" data-tab="summary">Summary</button>
-    <button class="tab-button" data-tab="picks">Today’s Picks</button>
-    <button class="tab-button" data-tab="analytics">Exposure & Analytics</button>
-    <button class="tab-button" data-tab="history">Open Bets</button>
-  </nav>
+  <!-- ===================== -->
+  <!--        TABS           -->
+  <!-- ===================== -->
+  <div class="tab-bar">
+    <button class="tab-button" data-tab="summary">Summary</button>
+    <button class="tab-button" data-tab="picks">Today's Picks</button>
+    <button class="tab-button" data-tab="history">History</button>
+    <button class="tab-button" data-tab="analytics">Analytics</button>
+  </div>
 
-  <main class="tab-container">
+  <!-- ===================== -->
+  <!--     TAB SECTIONS      -->
+  <!-- ===================== -->
 
-    <section id="summary" class="tab-content active"></section>
-    <section id="picks" class="tab-content"></section>
+  <!-- SUMMARY TAB -->
+  <section id="summary" class="tab-content active"></section>
 
-    <section id="analytics" class="tab-content">
-      <!-- (unchanged analytics markup) -->
-    </section>
+  <!-- PICKS TAB -->
+  <section id="picks" class="tab-content"></section>
 
-    <section id="history" class="tab-content"></section>
-  </main>
+  <!-- HISTORY TAB -->
+  <section id="history" class="tab-content">
+    <!-- This will be fully rendered by app_v2.js -->
+  </section>
 
-  <footer class="footer">
-    <span>SmartPicksGPT • Experimental analytics • Not financial advice</span>
-  </footer>
+  <!-- ANALYTICS TAB -->
+  <section id="analytics" class="tab-content">
+    <!-- Fully populated by app_v2.js -->
+  </section>
+
+  <!-- ===================== -->
+  <!--      MAIN SCRIPT      -->
+  <!-- ===================== -->
+  <script src="app_v2.js"></script>
+
 </body>
 </html>
