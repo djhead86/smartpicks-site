@@ -615,10 +615,17 @@ def build_data_json(
     return {
         "bankroll": bankroll,
         "last_updated": now_str,
+
+        # The key the frontend actually expects:
+        "picks": open_bets,
+        "generated": open_bets,
+
+        # Legacy + canonical:
         "open_bets": open_bets,
         "history": history_rows,
         "analytics": analytics,
     }
+
 
 
 # -------------------------------------------------------------------
