@@ -40,6 +40,10 @@ async function fetchLiveScores() {
         const openEvents = (data.history || [])
             .filter(row => row.status === "OPEN")
             .map(row => row.event);
+        // After you parse data.json:
+        const openBets = data.history.filter(r => r.status === "OPEN");
+            renderGrader(openBets);
+
 
         let tickerItems = [];
 
@@ -145,32 +149,7 @@ function renderAll(data) {
 
 // ---------- Score Fetch Helper ----------
 
-def fetch_scores_for_sport(
-    sport: str, api_key: str, days_from: int
-) -> Optional[List[Dict[str, Any]]]:
-    """
-    Uses The Odds API scores endpoint to pull recent results.
-    """
-    if not api_key:
-        return None
 
-    url = (
-        f"{ODDS_BASE_URL}/sports/{sport}/scores"
-        f"?apiKey={api_key}"
-        f"&daysFrom={days_from}"
-    )
-    try:
-        resp = requests.get(url, timeout=15)
-        if not resp.ok:
-            print(
-                f"[HTTP] Error {resp.status_code} fetching scores for {sport}: {resp.text[:200]}",
-                file=sys.stderr,
-            )
-            return None
-        return resp.json()
-    except Exception as e:
-        print(f"[HTTP] Exception fetching scores for {sport}: {e}", file=sys.stderr)
-        return None
 
 
 // ---------- Summary Tab ----------
@@ -271,6 +250,70 @@ function renderPicksTab(picks) {
     </div>
   `;
 }
+
+function renderGrader(openBets) {
+  const container = document.getElementById("grader-root");
+  if (!container) return;
+
+  if (!openBets.length) {
+    container.innerHTML = "<p>No open bets to grade.</p>";
+    return;
+  }
+
+  const rows = openBets.map(bet => {
+    const id = bet.bet_id || bet.betId || ""; // depending which you stored
+    return `
+      <tr>
+        <td>${bet.date || ""}</td>
+        <td>${bet.sport}</td>
+        <td>${bet.event}</td>
+        <td>${bet.team} (${bet.market})</td>
+        <td>${bet.odds}</td>
+        <td>
+          <button data-id="${id}" data-outcome="win">Win</button>
+          <button data-id="${id}" data-outcome="loss">Loss</button>
+          <button data-id="${id}" data-outcome="push">Push</button>
+        </td>
+      </tr>`;
+  }).join("");
+
+  container.innerHTML = `
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th><th>Sport</th><th>Event</th><th>Side</th><th>Odds</th><th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  container.querySelectorAll("button[data-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const betId = btn.getAttribute("data-id");
+      const outcome = btn.getAttribute("data-outcome");
+      fetch("http://127.0.0.1:5001/grade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bet_id: betId, outcome })
+      })
+      .then(r => r.json())
+      .then(resp => {
+        if (resp.status === "ok") {
+          alert(`Graded ${betId} as ${outcome.toUpperCase()}. Refreshing...`);
+          window.location.reload();
+        } else {
+          alert("Error grading bet: " + (resp.message || "unknown"));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to talk to local grader API. Is grader_api.py running?");
+      });
+    });
+  });
+}
+
 
 function formatOdds(o) {
   const n = Number(o || 0);
