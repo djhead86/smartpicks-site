@@ -55,6 +55,22 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+/* ===== SCORE TICKER ===== */
+.score-ticker {
+  width: 100%;
+  background: #0f1629;
+  color: #b9c4e4;
+  padding: 6px 14px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow-x: auto;
+  border-bottom: 1px solid #1f2a44;
+}
+
+.score-ticker span {
+  margin-right: 30px;
+  display: inline-block;
+}
 
 /* Tabs */
 .tabs {

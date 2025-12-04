@@ -1,5 +1,5 @@
 {
-  "generated": "2025-12-04T02:51:14.682324Z",
+  "generated": "2025-12-04T03:04:42.799367Z",
   "picks": [
     {
       "event_id": "829c33f27898d96c181850b3e01e936d",
@@ -176,7 +176,7 @@
     {
       "bet_id": "829c33f27898d96c181850b3e01e936d_h2h__manchester_united",
       "event_id": "829c33f27898d96c181850b3e01e936d",
-      "timestamp": "2025-12-04T02:51:14.659151Z",
+      "timestamp": "2025-12-04T03:04:42.790036Z",
       "date": "12/03/25",
       "sport": "soccer_epl",
       "match": "West Ham United @ Manchester United",
@@ -195,7 +195,7 @@
     {
       "bet_id": "0ef228d015b4f211bab07a3c269105ab_h2h__philadelphia_76ers",
       "event_id": "0ef228d015b4f211bab07a3c269105ab",
-      "timestamp": "2025-12-04T02:51:14.660138Z",
+      "timestamp": "2025-12-04T03:04:42.791570Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Golden State Warriors @ Philadelphia 76ers",
@@ -214,7 +214,7 @@
     {
       "bet_id": "d7046816eb6615d7ec83c6356451c7cd_h2h__utah_jazz",
       "event_id": "d7046816eb6615d7ec83c6356451c7cd",
-      "timestamp": "2025-12-04T02:51:14.660644Z",
+      "timestamp": "2025-12-04T03:04:42.792258Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Utah Jazz @ Brooklyn Nets",
@@ -233,7 +233,7 @@
     {
       "bet_id": "81db991c5b34169eeeff8d734d8836d9_h2h__detroit_lions",
       "event_id": "81db991c5b34169eeeff8d734d8836d9",
-      "timestamp": "2025-12-04T02:51:14.661122Z",
+      "timestamp": "2025-12-04T03:04:42.792960Z",
       "date": "12/03/25",
       "sport": "americanfootball_nfl",
       "match": "Dallas Cowboys @ Detroit Lions",
@@ -252,7 +252,7 @@
     {
       "bet_id": "3bb98aa07fabd4fae0e83a62c2d5fb1a_spreads_85_boston_celtics",
       "event_id": "3bb98aa07fabd4fae0e83a62c2d5fb1a",
-      "timestamp": "2025-12-04T02:51:14.661970Z",
+      "timestamp": "2025-12-04T03:04:42.793664Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Boston Celtics @ Washington Wizards",
@@ -271,7 +271,7 @@
     {
       "bet_id": "3bb98aa07fabd4fae0e83a62c2d5fb1a_totals_2285_under",
       "event_id": "3bb98aa07fabd4fae0e83a62c2d5fb1a",
-      "timestamp": "2025-12-04T02:51:14.668989Z",
+      "timestamp": "2025-12-04T03:04:42.794744Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Boston Celtics @ Washington Wizards",
@@ -290,7 +290,7 @@
     {
       "bet_id": "0ef228d015b4f211bab07a3c269105ab_spreads_40_philadelphia_76ers",
       "event_id": "0ef228d015b4f211bab07a3c269105ab",
-      "timestamp": "2025-12-04T02:51:14.670402Z",
+      "timestamp": "2025-12-04T03:04:42.795537Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Golden State Warriors @ Philadelphia 76ers",
@@ -309,7 +309,7 @@
     {
       "bet_id": "0ef228d015b4f211bab07a3c269105ab_totals_2215_over",
       "event_id": "0ef228d015b4f211bab07a3c269105ab",
-      "timestamp": "2025-12-04T02:51:14.673450Z",
+      "timestamp": "2025-12-04T03:04:42.796297Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Golden State Warriors @ Philadelphia 76ers",
@@ -328,7 +328,7 @@
     {
       "bet_id": "0ef228d015b4f211bab07a3c269105ab_totals_2215_under",
       "event_id": "0ef228d015b4f211bab07a3c269105ab",
-      "timestamp": "2025-12-04T02:51:14.680592Z",
+      "timestamp": "2025-12-04T03:04:42.797036Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Golden State Warriors @ Philadelphia 76ers",
@@ -347,7 +347,7 @@
     {
       "bet_id": "d7046816eb6615d7ec83c6356451c7cd_spreads_35_utah_jazz",
       "event_id": "d7046816eb6615d7ec83c6356451c7cd",
-      "timestamp": "2025-12-04T02:51:14.681668Z",
+      "timestamp": "2025-12-04T03:04:42.797897Z",
       "date": "12/03/25",
       "sport": "basketball_nba",
       "match": "Utah Jazz @ Brooklyn Nets",

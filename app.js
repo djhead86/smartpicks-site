@@ -27,6 +27,66 @@ function setupTabs() {
 }
 
 function loadData() {
+  /* =======================
+   LIVE SCORE TICKER
+======================= */
+async function fetchLiveScores() {
+    try {
+        const sports = ["basketball_nba", "americanfootball_nfl", "soccer_epl"];
+
+        // Grab events WE actually have bets on:
+        const response = await fetch("data.json");
+        const data = await response.json();
+        const openEvents = (data.history || [])
+            .filter(row => row.status === "OPEN")
+            .map(row => row.event);
+
+        let tickerItems = [];
+
+        for (const sport of sports) {
+            const url = `https://api.the-odds-api.com/v4/sports/${sport}/scores?apiKey=${ODDS_API_KEY}&daysFrom=2`;
+
+            const res = await fetch(url);
+            if (!res.ok) continue;
+            const scores = await res.json();
+
+            for (const game of scores) {
+                const match = game.teams ? `${game.teams[0]} @ ${game.teams[1]}` : "";
+
+                // Only show scores for games we bet on
+                if (!openEvents.some(ev => ev.includes(game.teams?.[1]) || ev.includes(game.teams?.[0]))) {
+                    continue;
+                }
+
+                const home = game.home_score;
+                const away = game.away_score;
+
+                let status = game.completed
+                    ? "FINAL"
+                    : (game.time || "LIVE");
+
+                tickerItems.push(
+                    `${game.teams[0]} ${away} – ${home} ${game.teams[1]} (${status})`
+                );
+            }
+        }
+
+        const ticker = document.getElementById("score-ticker");
+        if (tickerItems.length === 0) {
+            ticker.innerHTML = `<span>No live games right now</span>`;
+        } else {
+            ticker.innerHTML = tickerItems.map(t => `<span>${t}</span>`).join("");
+        }
+
+    } catch (err) {
+        console.error("Score ticker error:", err);
+    }
+}
+
+/* Refresh ticker every 60sec */
+setInterval(fetchLiveScores, 60000);
+fetchLiveScores();
+
   fetch("data.json")
     .then((r) => {
       if (!r.ok) {
