@@ -118,7 +118,7 @@ function setErrorState(err) {
 
 function renderAll(data) {
   const generated = data.generated || "";
-  const picks = data.picks || [];
+  const picks = data.open_bets || [];
   const history = data.history || [];
   const analytics = data.analytics || {
     total_bets: 0,
