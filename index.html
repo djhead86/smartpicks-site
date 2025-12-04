@@ -3,62 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <title>SmartPicksGPT Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Chart.js CDN -->
+  <!-- Chart.js for Analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-
-  <!-- ===================== -->
-  <!--     TOP NAV BAR       -->
-  <!-- ===================== -->
   <header class="top-bar">
     <div class="brand">
       <span class="logo-dot"></span>
       <span class="brand-text">SmartPicksGPT</span>
     </div>
-
-    <div id="score-ticker" class="score-ticker">
-      Loading scores…
+    <div class="meta">
+      <span id="last-updated">Last updated: —</span>
     </div>
   </header>
 
-  <!-- ===================== -->
-  <!--        TABS           -->
-  <!-- ===================== -->
-  <div class="tab-bar">
-    <button class="tab-button" data-tab="summary">Summary</button>
-    <button class="tab-button" data-tab="picks">Today's Picks</button>
-    <button class="tab-button" data-tab="history">History</button>
-    <button class="tab-button" data-tab="analytics">Analytics</button>
-  </div>
+  <main class="container">
+    <nav class="tabs">
+      <button class="tab-button active" data-target="summary">Summary</button>
+      <button class="tab-button" data-target="picks">Today's Picks</button>
+      <button class="tab-button" data-target="history">History</button>
+      <button class="tab-button" data-target="analytics">Analytics</button>
+    </nav>
 
-  <!-- ===================== -->
-  <!--     TAB SECTIONS      -->
-  <!-- ===================== -->
+    <section id="summary" class="tab-panel active">
+      <!-- Filled by app.js -->
+      <div class="loading">Loading summary…</div>
+    </section>
 
-  <!-- SUMMARY TAB -->
-  <section id="summary" class="tab-content active"></section>
+    <section id="picks" class="tab-panel">
+      <!-- Filled by app.js -->
+      <div class="loading">Loading picks…</div>
+    </section>
 
-  <!-- PICKS TAB -->
-  <section id="picks" class="tab-content"></section>
+    <section id="history" class="tab-panel">
+      <!-- Filled by app.js -->
+      <div class="loading">Loading history…</div>
+    </section>
 
-  <!-- HISTORY TAB -->
-  <section id="history" class="tab-content">
-    <!-- This will be fully rendered by app_v2.js -->
-  </section>
+    <section id="analytics" class="tab-panel">
+      <!-- Filled by app.js -->
+      <div class="loading">Loading analytics…</div>
+    </section>
+  </main>
 
-  <!-- ANALYTICS TAB -->
-  <section id="analytics" class="tab-content">
-    <!-- Fully populated by app_v2.js -->
-  </section>
+  <footer class="footer">
+    <span>SmartPicksGPT • Experimental Betting Analytics</span>
+  </footer>
 
-  <!-- ===================== -->
-  <!--      MAIN SCRIPT      -->
-  <!-- ===================== -->
-  <script src="app_v2.js"></script>
-
+  <script src="app.js"></script>
 </body>
 </html>

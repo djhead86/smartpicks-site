@@ -1,34 +1,49 @@
 #!/usr/bin/env python3
 """
-Patched Smart Picks Backend (smart_picks.py)
---------------------------------------------
+Clean SmartPicks backend.
 
-Features:
-- Fetches odds for all configured sports
-- Event-level dedupe
-- Score scraping (all sports), automatic grading
-- Manual override merging (Strategy 3)
-- bet_history.csv maintenance
-- Output: data.json, scores.json, analytics block
-- Full history array for frontend (aligned with JS)
+- Loads config.json with:
+    {
+      "ODDS_API_KEY": "...",
+      "BASE_BANKROLL": 200.0,
+      "UNIT_FRACTION": 0.01
+    }
+
+- Maintains bet_history.csv
+- Fetches odds from The Odds API
+- Builds value picks using a simple Kelly-based model
+- Writes data.json with structure expected by the frontend:
+    {
+      "generated": "...",
+      "picks": [...],
+      "history": [...],
+      "analytics": {
+         "total_bets": ...,
+         "wins": ...,
+         "losses": ...,
+         "pushes": ...,
+         "roi": ...,
+         "sport_roi": {...},
+         "bankroll_history": [...]
+      }
+    }
 """
 
-import os
 import csv
 import json
 import math
-import requests
-from datetime import datetime, timezone, timedelta
+import os
+from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
+from typing import List, Dict, Any
 
-# -------------------------------------------------------------
-# CONFIG
-# -------------------------------------------------------------
+import requests
+
 CONFIG_PATH = "config.json"
 BET_HISTORY_PATH = "bet_history.csv"
-DATA_PATH = "data.json"
-SCORES_PATH = "scores.json"
-MANUAL_OVERRIDES_PATH = "manual_overrides.json"
+DATA_JSON_PATH = "data.json"
 
+# Supported sports
 SPORTS = [
     "basketball_nba",
     "americanfootball_nfl",
@@ -36,447 +51,373 @@ SPORTS = [
     "icehockey_nhl",
     "baseball_mlb",
     "soccer_epl",
-    "mma_mixed_martial_arts"
+    "mma_mixed_martial_arts",
 ]
 
 MARKETS = ["h2h", "spreads", "totals"]
-API_BASE = "https://api.the-odds-api.com/v4/sports"
-
-MAX_KELLY = 0.02  # 2%
-
-
-# -------------------------------------------------------------
-# LOAD CONFIG
-# -------------------------------------------------------------
-def load_config():
-    if not os.path.exists(CONFIG_PATH):
-        raise RuntimeError("config.json missing.")
-
-    with open(CONFIG_PATH, "r") as f:
-        cfg = json.load(f)
-
-    if not cfg.get("ODDS_API_KEY"):
-        raise RuntimeError("ODDS_API_KEY missing.")
-
-    cfg.setdefault("BASE_BANKROLL", 200.0)
-    cfg.setdefault("UNIT_FRACTION", 0.01)
-
-    return cfg
+ODDS_API_BASE = "https://api.the-odds-api.com/v4/sports"
+MAX_KELLY_FRACTION = 0.02  # Cap Kelly to 2% of bankroll
 
 
-# -------------------------------------------------------------
-# TIME UTILS
-# -------------------------------------------------------------
-def now_iso():
+def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-# -------------------------------------------------------------
-# ODDS HELPERS
-# -------------------------------------------------------------
-def american_to_prob(odds):
+def load_config() -> Dict[str, Any]:
+    if not os.path.exists(CONFIG_PATH):
+        raise FileNotFoundError(
+            f"{CONFIG_PATH} not found. Create it with at least ODDS_API_KEY, "
+            "BASE_BANKROLL, and UNIT_FRACTION."
+        )
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+        cfg = json.load(f)
+
+    if "ODDS_API_KEY" not in cfg or not cfg["ODDS_API_KEY"]:
+        raise ValueError("ODDS_API_KEY missing from config.json")
+
+    cfg.setdefault("BASE_BANKROLL", 200.0)
+    cfg.setdefault("UNIT_FRACTION", 0.01)
+    return cfg
+
+
+def american_to_prob(odds: float) -> float:
     odds = float(odds)
     if odds < 0:
         return -odds / (-odds + 100)
     return 100 / (odds + 100)
 
 
-def kelly(p, odds):
+def kelly_fraction(p: float, odds: float) -> float:
+    """Basic Kelly formula with guardrails."""
     if odds < 0:
-        b = 100 / abs(odds)
+        b = 100.0 / abs(odds)
     else:
-        b = odds / 100
-    q = 1 - p
+        b = odds / 100.0
+    q = 1.0 - p
     k = (b * p - q) / b
-    return max(0, k)
+    if k <= 0:
+        return 0.0
+    return min(k, MAX_KELLY_FRACTION)
 
 
-# -------------------------------------------------------------
-# FETCH ODDS FOR ONE SPORT
-# -------------------------------------------------------------
-def fetch_odds(api_key, sport):
-    url = f"{API_BASE}/{sport}/odds"
+def make_bet_id(sport: str, match: str, team: str, market: str, event_time: str) -> str:
+    raw = f"{sport}_{match}_{team}_{market}_{event_time}"
+    return "".join(c if c.isalnum() or c == "_" else "_" for c in raw)
+
+
+@dataclass
+class Pick:
+    bet_id: str
+    sport: str
+    match: str
+    team: str
+    market: str
+    price: float
+    implied_prob: float
+    model_prob: float
+    ev: float
+    recommended_fraction: float
+    recommended_stake: float
+    event_time: str
+
+
+def fetch_odds_for_sport(api_key: str, sport: str) -> List[Dict[str, Any]]:
+    url = f"{ODDS_API_BASE}/{sport}/odds"
     params = {
         "apiKey": api_key,
         "regions": "us",
         "markets": ",".join(MARKETS),
         "oddsFormat": "american",
     }
-    r = requests.get(url, params=params, timeout=20)
-    r.raise_for_status()
-    return r.json()
+    resp = requests.get(url, params=params, timeout=20)
+    resp.raise_for_status()
+    return resp.json()
 
 
-# -------------------------------------------------------------
-# BUILD BET ID
-# -------------------------------------------------------------
-def make_bet_id(sport, match, team, market, event_time):
-    raw = f"{sport}_{match}_{team}_{market}_{event_time}"
-    return "".join(c if c.isalnum() or c == "_" else "_" for c in raw)
-
-
-# -------------------------------------------------------------
-# PARSE CANDIDATES
-# -------------------------------------------------------------
-def parse_sport_books(odds_json, sport, bankroll, unit_fraction):
-    picks = []
+def build_picks_from_odds(odds_json: List[Dict[str, Any]], sport: str,
+                          bankroll: float, unit_fraction: float) -> List[Pick]:
+    picks: List[Pick] = []
 
     for game in odds_json:
         home = game.get("home_team", "Home")
         away = game.get("away_team", "Away")
         match = f"{away} @ {home}"
-
         event_time = game.get("commence_time", "")
 
-        bookmakers = game.get("bookmakers", [])
+        bookmakers = game.get("bookmakers") or []
         if not bookmakers:
             continue
 
-        # First bookmaker only (cleanest)
+        # Take the first bookmaker's markets for simplicity
         bm = bookmakers[0]
-
-        for market_info in bm.get("markets", []):
-            market = market_info.get("key")
-            if market not in MARKETS:
+        markets = bm.get("markets") or []
+        for m in markets:
+            market_key = m.get("key")
+            if market_key not in MARKETS:
                 continue
 
-            for out in market_info.get("outcomes", []):
-                team = out.get("name")
-                price = out.get("price")
-                if price is None:
+            outcomes = m.get("outcomes") or []
+            for o in outcomes:
+                team = o.get("name")
+                price = o.get("price")
+                if team is None or price is None:
                     continue
 
                 price = float(price)
                 implied = american_to_prob(price)
+                # Very simple model: slightly shade toward favorites
+                model_prob = max(0.01, min(0.99, implied + 0.01))
 
-                # Simple model boost
-                model_p = min(0.99, max(0.01, implied + 0.01))
-
-                ev = None
+                # Compute edge EV
                 if price < 0:
-                    b = 100 / abs(price)
+                    b = 100.0 / abs(price)
                 else:
-                    b = price / 100
-                ev = model_p * b - (1 - model_p)
+                    b = price / 100.0
+                ev = model_prob * b - (1.0 - model_prob)
 
-                k = kelly(model_p, price)
-                k = min(MAX_KELLY, k, unit_fraction)
+                k = kelly_fraction(model_prob, price)
+                k = min(k, unit_fraction)
                 stake = round(bankroll * k, 2)
 
-                bet_id = make_bet_id(sport, match, team, market, event_time)
+                if stake <= 0:
+                    continue
 
-                picks.append({
-                    "bet_id": bet_id,
-                    "sport": sport,
-                    "match": match,
-                    "team": team,
-                    "market": market,
-                    "price": price,
-                    "implied_prob": implied,
-                    "model_prob": model_p,
-                    "ev": ev,
-                    "recommended_fraction": k,
-                    "recommended_stake": stake,
-                    "event_time": event_time
-                })
+                bet_id = make_bet_id(sport, match, team, market_key, event_time)
+
+                picks.append(
+                    Pick(
+                        bet_id=bet_id,
+                        sport=sport,
+                        match=match,
+                        team=team,
+                        market=market_key,
+                        price=price,
+                        implied_prob=implied,
+                        model_prob=model_prob,
+                        ev=ev,
+                        recommended_fraction=k,
+                        recommended_stake=stake,
+                        event_time=event_time,
+                    )
+                )
 
     return picks
 
 
-# -------------------------------------------------------------
-# DEDUPE
-# -------------------------------------------------------------
-def dedupe_picks(picks):
-    best = {}
+def dedupe_picks(picks: List[Pick]) -> List[Pick]:
+    """Keep only best EV pick per (sport, match, team, market)."""
+    best: Dict[tuple, Pick] = {}
     for p in picks:
-        key = (p["sport"], p["match"], p["team"], p["market"])
-        if key not in best or p["ev"] > best[key]["ev"]:
+        key = (p.sport, p.match, p.team, p.market)
+        if key not in best or p.ev > best[key].ev:
             best[key] = p
     return list(best.values())
 
 
-# -------------------------------------------------------------
-# SCORE FETCHING FOR ALL SPORTS
-# -------------------------------------------------------------
-def fetch_scores(api_key):
-    url = "https://api.the-odds-api.com/v4/scores/"
-    params = {"apiKey": api_key, "daysFrom": 3}
-    r = requests.get(url, params=params, timeout=20)
-    if r.status_code != 200:
-        return []
-    return r.json()
-
-
-def write_scores(scores):
-    with open(SCORES_PATH, "w") as f:
-        json.dump(scores, f, indent=2)
-
-
-# -------------------------------------------------------------
-# HISTORY CSV LOAD & SAVE
-# -------------------------------------------------------------
-def load_history_csv():
+def load_history() -> List[Dict[str, Any]]:
     if not os.path.exists(BET_HISTORY_PATH):
         return []
 
-    rows = []
-    with open(BET_HISTORY_PATH, "r") as f:
+    rows: List[Dict[str, Any]] = []
+    with open(BET_HISTORY_PATH, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             rows.append(row)
     return rows
 
 
-def save_history_csv(rows):
+def save_history(rows: List[Dict[str, Any]]) -> None:
     fieldnames = [
-        "bet_id", "timestamp", "date", "sport", "match", "team", "market",
-        "odds", "stake", "event_time", "status", "result", "profit", "bankroll_after"
+        "bet_id",
+        "timestamp",
+        "date",
+        "sport",
+        "match",
+        "team",
+        "market",
+        "odds",
+        "stake",
+        "event_time",
+        "status",
+        "result",
+        "profit",
+        "bankroll_after",
     ]
-    with open(BET_HISTORY_PATH, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
-        w.writeheader()
-        for r in rows:
-            w.writerow(r)
+    with open(BET_HISTORY_PATH, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            # Ensure all fields exist
+            normalized = {fn: row.get(fn, "") for fn in fieldnames}
+            writer.writerow(normalized)
 
 
-# -------------------------------------------------------------
-# AUTOMATIC RESULT GRADING
-# -------------------------------------------------------------
-def grade_bet_auto(row, scores):
-    """Return updated row after auto-grading, or unchanged row."""
-    
-    # Skip legacy entries missing required fields
-    match = row.get("match")
-    sport = row.get("sport")
-    team = row.get("team")
-    market = row.get("market")
-
-    if not match or not sport or not team or not market:
-        # Incomplete row – leave as-is
-        return row
-
-    for s in scores:
-        if s.get("sport") == sport and s.get("home_team") and s.get("away_team"):
-            home = s["home_team"]
-            away = s["away_team"]
-            if home in match or away in match:
-                if not s.get("completed"):
-                    return row  # not final yet
-
-                winner = s.get("winner", "")
-                if not winner:
-                    return row
-
-                odds = float(row["odds"])
-                stake = float(row["stake"])
-
-                if market == "h2h":
-                    if team == winner:
-                        profit = stake * (100 / abs(odds)) if odds < 0 else stake * (odds / 100)
-                        row["result"] = "WIN"
-                    else:
-                        profit = -stake
-                        row["result"] = "LOSS"
-
-                    row["profit"] = round(profit, 2)
-                    row["status"] = "CLOSED"
-                    return row
-
-                # Spread & totals → manual grading only
-                return row
-
-    return row
-
-
-                # For spreads/totals, auto-scoring unreliable; leave manual
-    return row
-
-    return row
-
-
-# -------------------------------------------------------------
-# MANUAL OVERRIDES (Strategy 3)
-# -------------------------------------------------------------
-def load_manual_overrides():
-    if not os.path.exists(MANUAL_OVERRIDES_PATH):
-        return {}
-    with open(MANUAL_OVERRIDES_PATH, "r") as f:
-        return json.load(f)
-
-
-def apply_manual_override(row, overrides):
-    if row["result"] != "PENDING":
-        return row
-
-    bid = row["bet_id"]
-    if bid not in overrides:
-        return row
-
-    manual = overrides[bid]
-    row["result"] = manual
-
-    stake = float(row["stake"])
-    odds = float(row["odds"])
-
-    if manual == "PUSH":
-        row["profit"] = 0.0
-    elif manual == "WIN":
-        row["profit"] = (
-            stake * (100 / abs(odds)) if odds < 0 else stake * (odds / 100)
-        )
-    else:
-        row["profit"] = -stake
-
-    row["profit"] = round(row["profit"], 2)
-    row["status"] = "CLOSED"
-    return row
-
-# -------------------------------------------------------------
-# ANALYTICS GENERATION
-# -------------------------------------------------------------
-def compute_analytics(history_rows):
-    if not history_rows:
-        return {
-            "total_bets": 0,
-            "wins": 0,
-            "losses": 0,
-            "pushes": 0,
-            "roi": 0,
-            "sport_roi": {},
-            "bankroll_history": []
-        }
-
-    wins = 0
-    losses = 0
-    pushes = 0
-    profit_sum = 0.0
-
-    sport_profit = {}
-    sport_stake = {}
-
-    bankroll_curve = []
-    running_bankroll = 0.0
-
-    for row in history_rows:
-        res = row["result"]
-        profit = float(row["profit"])
-        stake = float(row["stake"])
-        sport = row["sport"]
-
-        if res == "WIN":
-            wins += 1
-        elif res == "LOSS":
-            losses += 1
-        elif res == "PUSH":
-            pushes += 1
-
-        profit_sum += profit
-
-        sport_profit.setdefault(sport, 0.0)
-        sport_stake.setdefault(sport, 0.0)
-        sport_profit[sport] += profit
-        sport_stake[sport] += stake
+def normalize_history_rows(rows: List[Dict[str, Any]], base_bankroll: float) -> List[Dict[str, Any]]:
+    """Ensure all legacy rows have required fields and sane defaults."""
+    out: List[Dict[str, Any]] = []
+    running_bankroll = base_bankroll
+    for row in rows:
+        result = row.get("result", "PENDING")
+        profit_str = row.get("profit", "")
+        try:
+            profit = float(profit_str)
+        except (TypeError, ValueError):
+            profit = 0.0
 
         running_bankroll += profit
-        bankroll_curve.append({
-            "t": row["timestamp"],
-            "bankroll": round(running_bankroll, 2)
-        })
+        row["profit"] = f"{profit:.2f}"
+        row.setdefault("status", "CLOSED" if result in ("WIN", "LOSS", "PUSH") else "OPEN")
+        row["bankroll_after"] = f"{running_bankroll:.2f}"
+        out.append(row)
+    return out
 
-    roi = (profit_sum / sum(sport_stake.values())) if sum(sport_stake.values()) > 0 else 0
 
-    sport_roi = {}
-    for sp in sport_profit:
-        if sport_stake[sp] > 0:
-            sport_roi[sp] = sport_profit[sp] / sport_stake[sp]
-        else:
-            sport_roi[sp] = 0
+def compute_analytics(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    total = len(rows)
+    wins = losses = pushes = 0
+    total_stake = 0.0
+    total_profit = 0.0
+
+    sport_profit: Dict[str, float] = {}
+    sport_stake: Dict[str, float] = {}
+    bankroll_history: List[Dict[str, Any]] = []
+
+    running_bankroll = 0.0
+    for row in rows:
+        result = row.get("result", "PENDING")
+        try:
+            stake = float(row.get("stake", 0.0))
+        except (TypeError, ValueError):
+            stake = 0.0
+        try:
+            profit = float(row.get("profit", 0.0))
+        except (TypeError, ValueError):
+            profit = 0.0
+        sport = row.get("sport", "unknown")
+
+        if result == "WIN":
+            wins += 1
+        elif result == "LOSS":
+            losses += 1
+        elif result == "PUSH":
+            pushes += 1
+
+        total_stake += stake
+        total_profit += profit
+
+        sport_profit[sport] = sport_profit.get(sport, 0.0) + profit
+        sport_stake[sport] = sport_stake.get(sport, 0.0) + stake
+
+        running_bankroll += profit
+        bankroll_history.append(
+            {
+                "t": row.get("timestamp", ""),
+                "bankroll": round(running_bankroll, 2),
+            }
+        )
+
+    roi = (total_profit / total_stake) if total_stake > 0 else 0.0
+    sport_roi = {
+        sp: (sport_profit[sp] / sport_stake[sp]) if sport_stake[sp] > 0 else 0.0
+        for sp in sport_profit
+    }
 
     return {
-        "total_bets": len(history_rows),
+        "total_bets": total,
         "wins": wins,
         "losses": losses,
         "pushes": pushes,
         "roi": roi,
         "sport_roi": sport_roi,
-        "bankroll_history": bankroll_curve
+        "bankroll_history": bankroll_history,
     }
 
 
-# -------------------------------------------------------------
-# EXPORT FRONTEND JSON
-# -------------------------------------------------------------
-def export_data_json(picks, history_rows, analytics):
+def export_data_json(picks: List[Pick], history_rows: List[Dict[str, Any]], analytics: Dict[str, Any]) -> None:
     data = {
         "generated": now_iso(),
-        "picks": picks,
+        "picks": [asdict(p) for p in picks],
         "history": history_rows,
-        "analytics": analytics
+        "analytics": analytics,
     }
-    with open(DATA_PATH, "w") as f:
+    with open(DATA_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
 
-    # -----------------------------
-    # FETCH ODDS & BUILD PICKS
-    # -----------------------------
-    all_picks = []
+def main() -> None:
+    cfg = load_config()
+    api_key = cfg["ODDS_API_KEY"]
+    base_bankroll = float(cfg["BASE_BANKROLL"])
+    unit_fraction = float(cfg["UNIT_FRACTION"])
+
+    print("[INFO] SmartPicks backend starting…")
+
+    # 1) Load & normalize history
+    history_rows = load_history()
+    history_rows = normalize_history_rows(history_rows, base_bankroll)
+
+    # 2) Fetch odds and build picks for each sport
+    all_picks: List[Pick] = []
     for sport in SPORTS:
         try:
-            odds_json = fetch_odds(api_key, sport)
-            sport_picks = parse_sport_books(
-                odds_json, sport, bankroll, unit_fraction
+            odds_json = fetch_odds_for_sport(api_key, sport)
+            sport_picks = build_picks_from_odds(
+                odds_json, sport, base_bankroll, unit_fraction
             )
             all_picks.extend(sport_picks)
         except Exception as e:
             print(f"[WARN] Failed fetching odds for {sport}: {e}")
 
-    # Dedupe event-level
+    # 3) Dedupe picks
     all_picks = dedupe_picks(all_picks)
 
-    # -----------------------------
-    # BUILD HISTORY ENTRY FOR NEW PICKS
-    # -----------------------------
+    # 4) Add any truly new picks into history as OPEN/PENDING
     now_date = datetime.now().strftime("%m/%d/%y")
     now_stamp = now_iso()
 
-    # Determine starting bankroll for new entries
+    # Determine last known bankroll
     if history_rows:
-        last_bankroll = float(history_rows[-1].get("bankroll_after", bankroll))
+        try:
+            last_bankroll = float(history_rows[-1].get("bankroll_after", base_bankroll))
+        except (TypeError, ValueError):
+            last_bankroll = base_bankroll
     else:
-        last_bankroll = bankroll
+        last_bankroll = base_bankroll
 
+    existing_ids = {row.get("bet_id") for row in history_rows}
     for p in all_picks:
-        # Only add new bet if not already present
-        if not any(hr.get("bet_id") == p["bet_id"] for hr in history_rows):
-            history_rows.append({
-                "bet_id": p["bet_id"],
+        if p.bet_id in existing_ids:
+            continue
+        history_rows.append(
+            {
+                "bet_id": p.bet_id,
                 "timestamp": now_stamp,
                 "date": now_date,
-                "sport": p["sport"],
-                "match": p["match"],
-                "team": p["team"],
-                "market": p["market"],
-                "odds": p["price"],
-                "stake": p["recommended_stake"],
-                "event_time": p["event_time"],
+                "sport": p.sport,
+                "match": p.match,
+                "team": p.team,
+                "market": p.market,
+                "odds": f"{p.price:.0f}",
+                "stake": f"{p.recommended_stake:.2f}",
+                "event_time": p.event_time,
                 "status": "OPEN",
                 "result": "PENDING",
-                "profit": 0.0,
-                "bankroll_after": last_bankroll
-            })
+                "profit": "0.00",
+                "bankroll_after": f"{last_bankroll:.2f}",
+            }
+        )
 
-    save_history_csv(history_rows)
+    # 5) Save normalized history
+    save_history(history_rows)
 
-    # -----------------------------
-    # ANALYTICS
-    # -----------------------------
+    # 6) Compute analytics
     analytics = compute_analytics(history_rows)
 
-    # -----------------------------
-    # EXPORT JSON FOR FRONTEND
-    # -----------------------------
+    # 7) Export data.json for frontend
     export_data_json(all_picks, history_rows, analytics)
 
-    print("[INFO] Data export complete.")
-    print("[INFO] Done.")
+    print("[INFO] SmartPicks backend finished successfully.")
+
+
+if __name__ == "__main__":
+    main()

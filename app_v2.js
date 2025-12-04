@@ -1,302 +1,367 @@
-// ===========================================================
-// SmartPicks Frontend (Patched Version)
-// ===========================================================
+// SmartPicks Frontend for new backend schema
+// Expects data.json = { generated, picks, history, analytics }
 
-// -----------------------------------------------------------
-// Helpers
-// -----------------------------------------------------------
-function makeBetId(bet) {
-  const raw = `${bet.sport}_${bet.match}_${bet.team}_${bet.market}_${bet.event_time}`;
-  return raw.replace(/[^a-zA-Z0-9_]/g, "_");
-}
+let GLOBAL_DATA = null;
 
-function formatOdds(o) {
-  return o > 0 ? `+${o}` : `${o}`;
-}
-
-// Load manual overrides from localStorage
-function loadManualOverrides() {
-  const data = localStorage.getItem("manualOverrides");
-  return data ? JSON.parse(data) : {};
-}
-
-function saveManualOverrides(overrides) {
-  localStorage.setItem("manualOverrides", JSON.stringify(overrides));
-}
-
-// Download override JSON file
-function downloadOverrides() {
-  const overrides = loadManualOverrides();
-  const blob = new Blob([JSON.stringify(overrides, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "manual_overrides.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-// -----------------------------------------------------------
-// Tab Switching
-// -----------------------------------------------------------
-document.querySelectorAll(".tab-button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const tab = btn.dataset.tab;
-
-    document.querySelectorAll(".tab-content").forEach(sec => {
-      sec.classList.remove("active");
-    });
-
-    document.getElementById(tab).classList.add("active");
-  });
+document.addEventListener("DOMContentLoaded", () => {
+  setupTabs();
+  loadData();
 });
 
-// -----------------------------------------------------------
-// Main Loader
-// -----------------------------------------------------------
-fetch("data.json")
-  .then(r => r.json())
-  .then(data => {
-    renderSummaryTab(data);
-    renderPicksTab(data.picks);
-    renderHistoryTab(data.history);
-    renderAnalyticsTab(data.analytics);
-    updateScoresTicker();
-  })
-  .catch(err => {
-    console.error("Failed to load data.json:", err);
-  });
+function setupTabs() {
+  const buttons = document.querySelectorAll(".tab-button");
+  const panels = document.querySelectorAll(".tab-panel");
 
-// -----------------------------------------------------------
-// SUMMARY TAB
-// -----------------------------------------------------------
-function renderSummaryTab(data) {
-  const summary = document.getElementById("summary");
-  summary.innerHTML = `
-    <h2>Summary</h2>
-    <p>Generated: ${data.generated}</p>
-    <p>Total open bets: ${data.picks.length}</p>
-    <p>Total historical bets: ${data.history.length}</p>
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.dataset.target;
+
+      buttons.forEach((b) => b.classList.remove("active"));
+      panels.forEach((p) => p.classList.remove("active"));
+
+      btn.classList.add("active");
+      const panel = document.getElementById(targetId);
+      if (panel) panel.classList.add("active");
+    });
+  });
+}
+
+function loadData() {
+  fetch("data.json")
+    .then((r) => {
+      if (!r.ok) {
+        throw new Error(`HTTP ${r.status}`);
+      }
+      return r.json();
+    })
+    .then((data) => {
+      GLOBAL_DATA = data;
+      renderAll(data);
+    })
+    .catch((err) => {
+      console.error("Failed to load data.json:", err);
+      setErrorState(err);
+    });
+}
+
+function setErrorState(err) {
+  const msg = `Failed to load data: ${err}`;
+  ["summary", "picks", "history", "analytics"].forEach((id) => {
+    const panel = document.getElementById(id);
+    if (panel) {
+      panel.innerHTML = `<p class="loading">${msg}</p>`;
+    }
+  });
+}
+
+// ---------- Render entry point ----------
+
+function renderAll(data) {
+  const generated = data.generated || "";
+  const picks = data.picks || [];
+  const history = data.history || [];
+  const analytics = data.analytics || {
+    total_bets: 0,
+    wins: 0,
+    losses: 0,
+    pushes: 0,
+    roi: 0,
+    sport_roi: {},
+    bankroll_history: []
+  };
+
+  const lastUpdatedEl = document.getElementById("last-updated");
+  if (lastUpdatedEl) {
+    lastUpdatedEl.textContent = generated
+      ? `Last updated: ${generated}`
+      : "Last updated: (unknown)";
+  }
+
+  renderSummaryTab(picks, history, analytics);
+  renderPicksTab(picks);
+  renderHistoryTab(history);
+  renderAnalyticsTab(analytics);
+}
+
+// ---------- Summary Tab ----------
+
+function renderSummaryTab(picks, history, analytics) {
+  const sec = document.getElementById("summary");
+  if (!sec) return;
+
+  const openCount = history.filter(
+    (r) => (r.status || "").toUpperCase() === "OPEN" || (r.result || "").toUpperCase() === "PENDING"
+  ).length;
+
+  const closedCount = analytics.total_bets || history.length || 0;
+  const roiPct = (analytics.roi || 0) * 100;
+
+  sec.innerHTML = `
+    <div class="summary-grid">
+      <div class="card">
+        <h3>Total Bets</h3>
+        <div class="value">${closedCount}</div>
+        <div class="sub">All-time graded bets</div>
+      </div>
+      <div class="card">
+        <h3>Open / Pending</h3>
+        <div class="value">${openCount}</div>
+        <div class="sub">Active tickets in bet_history.csv</div>
+      </div>
+      <div class="card">
+        <h3>Today's Picks</h3>
+        <div class="value">${picks.length}</div>
+        <div class="sub">New value opportunities</div>
+      </div>
+      <div class="card">
+        <h3>ROI</h3>
+        <div class="value">${roiPct.toFixed(2)}%</div>
+        <div class="sub">Aggregate return on invested units</div>
+      </div>
+    </div>
   `;
 }
 
-// -----------------------------------------------------------
-// PICKS TAB
-// -----------------------------------------------------------
+// ---------- Picks Tab ----------
+
 function renderPicksTab(picks) {
   const sec = document.getElementById("picks");
-  sec.innerHTML = "";
+  if (!sec) return;
 
-  if (!picks || picks.length === 0) {
-    sec.innerHTML = "<p>No picks available.</p>";
+  if (!picks.length) {
+    sec.innerHTML = `<p class="loading">No current picks. Run smart_picks.py to generate fresh edges.</p>`;
     return;
   }
 
-  picks.forEach(p => {
-    const row = document.createElement("div");
-    row.className = "pick-card";
-
-    row.innerHTML = `
-      <h3>${p.team} (${p.market})</h3>
-      <p>${p.match}</p>
-      <p>Odds: ${formatOdds(p.price)}</p>
-      <p>EV: ${p.ev.toFixed(3)}</p>
-      <p>Stake: $${p.recommended_stake.toFixed(2)}</p>
-    `;
-
-    sec.appendChild(row);
+  // Sort by event_time if available
+  const sorted = [...picks].sort((a, b) => {
+    const ta = a.event_time || "";
+    const tb = b.event_time || "";
+    return ta.localeCompare(tb);
   });
+
+  const cardsHtml = sorted
+    .map((p) => {
+      const ev = Number(p.ev || 0);
+      const evBadgeClass = ev >= 0 ? "badge badge-ev-pos" : "badge badge-ev-neg";
+      const evLabel = ev >= 0 ? `+${ev.toFixed(3)}` : ev.toFixed(3);
+
+      const implied = Number(p.implied_prob || 0) * 100;
+      const model = Number(p.model_prob || 0) * 100;
+      const edge = model - implied;
+
+      return `
+        <article class="pick-card">
+          <div class="pick-header">
+            <h2>${p.team}</h2>
+            <span class="${evBadgeClass}">EV ${evLabel}</span>
+          </div>
+          <div class="pick-match">${p.match} • ${p.sport}</div>
+          <div class="pick-meta">
+            <span>Market: ${p.market}</span>
+            <span>Odds: ${formatOdds(p.price)}</span>
+            <span>Stake: $${Number(p.recommended_stake || 0).toFixed(2)}</span>
+          </div>
+          <div class="pick-meta">
+            <span>Model: ${model.toFixed(1)}%</span>
+            <span>Implied: ${implied.toFixed(1)}%</span>
+            <span>Edge: ${edge.toFixed(1)} pts</span>
+          </div>
+          <div class="pick-meta">
+            <span>Event time: ${p.event_time || "—"}</span>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  sec.innerHTML = `
+    <div class="picks-list">
+      ${cardsHtml}
+    </div>
+  `;
 }
 
-// -----------------------------------------------------------
-// HISTORY TAB
-// -----------------------------------------------------------
+function formatOdds(o) {
+  const n = Number(o || 0);
+  if (Number.isNaN(n)) return String(o);
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+// ---------- History Tab ----------
+
 function renderHistoryTab(history) {
   const sec = document.getElementById("history");
-  sec.innerHTML = `
-    <h2>Bet History</h2>
-    <button id="download-overrides" class="export-btn">Download Manual Overrides</button>
-    <div id="history-list"></div>
-  `;
+  if (!sec) return;
 
-  document.getElementById("download-overrides")
-    .addEventListener("click", downloadOverrides);
-
-  const list = document.getElementById("history-list");
-  const overrides = loadManualOverrides();
-
-  history.forEach(bet => {
-    const betId = bet.bet_id || makeBetId(bet);
-    const appliedResult = overrides[betId] || bet.result;
-
-    const row = document.createElement("div");
-    row.className = "bet-row";
-    row.setAttribute("data-bet-id", betId);
-
-    row.innerHTML = `
-      <div class="bet-info">
-        <strong>${bet.team}</strong> (${bet.market}) — ${bet.match}<br>
-        <small>${bet.date} | Odds: ${formatOdds(bet.odds)} | Stake: $${bet.stake}</small>
-      </div>
-
-      <div class="bet-result result-field">${appliedResult}</div>
-
-      <div class="manual-grade">
-        <button class="grade-btn win-btn">WIN</button>
-        <button class="grade-btn loss-btn">LOSS</button>
-        <button class="grade-btn push-btn">PUSH</button>
-      </div>
-    `;
-
-    // Attach handlers
-    const winBtn = row.querySelector(".win-btn");
-    const lossBtn = row.querySelector(".loss-btn");
-    const pushBtn = row.querySelector(".push-btn");
-
-    winBtn.addEventListener("click", () => setManual(betId, "WIN", row));
-    lossBtn.addEventListener("click", () => setManual(betId, "LOSS", row));
-    pushBtn.addEventListener("click", () => setManual(betId, "PUSH", row));
-
-    list.appendChild(row);
-  });
-}
-
-function setManual(betId, result, row) {
-  const overrides = loadManualOverrides();
-  overrides[betId] = result;
-  saveManualOverrides(overrides);
-
-  // Update UI
-  row.querySelector(".result-field").textContent = result;
-}
-
-// -----------------------------------------------------------
-// ANALYTICS TAB
-// -----------------------------------------------------------
-function renderAnalyticsTab(analytics) {
-  const sec = document.getElementById("analytics");
-  sec.innerHTML = `
-    <h2>Analytics</h2>
-
-    <div class="analytics-grid">
-      <div class="analytic-card">
-        <h3>Total Bets</h3>
-        <p>${analytics.total_bets}</p>
-      </div>
-
-      <div class="analytic-card">
-        <h3>Wins</h3>
-        <p>${analytics.wins}</p>
-      </div>
-
-      <div class="analytic-card">
-        <h3>Losses</h3>
-        <p>${analytics.losses}</p>
-      </div>
-
-      <div class="analytic-card">
-        <h3>Pushes</h3>
-        <p>${analytics.pushes}</p>
-      </div>
-
-      <div class="analytic-card">
-        <h3>ROI</h3>
-        <p>${(analytics.roi * 100).toFixed(2)}%</p>
-      </div>
-    </div>
-
-    <h3>ROI by Sport</h3>
-    <div id="sport-roi"></div>
-
-    <h3>Bankroll Over Time</h3>
-    <canvas id="bankroll-chart" height="80"></canvas>
-  `;
-
-  // Render ROI by sport
-  const roiSec = document.getElementById("sport-roi");
-  for (const [sport, roi] of Object.entries(analytics.sport_roi)) {
-    const div = document.createElement("div");
-    div.className = "roi-row";
-    div.innerHTML = `
-      <strong>${sport}</strong>: ${(roi * 100).toFixed(2)}%
-    `;
-    roiSec.appendChild(div);
+  if (!history.length) {
+    sec.innerHTML = `<p class="loading">No history yet. Once bets are generated and tracked, they will show here.</p>`;
+    return;
   }
 
-  // Render bankroll chart
-  renderBankrollChart(analytics.bankroll_history);
+  const rowsHtml = history
+    .map((r) => {
+      const status = (r.status || "").toUpperCase();
+      const result = (r.result || "").toUpperCase();
+
+      const statusClass =
+        status === "OPEN" ? "status-open" : status === "CLOSED" ? "status-closed" : "";
+      let resultClass = "";
+      if (result === "WIN") resultClass = "result-win";
+      else if (result === "LOSS") resultClass = "result-loss";
+      else if (result === "PUSH") resultClass = "result-push";
+
+      return `
+        <tr>
+          <td>${r.date || ""}</td>
+          <td>${r.sport || ""}</td>
+          <td>${r.match || ""}</td>
+          <td>${r.team || ""} (${r.market || ""})</td>
+          <td>${formatOdds(r.odds)}</td>
+          <td>$${Number(r.stake || 0).toFixed(2)}</td>
+          <td class="${statusClass}">${status || ""}</td>
+          <td class="${resultClass}">${result || ""}</td>
+          <td>${Number(r.profit || 0).toFixed(2)}</td>
+          <td>${r.bankroll_after || ""}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  sec.innerHTML = `
+    <div class="history-table-wrapper">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Sport</th>
+            <th>Event</th>
+            <th>Side</th>
+            <th>Odds</th>
+            <th>Stake</th>
+            <th>Status</th>
+            <th>Result</th>
+            <th>Profit</th>
+            <th>Bankroll</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
-// -----------------------------------------------------------
-// BANKROLL CHART (Chart.js)
-// -----------------------------------------------------------
+// ---------- Analytics Tab ----------
+
+function renderAnalyticsTab(analytics) {
+  const sec = document.getElementById("analytics");
+  if (!sec) return;
+
+  const total = analytics.total_bets || 0;
+  const wins = analytics.wins || 0;
+  const losses = analytics.losses || 0;
+  const pushes = analytics.pushes || 0;
+  const roi = (analytics.roi || 0) * 100;
+
+  const sportRoi = analytics.sport_roi || {};
+  const bankrollHist = analytics.bankroll_history || [];
+
+  const winPct = total > 0 ? (wins / total) * 100 : 0;
+
+  // Summary cards
+  const summaryHtml = `
+    <div class="analytics-grid">
+      <div class="card">
+        <h3>Total Bets</h3>
+        <div class="value">${total}</div>
+        <div class="sub">All-time tracked bets</div>
+      </div>
+      <div class="card">
+        <h3>Record</h3>
+        <div class="value">${wins}-${losses}-${pushes}</div>
+        <div class="sub">Win rate: ${winPct.toFixed(1)}%</div>
+      </div>
+      <div class="card">
+        <h3>ROI</h3>
+        <div class="value">${roi.toFixed(2)}%</div>
+        <div class="sub">Return on total stake</div>
+      </div>
+      <div class="card">
+        <h3>Sports Tracked</h3>
+        <div class="value">${Object.keys(sportRoi).length}</div>
+        <div class="sub">Distinct markets with bets</div>
+      </div>
+    </div>
+  `;
+
+  // Bankroll chart container
+  const chartHtml = `
+    <div id="bankroll-chart-container">
+      <h3 style="font-size:0.9rem; color:#9ca3af; margin-bottom:0.5rem;">Bankroll Over Time</h3>
+      <canvas id="bankroll-chart" height="120"></canvas>
+    </div>
+  `;
+
+  // ROI by sport
+  const roiRows = Object.entries(sportRoi)
+    .map(([sport, v]) => {
+      const pct = (Number(v) * 100).toFixed(2);
+      return `
+        <div class="sport-roi-row">
+          <span>${sport}</span>
+          <span>${pct}%</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  const sportRoiHtml = `
+    <div class="sport-roi-list">
+      <h3 style="font-size:0.9rem; color:#9ca3af; margin-bottom:0.5rem;">ROI by Sport</h3>
+      ${roiRows || `<p class="loading">No sport-level stats yet.</p>`}
+    </div>
+  `;
+
+  sec.innerHTML = summaryHtml + chartHtml + sportRoiHtml;
+
+  renderBankrollChart(bankrollHist);
+}
+
 function renderBankrollChart(history) {
-  if (!history || history.length === 0) return;
+  if (!history || !history.length) return;
+  const canvas = document.getElementById("bankroll-chart");
+  if (!canvas) return;
 
-  const ctx = document.getElementById("bankroll-chart").getContext("2d");
+  const labels = history.map((p, idx) => p.t || `#${idx + 1}`);
+  const values = history.map((p) => Number(p.bankroll || 0));
 
-  const labels = history.map(h => h.t);
-  const values = history.map(h => h.bankroll);
-
+  const ctx = canvas.getContext("2d");
   new Chart(ctx, {
     type: "line",
     data: {
-      labels: labels,
+      labels,
       datasets: [
         {
           label: "Bankroll",
           data: values,
-          fill: false,
           borderWidth: 2,
-        },
-      ],
+          fill: false
+        }
+      ]
     },
     options: {
       responsive: true,
-      tension: 0.3,
-    },
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 45,
+            minRotation: 0
+          }
+        }
+      }
+    }
   });
 }
-
-// -----------------------------------------------------------
-// SCORE TICKER
-// -----------------------------------------------------------
-function updateScoresTicker() {
-  fetch("scores.json")
-    .then(r => r.json())
-    .then(scores => {
-      const ticker = document.getElementById("score-ticker");
-      if (!ticker) return;
-
-      if (!scores || scores.length === 0) {
-        ticker.textContent = "No scores available.";
-        return;
-      }
-
-      let text = "";
-
-      scores.forEach(s => {
-        if (!s.completed) return;
-
-        const home = s.home_team || "";
-        const away = s.away_team || "";
-        const homeScore = s.scores?.[0]?.score || "?";
-        const awayScore = s.scores?.[1]?.score || "?";
-
-        text += `${away} ${awayScore} — ${home} ${homeScore} | `;
-      });
-
-      ticker.textContent = text || "No completed games yet.";
-    })
-    .catch(() => {
-      const ticker = document.getElementById("score-ticker");
-      if (ticker) ticker.textContent = "Failed to load scores.";
-    });
-}
-
-// -----------------------------------------------------------
-// END OF FILE
-// -----------------------------------------------------------
