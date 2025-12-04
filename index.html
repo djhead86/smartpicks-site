@@ -1,61 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>SmartPicksGPT Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Chart.js for Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartPicks - Sports Betting Analytics</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top-bar">
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <span class="brand-text">SmartPicksGPT</span>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎯 SmartPicks</h1>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Bankroll</span>
+                    <span class="stat-value" id="bankroll">$0.00</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Open Bets</span>
+                    <span class="stat-value" id="open-bets">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Last Updated</span>
+                    <span class="stat-value" id="last-updated">--</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Live Score Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker" id="ticker">
+            <div class="ticker-item">Loading scores...</div>
+        </div>
     </div>
-    <div class="meta">
-      <span id="last-updated">Last updated: —</span>
-    </div>
-  </header>
 
-  <main class="container">
-    <nav class="tabs">
-      <div id="score-ticker" class="score-ticker">
-    <span>Loading live scores...</span>
-</div>
-      <button class="tab-button active" data-target="summary">Summary</button>
-      <button class="tab-button" data-target="picks">Today's Picks</button>
-      <button class="tab-button" data-target="history">History</button>
-      <button class="tab-button" data-target="analytics">Analytics</button>
-    </nav>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Parlay Card (Featured) -->
+        <section class="parlay-section">
+            <h2 class="section-title">🔥 Top 5 EV Parlay</h2>
+            <div class="parlay-card" id="parlay-card">
+                <div class="loading">Loading parlay...</div>
+            </div>
+        </section>
 
-    <section id="summary" class="tab-panel active">
-      <!-- Filled by app.js -->
-      <div class="loading">Loading summary…</div>
-    </section>
+        <!-- Pick Cards by Sport -->
+        <section class="picks-section">
+            <h2 class="section-title">📊 Smart Picks by Sport</h2>
+            
+            <!-- NBA -->
+            <div class="sport-group" id="nba-group">
+                <h3 class="sport-title">🏀 NBA</h3>
+                <div class="picks-grid" id="nba-picks">
+                    <div class="loading">Loading NBA picks...</div>
+                </div>
+            </div>
 
-    <section id="picks" class="tab-panel">
-      <!-- Filled by app.js -->
-      <div class="loading">Loading picks…</div>
-    </section>
+            <!-- NFL -->
+            <div class="sport-group" id="nfl-group">
+                <h3 class="sport-title">🏈 NFL</h3>
+                <div class="picks-grid" id="nfl-picks">
+                    <div class="loading">Loading NFL picks...</div>
+                </div>
+            </div>
 
-    <section id="history" class="tab-panel">
-      <!-- Filled by app.js -->
-      <div class="loading">Loading history…</div>
-    </section>
+            <!-- NHL -->
+            <div class="sport-group" id="nhl-group">
+                <h3 class="sport-title">🏒 NHL</h3>
+                <div class="picks-grid" id="nhl-picks">
+                    <div class="loading">Loading NHL picks...</div>
+                </div>
+            </div>
 
-    <section id="analytics" class="tab-panel">
-      <!-- Filled by app.js -->
-      <div class="loading">Loading analytics…</div>
-    </section>
-  </main>
+            <!-- EPL -->
+            <div class="sport-group" id="epl-group">
+                <h3 class="sport-title">⚽ EPL</h3>
+                <div class="picks-grid" id="epl-picks">
+                    <div class="loading">Loading EPL picks...</div>
+                </div>
+            </div>
 
-  <footer class="footer">
-    <span>SmartPicksGPT • Experimental Betting Analytics</span>
-  </footer>
+            <!-- UEFA -->
+            <div class="sport-group" id="uefa-group">
+                <h3 class="sport-title">🏆 UEFA</h3>
+                <div class="picks-grid" id="uefa-picks">
+                    <div class="loading">Loading UEFA picks...</div>
+                </div>
+            </div>
 
-  <script src="app.js"></script>
+            <!-- UFC -->
+            <div class="sport-group" id="ufc-group">
+                <h3 class="sport-title">🥊 UFC</h3>
+                <div class="picks-grid" id="ufc-picks">
+                    <div class="loading">Loading UFC picks...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Display -->
+        <div class="error-message" id="error-message" style="display: none;">
+            <strong>⚠️ Error:</strong> <span id="error-text"></span>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>SmartPicks Analytics Engine | Expected Value calculations are estimates only | Gamble responsibly</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
 </body>
 </html>
