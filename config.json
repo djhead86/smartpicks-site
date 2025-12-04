@@ -1,5 +1,5 @@
 {
-  "ODDS_API_KEY": "9d61eb73828183a28956f55fb0ae6c09",
+  "api_key": "9d61eb73828183a28956f55fb0ae6c09",
   "BASE_BANKROLL": 200.0,
   "UNIT_FRACTION": 0.01
 }
