@@ -1,7 +1,16 @@
 {
-  "last_updated": "2025-12-05T01:06:49.130749+00:00",
-  "performance": {
-    "overall": {
+  "overall": {
+    "total_bets": 0,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "win_rate": 0.0,
+    "roi": 0.0,
+    "total_wagered": 0.0,
+    "total_profit": 0.0
+  },
+  "by_sport": {
+    "NBA": {
       "total_bets": 0,
       "wins": 0,
       "losses": 0,
@@ -11,7 +20,27 @@
       "total_wagered": 0.0,
       "total_profit": 0.0
     },
-    "by_sport": {},
-    "by_bet_type": {}
+    "NFL": {
+      "total_bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "win_rate": 0.0,
+      "roi": 0.0,
+      "total_wagered": 0.0,
+      "total_profit": 0.0
+    }
+  },
+  "by_bet_type": {
+    "h2h": {
+      "total_bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "win_rate": 0.0,
+      "roi": 0.0,
+      "total_wagered": 0.0,
+      "total_profit": 0.0
+    }
   }
 }

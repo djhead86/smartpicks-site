@@ -147,13 +147,16 @@ function renderScores(scores) {
     const ticker = document.getElementById("ticker");
 
     if (!scores || !scores.scores || scores.scores.length === 0) {
-        ticker.innerHTML = `<div class="ticker-item">No live scores available</div>`;
-        return;
-    }
+        ticker.innerHTML = scores.scores
+    .map(s => {
+        const league = s.league || "";        // no "undefined"
+        const prefix = league ? league + ": " : "";  
+        const score = s.score || "";
+        const status = s.status || "";
+        return `<div class="ticker-item">${prefix}${s.event} — ${score} (${status})</div>`;
+    })
+    .join("");
 
-    ticker.innerHTML = scores.scores
-        .map(s => `<div class="ticker-item">${s.league}: ${s.event} — ${s.score} (${s.status})</div>`)
-        .join("");
 }
 
 // ===============================

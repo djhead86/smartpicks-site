@@ -1,355 +1,1012 @@
 {
-  "last_updated": "2025-12-05T01:06:49.134560+00:00",
   "scores": [
     {
-      "sport": "UFC",
-      "event": "Ilia Topuria @ Islam Makhachev",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-31T22:59:00Z"
+      "league": "NBA",
+      "event": "Miami Heat @ Dallas Mavericks",
+      "score": "108-118",
+      "status": "final"
     },
     {
-      "sport": "NHL",
-      "event": "New York Rangers @ Ottawa Senators",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:08:49Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Toronto Maple Leafs @ Carolina Hurricanes",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:08:23Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Colorado Avalanche @ New York Islanders",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:12:17Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "St Louis Blues @ Boston Bruins",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:08:19Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Pittsburgh Penguins @ Tampa Bay Lightning",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:13:08Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Badreddine Diani @ Mohammad Alaqraa",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T16:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Mahmoud Atef @ Malik Basahel",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T15:55:00Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "San Jose Sharks @ Dallas Stars",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T01:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Chicago Blackhawks @ Los Angeles Kings",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T03:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Seattle Kraken @ Edmonton Oilers",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T02:10:00Z"
-    },
-    {
-      "sport": "NBA",
+      "league": "NBA",
       "event": "Golden State Warriors @ Philadelphia 76ers",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:10:00Z"
+      "score": "53-71",
+      "status": "live"
     },
     {
-      "sport": "NHL",
-      "event": "Nashville Predators @ Florida Panthers",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:08:55Z"
+      "league": "NBA",
+      "event": "Boston Celtics @ Washington Wizards",
+      "score": "81-70",
+      "status": "live"
     },
     {
-      "sport": "NHL",
-      "event": "Minnesota Wild @ Calgary Flames",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T02:10:00Z"
+      "league": "NBA",
+      "event": "Utah Jazz @ Brooklyn Nets",
+      "score": "47-51",
+      "status": "live"
     },
     {
-      "sport": "UFC",
-      "event": "Amanda Nunes @ Kayla Harrison",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2026-01-24T10:00:00Z"
+      "league": "NBA",
+      "event": "Los Angeles Lakers @ Toronto Raptors",
+      "score": "61-49",
+      "status": "live"
     },
     {
-      "sport": "NHL",
-      "event": "Washington Capitals @ Anaheim Ducks",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T03:10:00Z"
+      "league": "NBA",
+      "event": "Minnesota Timberwolves @ New Orleans Pelicans",
+      "score": "29-26",
+      "status": "live"
     },
     {
-      "sport": "NHL",
-      "event": "Buffalo Sabres @ Winnipeg Jets",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T00:10:00Z"
-    },
-    {
-      "sport": "NBA",
+      "league": "NBA",
       "event": "Los Angeles Lakers @ Boston Celtics",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T00:10:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "NHL",
-      "event": "Utah Mammoth @ Vancouver Canucks",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T02:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Vegas Golden Knights @ New Jersey Devils",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "event": "Detroit Red Wings @ Columbus Blue Jackets",
-      "score": "",
-      "status": "Live",
-      "commence_time": "2025-12-05T00:40:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Israel Adesanya @ Alex Pereira",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-31T22:59:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Derrick Lewis @ Waldo Cortes-Acosta",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2026-01-25T02:00:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Antonio Trocoli @ Mansur Abdul-Malik",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T23:45:00Z"
-    },
-    {
-      "sport": "NBA",
-      "event": "New York Knicks @ Toronto Raptors",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-10T01:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Petr Yan @ Merab Dvalishvili",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T05:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Arman Tsarukyan @ Ilia Topuria",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-31T22:59:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Ibo Aslan @ Iwo Baraniewski",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T00:15:00Z"
-    },
-    {
-      "sport": "NFL",
-      "event": "Houston Texans @ Kansas City Chiefs",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-08T01:20:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Paddy Pimblett @ Justin Gaethje",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2026-01-25T05:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Alex Pereira @ Tom Aspinall",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-31T22:59:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Daniel Konrad @ George Hardwick",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T18:00:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Joshua Van @ Alexandre Pantoja",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T04:45:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Jalin Turner @ Edson Barboza",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T00:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Diego Lopes @ Alex Volkanovski",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2026-02-01T05:30:00Z"
-    },
-    {
-      "sport": "UFC",
-      "event": "Chris Duncan @ Terrance Mckinney",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T02:15:00Z"
-    },
-    {
-      "sport": "NBA",
+      "league": "NBA",
       "event": "Miami Heat @ Orlando Magic",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-09T23:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Jean Silva @ Arnold Allen",
+      "league": "NBA",
+      "event": "Denver Nuggets @ Atlanta Hawks",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2026-01-25T02:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Ahmed El Sisy @ Abbas Khan",
+      "league": "NBA",
+      "event": "Charlotte Hornets @ Toronto Raptors",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T15:30:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Fares Ziam @ Nazim Sadykhov",
+      "league": "NBA",
+      "event": "San Antonio Spurs @ Cleveland Cavaliers",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T01:15:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "EPL",
-      "event": "Leeds United @ Brentford",
+      "league": "NBA",
+      "event": "Utah Jazz @ New York Knicks",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-14T16:30:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "EPL",
-      "event": "Brighton and Hove Albion @ Liverpool",
+      "league": "NBA",
+      "event": "Miami Heat @ Orlando Magic",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-13T15:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "NFL",
+      "league": "NBA",
+      "event": "New York Knicks @ Toronto Raptors",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NBA",
+      "event": "Phoenix Suns @ Oklahoma City Thunder",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NBA",
+      "event": "San Antonio Spurs @ Los Angeles Lakers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Dallas Cowboys @ Detroit Lions",
+      "score": "3-3",
+      "status": "live"
+    },
+    {
+      "league": "NFL",
+      "event": "Seattle Seahawks @ Atlanta Falcons",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Pittsburgh Steelers @ Baltimore Ravens",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Cincinnati Bengals @ Buffalo Bills",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Tennessee Titans @ Cleveland Browns",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Indianapolis Colts @ Jacksonville Jaguars",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Miami Dolphins @ New York Jets",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
       "event": "Washington Commanders @ Minnesota Vikings",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T18:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "EPL",
-      "event": "Aston Villa @ West Ham United",
+      "league": "NFL",
+      "event": "New Orleans Saints @ Tampa Bay Buccaneers",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-14T14:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Islam Youssef @ Nawras Abzakh",
+      "league": "NFL",
+      "event": "Denver Broncos @ Las Vegas Raiders",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T15:30:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "EPL",
+      "league": "NFL",
+      "event": "Los Angeles Rams @ Arizona Cardinals",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Chicago Bears @ Green Bay Packers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Houston Texans @ Kansas City Chiefs",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Philadelphia Eagles @ Los Angeles Chargers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Atlanta Falcons @ Tampa Bay Buccaneers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Arizona Cardinals @ Houston Texans",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Baltimore Ravens @ Cincinnati Bengals",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Buffalo Bills @ New England Patriots",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Cleveland Browns @ Chicago Bears",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "New York Jets @ Jacksonville Jaguars",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Los Angeles Chargers @ Kansas City Chiefs",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Las Vegas Raiders @ Philadelphia Eagles",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Washington Commanders @ New York Giants",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Carolina Panthers @ New Orleans Saints",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Green Bay Packers @ Denver Broncos",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Indianapolis Colts @ Seattle Seahawks",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Tennessee Titans @ San Francisco 49ers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NFL",
+      "event": "Miami Dolphins @ Pittsburgh Steelers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Washington Capitals @ San Jose Sharks",
+      "score": "7-1",
+      "status": "final"
+    },
+    {
+      "league": "NHL",
+      "event": "Utah Mammoth @ Anaheim Ducks",
+      "score": "7-0",
+      "status": "final"
+    },
+    {
+      "league": "NHL",
+      "event": "St Louis Blues @ Boston Bruins",
+      "score": "1-4",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Toronto Maple Leafs @ Carolina Hurricanes",
+      "score": "4-1",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "New York Rangers @ Ottawa Senators",
+      "score": "3-1",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Nashville Predators @ Florida Panthers",
+      "score": "0-1",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Colorado Avalanche @ New York Islanders",
+      "score": "2-4",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Pittsburgh Penguins @ Tampa Bay Lightning",
+      "score": "3-0",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Detroit Red Wings @ Columbus Blue Jackets",
+      "score": "0-1",
+      "status": "live"
+    },
+    {
+      "league": "NHL",
+      "event": "Minnesota Wild @ Calgary Flames",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Seattle Kraken @ Edmonton Oilers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Chicago Blackhawks @ Los Angeles Kings",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Buffalo Sabres @ Winnipeg Jets",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Vegas Golden Knights @ New Jersey Devils",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "San Jose Sharks @ Dallas Stars",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Utah Mammoth @ Vancouver Canucks",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "NHL",
+      "event": "Washington Capitals @ Anaheim Ducks",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "West Ham United @ Manchester United",
+      "score": "1-1",
+      "status": "final"
+    },
+    {
+      "league": "EPL",
+      "event": "Arsenal @ Aston Villa",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Chelsea @ Bournemouth",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
       "event": "Brentford @ Tottenham Hotspur",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T15:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Tatsuro Taira @ Brandon Moreno",
+      "league": "EPL",
+      "event": "Burnley @ Newcastle United",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-07T04:15:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "UFC",
-      "event": "Mohammad Fahmi @ Salah Eddine Hamli",
-      "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-05T15:30:00Z"
-    },
-    {
-      "sport": "EPL",
+      "league": "EPL",
       "event": "Nottingham Forest @ Everton",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-06T15:00:00Z"
+      "status": "scheduled"
     },
     {
-      "sport": "EPL",
+      "league": "EPL",
+      "event": "Sunderland @ Manchester City",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Liverpool @ Leeds United",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "West Ham United @ Brighton and Hove Albion",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Crystal Palace @ Fulham",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Manchester United @ Wolverhampton Wanderers",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Brighton and Hove Albion @ Liverpool",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Everton @ Chelsea",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
       "event": "Fulham @ Burnley",
       "score": "",
-      "status": "Not started",
-      "commence_time": "2025-12-13T17:30:00Z"
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Wolverhampton Wanderers @ Arsenal",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Aston Villa @ West Ham United",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Manchester City @ Crystal Palace",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Newcastle United @ Sunderland",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Tottenham Hotspur @ Nottingham Forest",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Leeds United @ Brentford",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "EPL",
+      "event": "Bournemouth @ Manchester United",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Ahmed El Sisy @ Abbas Khan",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Walid Gounaine @ Hamad Marhoon",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Islam Reda @ Yanis Ghemmouri",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Islam Youssef @ Nawras Abzakh",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Mohammad Fahmi @ Salah Eddine Hamli",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Mahmoud Atef @ Malik Basahel",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Badreddine Diani @ Mohammad Alaqraa",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Lorenz Larkin @ Vanilto Antunes",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Sam Alvey @ Robelis Despaigne",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Norbert Pietrzak @ Charles Joyner",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Daniel Konrad @ George Hardwick",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Nicolas Barna @ Josh Abraham",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Leandro Camargo @ Teddy Adlington-Stringer",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Nicolas Leblond @ Shajidul Haque",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Mairon Santos @ Muhammadjon Naimov",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Antonio Trocoli @ Mansur Abdul-Malik",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Ibo Aslan @ Iwo Baraniewski",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Jalin Turner @ Edson Barboza",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Brunno Ferreira @ Marvin Vettori",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Fares Ziam @ Nazim Sadykhov",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Karine Silva @ Maycee Barber",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Chris Duncan @ Terrance Mckinney",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Manuel Torres @ Grant Dawson",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Bogdan Guskov @ Jan Blachowicz",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Payton Talbott @ Henry Cejudo",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Tatsuro Taira @ Brandon Moreno",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Joshua Van @ Alexandre Pantoja",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Petr Yan @ Merab Dvalishvili",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Arman Tsarukyan @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Israel Adesanya @ Alex Pereira",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Alex Pereira @ Jon Jones",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Alex Pereira @ Tom Aspinall",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Alex Volkanovski @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Alex Volkanovski @ Max Holloway",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Erin Blanchfield @ Alexa Grasso",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Rose Namajunas @ Alexa Grasso",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Alexander Volkov @ Tom Aspinall",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Brandon Moreno @ Alexandre Pantoja",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Manel Kape @ Alexandre Pantoja",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Amanda Nunes @ Kayla Harrison",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Arman Tsarukyan @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Belal Muhammad @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Shavkat Rakhmonov @ Belal Muhammad",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Charles Oliveira @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Cory Sandhagen @ Sean O'Malley",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Curtis Blaydes @ Tom Aspinall",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Dakota Ditcheva @ Valentina Shevchenko",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Daniel Hooker @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Daniel Hooker @ Michael Chandler",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Diego Lopes @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Israel Adesanya @ Dricus Du Plessis",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Erin Blanchfield @ Valentina Shevchenko",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Ilia Topuria @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Justin Gaethje @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Paddy Pimblett @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Israel Adesanya @ Khamzat Chimaev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Israel Adesanya @ Sean Strickland",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Tom Aspinall @ Jon Jones",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Kamaru Usman @ Leon Edwards",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Kamaru Usman @ Shavkat Rakhmonov",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Khamzat Chimaev @ Sean Strickland",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Shavkat Rakhmonov @ Leon Edwards",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Petr Yan @ Sean O'Malley",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Sergey Pavlovich @ Tom Aspinall",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Yan Xiaonan @ Weili Zhang",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Michael Page @ Khamzat Chimaev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Caio Borralho @ Khamzat Chimaev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Nassourdine Imavov @ Khamzat Chimaev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Amanda Nunes @ Kayla Harrison",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Jean Silva @ Arnold Allen",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Derrick Lewis @ Waldo Cortes-Acosta",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Song Yadong @ Sean O'Malley",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Paddy Pimblett @ Justin Gaethje",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Diego Lopes @ Alex Volkanovski",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Max Holloway @ Charles Oliveira",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Ilia Topuria @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Carlos Ulberg @ Alex Pereira",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Jiri Prochazka @ Alex Pereira",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Jon Jones @ Alex Pereira",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Carlos Ulberg @ Magomed Ankalaev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Natalia Silva @ Valentina Shevchenko",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Ciryl Gane @ Tom Aspinall",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Michael Morales @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Mackenzie Dern @ Weili Zhang",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Arman Tsarukyan @ Ilia Topuria",
+      "score": "",
+      "status": "scheduled"
+    },
+    {
+      "league": "UFC",
+      "event": "Kamaru Usman @ Islam Makhachev",
+      "score": "",
+      "status": "scheduled"
     }
   ]
 }
