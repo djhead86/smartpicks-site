@@ -104,8 +104,14 @@ function renderAll() {
     // Render header stats
     renderHeaderStats();
     
+    // Render performance summary
+    renderPerformance();
+    
     // Render parlay card
     renderParlayCard();
+    
+    // Render placed bets tabs
+    renderPlacedBets();
     
     // Render sport pick cards
     renderSportPicks('nba');
@@ -117,6 +123,9 @@ function renderAll() {
     
     // Render live scores ticker
     renderScoresTicker();
+    
+    // Setup tab functionality
+    setupTabs();
 }
 
 function renderHeaderStats() {
@@ -127,6 +136,18 @@ function renderHeaderStats() {
     // Open bets
     const openBets = appData.open_bets || 0;
     document.getElementById('open-bets').textContent = openBets;
+    
+    // Performance stats
+    const perf = appData.performance || {};
+    const winRate = (perf.win_rate || 0) * 100;
+    const roi = (perf.roi || 0) * 100;
+    
+    document.getElementById('win-rate').textContent = `${winRate.toFixed(1)}%`;
+    document.getElementById('roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
+    
+    // Color code ROI
+    const roiElement = document.getElementById('roi');
+    roiElement.style.color = roi >= 0 ? 'var(--color-success)' : 'var(--color-danger)';
     
     // Last updated
     const timestamp = appData.generated_at || '';
@@ -283,6 +304,106 @@ function renderScoresTicker() {
     });
     
     ticker.innerHTML = html;
+}
+
+// ============================================================================
+// PERFORMANCE RENDERING
+// ============================================================================
+
+function renderPerformance() {
+    const container = document.getElementById('performance-grid');
+    const perf = appData.performance || {};
+    
+    if (!perf || perf.total_bets === 0) {
+        container.innerHTML = '<div class="no-picks">No performance data yet - place some bets!</div>';
+        return;
+    }
+    
+    const winRate = (perf.win_rate || 0) * 100;
+    const roi = (perf.roi || 0) * 100;
+    const roiClass = roi >= 0 ? 'positive' : 'negative';
+    
+    const html = `
+        <div class="perf-card">
+            <div class="perf-label">Total Bets</div>
+            <div class="perf-value">${perf.total_bets || 0}</div>
+        </div>
+        <div class="perf-card">
+            <div class="perf-label">Record</div>
+            <div class="perf-value">${perf.wins || 0}-${perf.losses || 0}-${perf.pushes || 0}</div>
+        </div>
+        <div class="perf-card">
+            <div class="perf-label">Win Rate</div>
+            <div class="perf-value">${winRate.toFixed(1)}%</div>
+        </div>
+        <div class="perf-card">
+            <div class="perf-label">ROI</div>
+            <div class="perf-value ${roiClass}">${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%</div>
+        </div>
+        <div class="perf-card">
+            <div class="perf-label">Total Wagered</div>
+            <div class="perf-value">${formatCurrency(perf.total_wagered || 0)}</div>
+        </div>
+        <div class="perf-card">
+            <div class="perf-label">Total Profit</div>
+            <div class="perf-value ${roiClass}">${formatCurrency(perf.total_profit || 0, true)}</div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+// ============================================================================
+// PLACED BETS RENDERING
+// ============================================================================
+
+function renderPlacedBets() {
+    const placedBets = appData.placed_bets || {};
+    
+    // Update counts
+    document.getElementById('open-count').textContent = (placedBets.open || []).length;
+    document.getElementById('pending-count').textContent = (placedBets.pending || []).length;
+    document.getElementById('graded-count').textContent = (placedBets.graded || []).length;
+    
+    // Render each tab
+    renderBetTab('open', placedBets.open || []);
+    renderBetTab('pending', placedBets.pending || []);
+    renderBetTab('graded', placedBets.graded || []);
+}
+
+function renderBetTab(tabName, bets) {
+    const container = document.getElementById(`${tabName}-bets-grid`);
+    
+    if (bets.length === 0) {
+        container.innerHTML = `<div class="no-picks">No ${tabName} bets</div>`;
+        return;
+    }
+    
+    let html = '';
+    bets.forEach(bet => {
+        html += createPickCard(bet);
+    });
+    
+    container.innerHTML = html;
+}
+
+function setupTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.getAttribute('data-tab');
+            
+            // Remove active class from all tabs
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            button.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        });
+    });
 }
 
 // ============================================================================

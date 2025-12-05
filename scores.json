@@ -1,33 +1,6 @@
 {
-  "last_updated": "2025-12-04T17:09:48.036385",
+  "last_updated": "2025-12-04T17:12:20.707750",
   "games": [
-    {
-      "sport": "NBA",
-      "home_team": "Orlando Magic",
-      "away_team": "San Antonio Spurs",
-      "home_score": "112",
-      "away_score": "114",
-      "status": "final",
-      "commence_time": "2025-12-04T00:10:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Cleveland Cavaliers",
-      "away_team": "Portland Trail Blazers",
-      "home_score": "110",
-      "away_score": "122",
-      "status": "final",
-      "commence_time": "2025-12-04T00:11:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Indiana Pacers",
-      "away_team": "Denver Nuggets",
-      "home_score": "120",
-      "away_score": "135",
-      "status": "final",
-      "commence_time": "2025-12-04T00:11:00Z"
-    },
     {
       "sport": "NBA",
       "home_team": "Atlanta Hawks",
@@ -86,8 +59,8 @@
       "sport": "NBA",
       "home_team": "Philadelphia 76ers",
       "away_team": "Golden State Warriors",
-      "home_score": null,
-      "away_score": null,
+      "home_score": "0",
+      "away_score": "0",
       "status": "live",
       "commence_time": "2025-12-05T00:10:00Z"
     },
@@ -95,8 +68,8 @@
       "sport": "NBA",
       "home_team": "Washington Wizards",
       "away_team": "Boston Celtics",
-      "home_score": null,
-      "away_score": null,
+      "home_score": "0",
+      "away_score": "0",
       "status": "live",
       "commence_time": "2025-12-05T00:11:00Z"
     },
@@ -435,15 +408,6 @@
     },
     {
       "sport": "NHL",
-      "home_team": "New Jersey Devils",
-      "away_team": "Dallas Stars",
-      "home_score": "0",
-      "away_score": "3",
-      "status": "final",
-      "commence_time": "2025-12-04T00:11:30Z"
-    },
-    {
-      "sport": "NHL",
       "home_team": "Philadelphia Flyers",
       "away_team": "Buffalo Sabres",
       "home_score": "5",
@@ -492,7 +456,7 @@
       "home_team": "Carolina Hurricanes",
       "away_team": "Toronto Maple Leafs",
       "home_score": "0",
-      "away_score": "0",
+      "away_score": "1",
       "status": "live",
       "commence_time": "2025-12-05T00:08:23Z"
     },
@@ -516,21 +480,21 @@
     },
     {
       "sport": "NHL",
-      "home_team": "Tampa Bay Lightning",
-      "away_team": "Pittsburgh Penguins",
-      "home_score": null,
-      "away_score": null,
-      "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
       "home_team": "New York Islanders",
       "away_team": "Colorado Avalanche",
       "home_score": null,
       "away_score": null,
       "status": "live",
       "commence_time": "2025-12-05T00:13:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Tampa Bay Lightning",
+      "away_team": "Pittsburgh Penguins",
+      "home_score": null,
+      "away_score": null,
+      "status": "live",
+      "commence_time": "2025-12-05T00:15:00Z"
     },
     {
       "sport": "NHL",
