@@ -55,19 +55,31 @@ function showError(msg) {
 // Create a Pick Card
 // ===============================
 function createPickCard(p) {
+    // Safe fallbacks for missing fields
+    const event = p.event || "Unknown Event";
+    const pick = p.team || p.pick || p.side || "N/A";
+    const market = p.market || p.bet_type || "N/A";
+    const odds = p.odds || p.price || "N/A";
+    const line = p.line ? ` (${p.line})` : "";
+    const ev = p.ev !== undefined ? Number(p.ev).toFixed(3) : "N/A";
+    const score = p.smart_score !== undefined ? Number(p.smart_score).toFixed(3) : "N/A";
+    const stake = p.stake !== undefined ? `$${p.stake.toFixed(2)}` : "$0.00";
+    const status = p.status || "pending";
+
     return `
         <div class="pick-card">
-            <h4>${p.event}</h4>
-            <p><strong>Pick:</strong> ${p.team}</p>
-            <p><strong>Market:</strong> ${p.market}</p>
-            <p><strong>Odds:</strong> ${p.odds}</p>
-            <p><strong>EV:</strong> ${Number(p.ev).toFixed(3)}</p>
-            <p><strong>Smart Score:</strong> ${Number(p.smart_score).toFixed(3)}</p>
-            <p><strong>Stake:</strong> ${fmtMoney(p.stake)}</p>
-            <p><strong>Status:</strong> ${p.status}</p>
+            <h4>${event}</h4>
+            <p><strong>Pick:</strong> ${pick}${line}</p>
+            <p><strong>Market:</strong> ${market}</p>
+            <p><strong>Odds:</strong> ${odds}</p>
+            <p><strong>EV:</strong> ${ev}</p>
+            <p><strong>Smart Score:</strong> ${score}</p>
+            <p><strong>Stake:</strong> ${stake}</p>
+            <p><strong>Status:</strong> ${status}</p>
         </div>
     `;
 }
+
 
 // ===============================
 // Render Picks by Sport
