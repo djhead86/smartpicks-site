@@ -208,14 +208,40 @@ function renderSportPicks(sport) {
     const container = document.getElementById(`${sport}-picks`);
     const group = document.getElementById(`${sport}-group`);
     // Map backend sport keys to DOM IDs
+    // Map backend sport keys to DOM sections
     const SPORT_KEY_TO_DOM_ID = {
         "basketball_nba": "NBA_picks",
         "americanfootball_nfl": "NFL_picks",
         "icehockey_nhl": "NHL_picks",
         "soccer_epl": "EPL_picks",
         "soccer_uefa_champs_league": "UEFA_picks",
-        "mma_mixed_martial_arts": "UFC_picks",
+        "mma_mixed_martial_arts": "UFC_picks"
     };
+
+// Render pick cards
+for (const sportKey in data.pick_cards) {
+    const domId = SPORT_KEY_TO_DOM_ID[sportKey];
+    if (!domId) {
+        console.warn("No DOM mapping for sport:", sportKey);
+        continue;
+    }
+
+    const container = document.getElementById(domId);
+    if (!container) {
+        console.error("Missing DOM element:", domId);
+        continue;
+    }
+
+    const picks = data.pick_cards[sportKey];
+
+    if (!picks || picks.length === 0) {
+        container.innerHTML = `<div class="loading">No picks available.</div>`;
+        continue;
+    }
+
+    container.innerHTML = picks.map(p => createPickCard(p)).join("");
+}
+
 
 for (const sportKey in data.pick_cards) {
     const domId = SPORT_KEY_TO_DOM_ID[sportKey];
