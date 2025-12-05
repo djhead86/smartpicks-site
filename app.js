@@ -207,22 +207,39 @@ function renderParlayCard() {
 function renderSportPicks(sport) {
     const container = document.getElementById(`${sport}-picks`);
     const group = document.getElementById(`${sport}-group`);
-    const picks = appData.pick_cards?.[sport] || [];
-    
-    if (picks.length === 0) {
-        group.style.display = 'none';
-        return;
+    // Map backend sport keys to DOM IDs
+    const SPORT_KEY_TO_DOM_ID = {
+        "basketball_nba": "NBA_picks",
+        "americanfootball_nfl": "NFL_picks",
+        "icehockey_nhl": "NHL_picks",
+        "soccer_epl": "EPL_picks",
+        "soccer_uefa_champs_league": "UEFA_picks",
+        "mma_mixed_martial_arts": "UFC_picks",
+    };
+
+for (const sportKey in data.pick_cards) {
+    const domId = SPORT_KEY_TO_DOM_ID[sportKey];
+    if (!domId) {
+        console.warn("No DOM mapping for sport:", sportKey);
+        continue;
     }
-    
-    group.style.display = 'block';
-    
-    let html = '';
-    picks.forEach(pick => {
-        html += createPickCard(pick);
-    });
-    
-    container.innerHTML = html;
+
+    const container = document.getElementById(domId);
+    if (!container) {
+        console.error("Missing DOM element:", domId);
+        continue;
+    }
+
+    const picks = data.pick_cards[sportKey];
+
+    if (!picks || picks.length === 0) {
+        container.innerHTML = `<div class="loading">No picks available.</div>`;
+        continue;
+    }
+
+    container.innerHTML = picks.map(p => createPickCard(p)).join("");
 }
+
 
 function createPickCard(pick) {
     const statusClass = getStatusClass(pick.status);
