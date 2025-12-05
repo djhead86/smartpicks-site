@@ -209,13 +209,14 @@ function renderSportPicks(sport) {
     const group = document.getElementById(`${sport}-group`);
     // Map backend sport keys to DOM IDs
     // Map backend sport keys to DOM sections
+    // Correct DOM mapping for sport keys → index.html IDs
     const SPORT_KEY_TO_DOM_ID = {
-        "basketball_nba": "NBA_picks",
-        "americanfootball_nfl": "NFL_picks",
-        "icehockey_nhl": "NHL_picks",
-        "soccer_epl": "EPL_picks",
-        "soccer_uefa_champs_league": "UEFA_picks",
-        "mma_mixed_martial_arts": "UFC_picks"
+        "basketball_nba": "nba-picks",
+        "americanfootball_nfl": "nfl-picks",
+        "icehockey_nhl": "nhl-picks",
+        "soccer_epl": "epl-picks",
+        "soccer_uefa_champs_league": "uefa-picks",
+        "mma_mixed_martial_arts": "ufc-picks"
     };
 
 // Render pick cards
