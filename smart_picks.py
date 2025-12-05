@@ -61,10 +61,6 @@ SPORTS: Dict[str, Dict[str, Any]] = {
         "label": "EPL",
         "smart_score_min": 1.0,
     },
-    "soccer_uefa_champions_league": {
-        "label": "UEFA",
-        "smart_score_min": 1.0,
-    },
     "mma_mixed_martial_arts": {
         "label": "UFC",
         # Moneyline-only; no Smart Score threshold
@@ -593,7 +589,7 @@ def grade_bets(bets: List[Bet], api_key: str, base_bankroll: float, prior_profit
     # Fetch scores per sport
     all_scores: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for sport_key in SPORTS.keys():
-        scores = fetch_scores_for_sport(sport_key, api_key, days_from=7)
+        scores = fetch_scores_for_sport(sport_key, api_key, days_from=1)
         all_scores[sport_key] = map_scores_by_event_id(scores)
 
     for bet in bets:

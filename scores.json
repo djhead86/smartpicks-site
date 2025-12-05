@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-05T00:32:50.328515+00:00",
+  "last_updated": "2025-12-05T00:40:32.326096+00:00",
   "scores": [
     {
       "sport": "UFC",
@@ -145,7 +145,7 @@
       "sport": "NHL",
       "event": "Detroit Red Wings @ Columbus Blue Jackets",
       "score": "",
-      "status": "Not started",
+      "status": "Live",
       "commence_time": "2025-12-05T00:40:00Z"
     },
     {
