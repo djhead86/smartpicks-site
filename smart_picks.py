@@ -1,4 +1,111 @@
-#!/usr/bin/env python3
+# ============================================================================
+# PERFORMANCE TRACKING
+# ============================================================================
+
+def calculate_performance(picks: List[Pick]) -> Dict:
+    """Calculate performance metrics from graded picks"""
+    graded = [p for p in picks if p.status == 'graded' and p.result]
+    
+    if not graded:
+        return {
+            'overall': {
+                'total_bets': 0,
+                'wins': 0,
+                'losses': 0,
+                'pushes': 0,
+                'win_rate': 0.0,
+                'roi': 0.0,
+                'total_wagered': 0.0,
+                'total_profit': 0.0
+            },
+            'by_sport': {},
+            'by_bet_type': {}
+        }
+    
+    # Overall stats
+    wins = len([p for p in graded if p.result == 'WIN'])
+    losses = len([p for p in graded if p.result == 'LOSS'])
+    pushes = len([p for p in graded if p.result == 'PUSH'])
+    total_wagered = sum(p.stake for p in graded)
+    total_profit = sum(p.profit for p in graded if p.profit is not None)
+    
+    # Calculate win rate (excluding pushes)
+    decisive_bets = wins + losses
+    win_rate = wins / decisive_bets if decisive_bets > 0 else 0.0
+    
+    # Calculate ROI
+    roi = (total_profit / total_wagered) if total_wagered > 0 else 0.0
+    
+    overall = {
+        'total_bets': len(graded),
+        'wins': wins,
+        'losses': losses,
+        'pushes': pushes,
+        'win_rate': round(win_rate, 3),
+        'roi': round(roi, 3),
+        'total_wagered': round(total_wagered, 2),
+        'total_profit': round(total_profit, 2)
+    }
+    
+    # By sport
+    by_sport = {}
+    for sport in set(p.sport for p in graded):
+        sport_picks = [p for p in graded if p.sport == sport]
+        sport_wins = len([p for p in sport_picks if p.result == 'WIN'])
+        sport_losses = len([p for p in sport_picks if p.result == 'LOSS'])
+        sport_decisive = sport_wins + sport_losses
+        sport_wagered = sum(p.stake for p in sport_picks)
+        sport_profit = sum(p.profit for p in sport_picks if p.profit is not None)
+        
+        by_sport[sport] = {
+            'bets': len(sport_picks),
+            'wins': sport_wins,
+            'losses': sport_losses,
+            'win_rate': round(sport_wins / sport_decisive, 3) if sport_decisive > 0 else 0.0,
+            'roi': round(sport_profit / sport_wagered, 3) if sport_wagered > 0 else 0.0,
+            'profit': round(sport_profit, 2)
+        }
+    
+    # By bet type
+    by_bet_type = {}
+    for bet_type in set(p.pick_type for p in graded):
+        type_picks = [p for p in graded if p.pick_type == bet_type]
+        type_wins = len([p for p in type_picks if p.result == 'WIN'])
+        type_losses = len([p for p in type_picks if p.result == 'LOSS'])
+        type_decisive = type_wins + type_losses
+        type_wagered = sum(p.stake for p in type_picks)
+        type_profit = sum(p.profit for p in type_picks if p.profit is not None)
+        
+        bet_type_name = {'h2h': 'Moneyline', 'spreads': 'Spread', 'totals': 'Total'}.get(bet_type, bet_type)
+        
+        by_bet_type[bet_type_name] = {
+            'bets': len(type_picks),
+            'wins': type_wins,
+            'losses': type_losses,
+            'win_rate': round(type_wins / type_decisive, 3) if type_decisive > 0 else 0.0,
+            'roi': round(type_profit / type_wagered, 3) if type_wagered > 0 else 0.0,
+            'profit': round(type_profit, 2)
+        }
+    
+    return {
+        'overall': overall,
+        'by_sport': by_sport,
+        'by_bet_type': by_bet_type
+    }
+
+def save_performance(performance: Dict):
+    """Save performance metrics to JSON file"""
+    data = {
+        'last_updated': datetime.now().isoformat(),
+        'performance': performance
+    }
+    
+    try:
+        with open(PERFORMANCE_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+        logger.info(f"✓ Saved performance metrics to {PERFORMANCE_FILE}")
+    except Exception as e:
+        logger.error(f"Error saving performance: {e}")#!/usr/bin/env python3
 """
 SmartPicks - Sports Betting Analytics Engine
 Fetches odds, calculates EV, generates picks, grades results
@@ -22,7 +129,9 @@ from dataclasses import dataclass, asdict
 CONFIG_FILE = "config.json"
 DATA_OUTPUT = "data.json"
 SCORES_OUTPUT = "scores.json"
-BET_HISTORY = "bet_history.csv"
+PLACED_BETS_FILE = "placed_bets.json"
+PERFORMANCE_FILE = "performance.json"
+MAX_PICKS = 15  # Maximum picks to auto-place
 
 # Sport mappings
 SPORT_KEYS = {
@@ -315,6 +424,7 @@ def extract_picks_from_event(event: Dict, sport_key: str, sport_short: str,
         for outcome in outcomes:
             pick_name = outcome.get('name', '')
             odds = outcome.get('price', 0)
+            point = outcome.get('point')  # For spreads/totals
             
             if odds == 0:
                 continue
@@ -335,6 +445,17 @@ def extract_picks_from_event(event: Dict, sport_key: str, sport_short: str,
             if ev <= 0:
                 continue
             
+            # Format pick name with point if applicable
+            if point is not None:
+                if market_key == 'spreads':
+                    pick_display = f"{pick_name} {point:+.1f}"
+                elif market_key == 'totals':
+                    pick_display = f"{pick_name} {point:.1f}"
+                else:
+                    pick_display = pick_name
+            else:
+                pick_display = pick_name
+            
             pick = Pick(
                 sport=sport_short.upper(),
                 event_id=event_id,
@@ -342,7 +463,7 @@ def extract_picks_from_event(event: Dict, sport_key: str, sport_short: str,
                 home_team=home_team,
                 away_team=away_team,
                 pick_type=market_key,
-                pick=pick_name,
+                pick=pick_display,
                 odds=odds,
                 fair_prob=fair_prob,
                 market_prob=market_prob,
@@ -361,17 +482,33 @@ def extract_picks_from_event(event: Dict, sport_key: str, sport_short: str,
 # ============================================================================
 
 def deduplicate_picks(picks: List[Pick]) -> List[Pick]:
-    """Remove duplicate picks for the same event"""
-    seen_events = set()
+    """
+    Remove duplicate picks for the same event
+    Also prevents betting both sides (e.g., Lakers -5 AND Warriors +5)
+    """
+    seen_events = {}  # event_id -> pick
     unique_picks = []
     
     for pick in picks:
-        event_key = f"{pick.event_id}_{pick.pick_type}_{pick.pick}"
-        if event_key not in seen_events:
-            seen_events.add(event_key)
+        event_id = pick.event_id
+        
+        # Check if we already have a pick for this event
+        if event_id in seen_events:
+            existing_pick = seen_events[event_id]
+            
+            # Keep the pick with higher EV
+            if pick.ev > existing_pick.ev:
+                # Remove old pick, add new one
+                unique_picks.remove(existing_pick)
+                seen_events[event_id] = pick
+                unique_picks.append(pick)
+                logger.debug(f"Replaced pick for {event_id}: {existing_pick.pick} → {pick.pick}")
+        else:
+            # First pick for this event
+            seen_events[event_id] = pick
             unique_picks.append(pick)
     
-    logger.info(f"✓ Deduplicated: {len(picks)} → {len(unique_picks)} picks")
+    logger.info(f"✓ Deduplicated: {len(picks)} → {len(unique_picks)} picks (no duplicate games)")
     return unique_picks
 
 def sort_picks_by_sport(picks: List[Pick]) -> Dict[str, List[Pick]]:
@@ -488,7 +625,7 @@ def grade_picks(picks: List[Pick], config: Config) -> List[Pick]:
     return graded
 
 def determine_result(pick: Pick, score_data: Dict) -> str:
-    """Determine if pick won, lost, or pushed"""
+    """Determine if pick won, lost, or pushed with full spread/total support"""
     scores = score_data.get('scores', [])
     if len(scores) < 2:
         return 'PUSH'
@@ -499,89 +636,191 @@ def determine_result(pick: Pick, score_data: Dict) -> str:
     if home_score is None or away_score is None:
         return 'PUSH'
     
-    # H2H (Moneyline)
+    # H2H (Moneyline) - Team must win outright
     if pick.pick_type == 'h2h':
-        if pick.pick == pick.home_team:
+        # Extract team name from pick (in case it has spread notation)
+        pick_team = pick.pick.split()[0] if ' ' in pick.pick else pick.pick
+        
+        if pick_team == pick.home_team:
             return 'WIN' if home_score > away_score else 'LOSS' if home_score < away_score else 'PUSH'
         else:
             return 'WIN' if away_score > home_score else 'LOSS' if away_score < home_score else 'PUSH'
     
-    # Spreads (simplified - needs point value parsing)
+    # Spreads - Extract point value and determine cover
     elif pick.pick_type == 'spreads':
-        # This is simplified - real implementation needs spread value
-        return 'PUSH'
+        try:
+            # Parse "Team Name +5.5" or "Team Name -3.0"
+            parts = pick.pick.rsplit(' ', 1)
+            if len(parts) != 2:
+                logger.warning(f"Could not parse spread pick: {pick.pick}")
+                return 'PUSH'
+            
+            team_name = parts[0]
+            spread = float(parts[1])
+            
+            # Determine which team we picked
+            if team_name == pick.home_team:
+                # Home team with spread
+                adjusted_score = home_score + spread
+                return 'WIN' if adjusted_score > away_score else 'LOSS' if adjusted_score < away_score else 'PUSH'
+            else:
+                # Away team with spread
+                adjusted_score = away_score + spread
+                return 'WIN' if adjusted_score > home_score else 'LOSS' if adjusted_score < home_score else 'PUSH'
+        except (ValueError, IndexError) as e:
+            logger.error(f"Error parsing spread for {pick.pick}: {e}")
+            return 'PUSH'
     
-    # Totals (simplified - needs total value parsing)
+    # Totals - Extract total value and determine over/under
     elif pick.pick_type == 'totals':
-        # This is simplified - real implementation needs total value
-        return 'PUSH'
+        try:
+            # Parse "Over 215.5" or "Under 48.0"
+            parts = pick.pick.rsplit(' ', 1)
+            if len(parts) != 2:
+                logger.warning(f"Could not parse total pick: {pick.pick}")
+                return 'PUSH'
+            
+            over_under = parts[0].upper()
+            total_line = float(parts[1])
+            actual_total = home_score + away_score
+            
+            if over_under == 'OVER':
+                return 'WIN' if actual_total > total_line else 'LOSS' if actual_total < total_line else 'PUSH'
+            elif over_under == 'UNDER':
+                return 'WIN' if actual_total < total_line else 'LOSS' if actual_total > total_line else 'PUSH'
+            else:
+                logger.warning(f"Unknown total type: {over_under}")
+                return 'PUSH'
+        except (ValueError, IndexError) as e:
+            logger.error(f"Error parsing total for {pick.pick}: {e}")
+            return 'PUSH'
     
     return 'PUSH'
 
 # ============================================================================
-# BET HISTORY TRACKING
+# PLACED BETS MANAGEMENT
 # ============================================================================
 
-def update_bet_history(picks: List[Pick]):
-    """Append graded picks to bet_history.csv"""
-    file_exists = Path(BET_HISTORY).exists()
+def load_placed_bets() -> List[Pick]:
+    """Load previously placed bets from JSON file"""
+    if not Path(PLACED_BETS_FILE).exists():
+        logger.info("No placed bets file found, starting fresh")
+        return []
     
-    graded_picks = [p for p in picks if p.status == 'graded' and p.result]
-    
-    if not graded_picks:
-        return
-    
-    with open(BET_HISTORY, 'a', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=[
-            'timestamp', 'sport', 'event_id', 'pick', 'odds', 
-            'stake', 'ev', 'smart_score', 'result', 'profit'
-        ])
+    try:
+        with open(PLACED_BETS_FILE, 'r') as f:
+            data = json.load(f)
         
-        if not file_exists:
-            writer.writeheader()
+        picks = []
+        for bet_data in data.get('bets', []):
+            pick = Pick(
+                sport=bet_data['sport'],
+                event_id=bet_data['event_id'],
+                commence_time=bet_data['commence_time'],
+                home_team=bet_data['home_team'],
+                away_team=bet_data['away_team'],
+                pick_type=bet_data['pick_type'],
+                pick=bet_data['pick'],
+                odds=bet_data['odds'],
+                fair_prob=bet_data['fair_prob'],
+                market_prob=bet_data['market_prob'],
+                ev=bet_data['ev'],
+                smart_score=bet_data['smart_score'],
+                stake=bet_data['stake'],
+                status=bet_data['status'],
+                result=bet_data.get('result'),
+                profit=bet_data.get('profit')
+            )
+            picks.append(pick)
         
-        for pick in graded_picks:
-            writer.writerow({
-                'timestamp': datetime.now().isoformat(),
-                'sport': pick.sport,
-                'event_id': pick.event_id,
-                'pick': pick.pick,
-                'odds': pick.odds,
-                'stake': pick.stake,
-                'ev': round(pick.ev, 2),
-                'smart_score': round(pick.smart_score, 2),
-                'result': pick.result,
-                'profit': round(pick.profit, 2) if pick.profit else 0
-            })
+        logger.info(f"✓ Loaded {len(picks)} placed bets")
+        return picks
     
-    total_profit = sum(p.profit for p in graded_picks if p.profit)
-    logger.info(f"✓ Updated bet history: {len(graded_picks)} picks, ${total_profit:+.2f} profit")
+    except Exception as e:
+        logger.error(f"Error loading placed bets: {e}")
+        return []
+
+def save_placed_bets(picks: List[Pick]):
+    """Save placed bets to JSON file"""
+    data = {
+        'last_updated': datetime.now().isoformat(),
+        'bets': [asdict(pick) for pick in picks]
+    }
+    
+    try:
+        with open(PLACED_BETS_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+        logger.info(f"✓ Saved {len(picks)} placed bets to {PLACED_BETS_FILE}")
+    except Exception as e:
+        logger.error(f"Error saving placed bets: {e}")
+
+def auto_place_picks(new_picks: List[Pick], existing_bets: List[Pick]) -> List[Pick]:
+    """
+    Auto-place top picks (up to MAX_PICKS)
+    Merge with existing bets, avoiding duplicates
+    """
+    # Get existing event IDs to avoid duplicates
+    existing_event_ids = {bet.event_id for bet in existing_bets if bet.status in ['open', 'pending']}
+    
+    # Filter out picks for games we already bet on
+    available_picks = [p for p in new_picks if p.event_id not in existing_event_ids]
+    
+    # Calculate how many new picks we can add
+    current_open_count = len([b for b in existing_bets if b.status in ['open', 'pending']])
+    slots_available = MAX_PICKS - current_open_count
+    
+    if slots_available <= 0:
+        logger.info(f"Already at max picks ({MAX_PICKS}), no new picks placed")
+        return existing_bets
+    
+    # Take top picks by EV up to available slots
+    picks_to_place = sorted(available_picks, key=lambda p: p.ev, reverse=True)[:slots_available]
+    
+    logger.info(f"✓ Auto-placing {len(picks_to_place)} new picks (max: {MAX_PICKS}, available slots: {slots_available})")
+    
+    # Merge with existing bets
+    all_bets = existing_bets + picks_to_place
+    return all_bets
 
 # ============================================================================
 # JSON OUTPUT GENERATION
 # ============================================================================
 
 def generate_data_json(picks_by_sport: Dict[str, List[Pick]], 
-                       parlay: List[Pick], config: Config):
+                       parlay: List[Pick], all_bets: List[Pick],
+                       config: Config, performance: Dict):
     """Generate data.json for frontend"""
     
-    # Calculate current bankroll from history
+    # Calculate current bankroll from performance
     current_bankroll = calculate_current_bankroll(config)
+    
+    # Count bets by status
+    open_count = len([b for b in all_bets if b.status == 'open'])
+    pending_count = len([b for b in all_bets if b.status == 'pending'])
+    graded_count = len([b for b in all_bets if b.status == 'graded'])
     
     data = {
         'generated_at': datetime.now().isoformat(),
         'bankroll': current_bankroll,
-        'open_bets': count_open_bets(picks_by_sport),
+        'open_bets': open_count,
+        'pending_bets': pending_count,
+        'graded_bets': graded_count,
+        'performance': performance['overall'],
         'pick_cards': {},
         'parlay_card': {
             'legs': len(parlay),
             'total_stake': sum(p.stake for p in parlay),
             'total_ev': sum(p.ev for p in parlay),
             'picks': [pick_to_dict(p) for p in parlay]
+        },
+        'placed_bets': {
+            'open': [pick_to_dict(b) for b in all_bets if b.status == 'open'],
+            'pending': [pick_to_dict(b) for b in all_bets if b.status == 'pending'],
+            'graded': [pick_to_dict(b) for b in all_bets if b.status == 'graded']
         }
     }
     
-    # Add sport-specific cards
+    # Add sport-specific cards (only open picks for display)
     for sport, picks in picks_by_sport.items():
         if picks:
             data['pick_cards'][sport.lower()] = [pick_to_dict(p) for p in picks[:10]]
@@ -590,6 +829,7 @@ def generate_data_json(picks_by_sport: Dict[str, List[Pick]],
         json.dump(data, f, indent=2)
     
     logger.info(f"✓ Generated {DATA_OUTPUT}")
+    logger.info(f"  Open: {open_count}, Pending: {pending_count}, Graded: {graded_count}")
 
 def generate_scores_json(config: Config):
     """Generate scores.json for live ticker"""
@@ -656,21 +896,17 @@ def count_open_bets(picks_by_sport: Dict[str, List[Pick]]) -> int:
     return count
 
 def calculate_current_bankroll(config: Config) -> float:
-    """Calculate current bankroll from history"""
-    if not Path(BET_HISTORY).exists():
-        return config.base_bankroll
+    """Calculate current bankroll from placed bets"""
+    placed_bets = load_placed_bets()
     
-    total_profit = 0
-    try:
-        with open(BET_HISTORY, 'r') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                total_profit += float(row.get('profit', 0))
-    except Exception as e:
-        logger.warning(f"Could not calculate bankroll from history: {e}")
-        return config.base_bankroll
+    total_profit = sum(
+        p.profit for p in placed_bets 
+        if p.status == 'graded' and p.profit is not None
+    )
     
-    return config.base_bankroll + total_profit
+    current = config.base_bankroll + total_profit
+    logger.debug(f"Bankroll: Base ${config.base_bankroll} + Profit ${total_profit:.2f} = ${current:.2f}")
+    return current
 
 # ============================================================================
 # MAIN EXECUTION
@@ -693,7 +929,11 @@ def main():
         # 1. Load configuration
         config = load_config()
         
-        # 2. Fetch odds from API
+        # 2. Load existing placed bets
+        logger.info("Loading existing placed bets...")
+        placed_bets = load_placed_bets()
+        
+        # 3. Fetch odds from API
         logger.info("Fetching odds from API...")
         odds_data = fetch_all_odds(config)
         
@@ -701,39 +941,52 @@ def main():
             logger.error("No odds data fetched. Exiting.")
             return
         
-        # 3. Generate picks
+        # 4. Generate new candidate picks
         logger.info("Generating picks...")
-        all_picks = generate_picks(odds_data, config)
+        new_picks = generate_picks(odds_data, config)
         
-        # 4. Deduplicate
-        all_picks = deduplicate_picks(all_picks)
+        # 5. Deduplicate (prevent both sides of same game)
+        new_picks = deduplicate_picks(new_picks)
         
-        # 5. Grade existing picks
-        logger.info("Grading picks...")
-        all_picks = grade_picks(all_picks, config)
+        # 6. Auto-place top picks (up to MAX_PICKS total)
+        logger.info(f"Auto-placing picks (max: {MAX_PICKS})...")
+        all_bets = auto_place_picks(new_picks, placed_bets)
         
-        # 6. Update bet history
-        update_bet_history(all_picks)
+        # 7. Grade pending bets
+        logger.info("Grading pending bets...")
+        all_bets = grade_picks(all_bets, config)
         
-        # 7. Organize by sport
-        picks_by_sport = sort_picks_by_sport(all_picks)
+        # 8. Save placed bets
+        save_placed_bets(all_bets)
         
-        # 8. Build parlay
-        open_picks = [p for p in all_picks if p.status == 'open']
+        # 9. Calculate performance metrics
+        logger.info("Calculating performance...")
+        performance = calculate_performance(all_bets)
+        save_performance(performance)
+        
+        # 10. Organize by sport for display
+        picks_by_sport = sort_picks_by_sport([b for b in all_bets if b.status == 'open'])
+        
+        # 11. Build parlay from open picks
+        open_picks = [p for p in all_bets if p.status == 'open']
         parlay = build_parlay(open_picks, config.parlay_legs)
         
-        # 9. Generate outputs
+        # 12. Generate outputs
         logger.info("Generating output files...")
-        generate_data_json(picks_by_sport, parlay, config)
+        generate_data_json(picks_by_sport, parlay, all_bets, config, performance)
         generate_scores_json(config)
         
-        # 10. Summary
+        # 13. Summary
         logger.info("=" * 60)
         logger.info(f"✓ SmartPicks Complete")
-        logger.info(f"  Total Picks: {len(all_picks)}")
-        logger.info(f"  Open: {count_open_bets(picks_by_sport)}")
+        logger.info(f"  Total Placed Bets: {len(all_bets)}")
+        logger.info(f"  Open: {len([b for b in all_bets if b.status == 'open'])}")
+        logger.info(f"  Pending: {len([b for b in all_bets if b.status == 'pending'])}")
+        logger.info(f"  Graded: {len([b for b in all_bets if b.status == 'graded'])}")
         logger.info(f"  Parlay Legs: {len(parlay)}")
         logger.info(f"  Bankroll: ${calculate_current_bankroll(config):.2f}")
+        logger.info(f"  Win Rate: {performance['overall']['win_rate']:.1%}")
+        logger.info(f"  ROI: {performance['overall']['roi']:.1%}")
         logger.info("=" * 60)
     
     except Exception as e:

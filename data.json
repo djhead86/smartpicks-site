@@ -1,90 +1,29 @@
 {
-  "generated_at": "2025-12-04T17:00:47.666230",
+  "generated_at": "2025-12-04T17:09:46.279986",
   "bankroll": 1000,
-  "open_bets": 95,
-  "pick_cards": {
-    "nba": [
-      {
-        "sport": "NBA",
-        "event_id": "9373b84d11358f66f18562222dbf5f42",
-        "commence_time": "2025-12-11T00:30:00Z",
-        "matchup": "Phoenix Suns @ Oklahoma City Thunder",
-        "pick_type": "h2h",
-        "pick": "Oklahoma City Thunder",
-        "odds": -1200,
-        "stake": 10.0,
-        "ev": 0.5,
-        "smart_score": 1.33,
-        "status": "pending",
-        "result": null,
-        "profit": null
-      }
-    ],
-    "nfl": [
-      {
-        "sport": "NFL",
-        "event_id": "813dab51d999b87c7968ac4890965f73",
-        "commence_time": "2025-12-14T18:00:00Z",
-        "matchup": "Las Vegas Raiders @ Philadelphia Eagles",
-        "pick_type": "h2h",
-        "pick": "Philadelphia Eagles",
-        "odds": -950,
-        "stake": 10.0,
-        "ev": 0.5,
-        "smart_score": 1.08,
-        "status": "pending",
-        "result": null,
-        "profit": null
-      },
-      {
-        "sport": "NFL",
-        "event_id": "7ba03312d1012d9872de9999e496558f",
-        "commence_time": "2025-12-14T21:25:00Z",
-        "matchup": "Tennessee Titans @ San Francisco 49ers",
-        "pick_type": "h2h",
-        "pick": "San Francisco 49ers",
-        "odds": -950,
-        "stake": 10.0,
-        "ev": 0.5,
-        "smart_score": 1.08,
-        "status": "pending",
-        "result": null,
-        "profit": null
-      }
-    ],
-    "epl": [
-      {
-        "sport": "EPL",
-        "event_id": "a7a986b5dc6379c1a2a3bf338c9d9ab5",
-        "commence_time": "2025-12-06T15:00:00Z",
-        "matchup": "Sunderland @ Manchester City",
-        "pick_type": "h2h",
-        "pick": "Sunderland",
-        "odds": 1200,
-        "stake": 10.0,
-        "ev": 0.5,
-        "smart_score": 1.32,
-        "status": "pending",
-        "result": null,
-        "profit": null
-      },
-      {
-        "sport": "EPL",
-        "event_id": "ef0252b916fd7bcba28068a6377cef95",
-        "commence_time": "2025-12-13T20:00:00Z",
-        "matchup": "Wolverhampton Wanderers @ Arsenal",
-        "pick_type": "h2h",
-        "pick": "Wolverhampton Wanderers",
-        "odds": 1200,
-        "stake": 10.0,
-        "ev": 0.5,
-        "smart_score": 1.32,
-        "status": "pending",
-        "result": null,
-        "profit": null
-      }
-    ],
-    "ufc": [
+  "open_bets": 0,
+  "pending_bets": 15,
+  "graded_bets": 0,
+  "performance": {
+    "total_bets": 0,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "win_rate": 0.0,
+    "roi": 0.0,
+    "total_wagered": 0.0,
+    "total_profit": 0.0
+  },
+  "pick_cards": {},
+  "parlay_card": {
+    "legs": 0,
+    "total_stake": 0,
+    "total_ev": 0,
+    "picks": []
+  },
+  "placed_bets": {
+    "open": [],
+    "pending": [
       {
         "sport": "UFC",
         "event_id": "701a4d08ee3c6bbc1495269d6de3d9a4",
@@ -111,6 +50,36 @@
         "stake": 10.0,
         "ev": 0.5,
         "smart_score": 0.3,
+        "status": "pending",
+        "result": null,
+        "profit": null
+      },
+      {
+        "sport": "EPL",
+        "event_id": "a7a986b5dc6379c1a2a3bf338c9d9ab5",
+        "commence_time": "2025-12-06T15:00:00Z",
+        "matchup": "Sunderland @ Manchester City",
+        "pick_type": "h2h",
+        "pick": "Sunderland",
+        "odds": 1200,
+        "stake": 10.0,
+        "ev": 0.5,
+        "smart_score": 1.32,
+        "status": "pending",
+        "result": null,
+        "profit": null
+      },
+      {
+        "sport": "EPL",
+        "event_id": "ef0252b916fd7bcba28068a6377cef95",
+        "commence_time": "2025-12-13T20:00:00Z",
+        "matchup": "Wolverhampton Wanderers @ Arsenal",
+        "pick_type": "h2h",
+        "pick": "Wolverhampton Wanderers",
+        "odds": 1200,
+        "stake": 10.0,
+        "ev": 0.5,
+        "smart_score": 1.32,
         "status": "pending",
         "result": null,
         "profit": null
@@ -234,13 +203,53 @@
         "status": "pending",
         "result": null,
         "profit": null
+      },
+      {
+        "sport": "UFC",
+        "event_id": "67548d3897e1454eab2ebbb61f2c91f2",
+        "commence_time": "2025-12-05T15:30:00Z",
+        "matchup": "Ahmed El Sisy @ Abbas Khan",
+        "pick_type": "h2h",
+        "pick": "Ahmed El Sisy",
+        "odds": -156,
+        "stake": 10.0,
+        "ev": 0.5,
+        "smart_score": 0.3,
+        "status": "pending",
+        "result": null,
+        "profit": null
+      },
+      {
+        "sport": "UFC",
+        "event_id": "5ff0e58c7a43bf8179d463b649455fe6",
+        "commence_time": "2025-12-07T05:30:00Z",
+        "matchup": "Petr Yan @ Merab Dvalishvili",
+        "pick_type": "h2h",
+        "pick": "Merab Dvalishvili",
+        "odds": -410,
+        "stake": 10.0,
+        "ev": 0.5,
+        "smart_score": 0.55,
+        "status": "pending",
+        "result": null,
+        "profit": null
+      },
+      {
+        "sport": "UFC",
+        "event_id": "fe6d6bf6ed8cf03c9ca9be474b87f811",
+        "commence_time": "2026-01-01T03:00:00Z",
+        "matchup": "Caio Borralho @ Khamzat Chimaev",
+        "pick_type": "h2h",
+        "pick": "Khamzat Chimaev",
+        "odds": -500,
+        "stake": 10.0,
+        "ev": 0.5,
+        "smart_score": 0.64,
+        "status": "pending",
+        "result": null,
+        "profit": null
       }
-    ]
-  },
-  "parlay_card": {
-    "legs": 0,
-    "total_stake": 0,
-    "total_ev": 0,
-    "picks": []
+    ],
+    "graded": []
   }
 }

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-04T17:00:49.676821",
+  "last_updated": "2025-12-04T17:09:48.036385",
   "games": [
     {
       "sport": "NBA",
@@ -84,8 +84,8 @@
     },
     {
       "sport": "NBA",
-      "home_team": "Washington Wizards",
-      "away_team": "Boston Celtics",
+      "home_team": "Philadelphia 76ers",
+      "away_team": "Golden State Warriors",
       "home_score": null,
       "away_score": null,
       "status": "live",
@@ -93,12 +93,12 @@
     },
     {
       "sport": "NBA",
-      "home_team": "Philadelphia 76ers",
-      "away_team": "Golden State Warriors",
+      "home_team": "Washington Wizards",
+      "away_team": "Boston Celtics",
       "home_score": null,
       "away_score": null,
       "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
+      "commence_time": "2025-12-05T00:11:00Z"
     },
     {
       "sport": "NBA",
@@ -482,15 +482,42 @@
       "sport": "NHL",
       "home_team": "Boston Bruins",
       "away_team": "St Louis Blues",
-      "home_score": null,
-      "away_score": null,
+      "home_score": "0",
+      "away_score": "0",
       "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
+      "commence_time": "2025-12-05T00:08:19Z"
     },
     {
       "sport": "NHL",
       "home_team": "Carolina Hurricanes",
       "away_team": "Toronto Maple Leafs",
+      "home_score": "0",
+      "away_score": "0",
+      "status": "live",
+      "commence_time": "2025-12-05T00:08:23Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Ottawa Senators",
+      "away_team": "New York Rangers",
+      "home_score": "0",
+      "away_score": "0",
+      "status": "live",
+      "commence_time": "2025-12-05T00:08:49Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Florida Panthers",
+      "away_team": "Nashville Predators",
+      "home_score": "0",
+      "away_score": "0",
+      "status": "live",
+      "commence_time": "2025-12-05T00:08:55Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Tampa Bay Lightning",
+      "away_team": "Pittsburgh Penguins",
       "home_score": null,
       "away_score": null,
       "status": "live",
@@ -503,34 +530,7 @@
       "home_score": null,
       "away_score": null,
       "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Florida Panthers",
-      "away_team": "Nashville Predators",
-      "home_score": null,
-      "away_score": null,
-      "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Ottawa Senators",
-      "away_team": "New York Rangers",
-      "home_score": null,
-      "away_score": null,
-      "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Tampa Bay Lightning",
-      "away_team": "Pittsburgh Penguins",
-      "home_score": null,
-      "away_score": null,
-      "status": "live",
-      "commence_time": "2025-12-05T00:10:00Z"
+      "commence_time": "2025-12-05T00:13:00Z"
     },
     {
       "sport": "NHL",
