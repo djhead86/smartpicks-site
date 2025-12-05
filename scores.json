@@ -1,1012 +1,2677 @@
 {
+  "last_updated": "2025-12-05T12:51:25.335369Z",
+  "games": [
+    {
+      "sport": "NBA",
+      "home_team": "Philadelphia 76ers",
+      "away_team": "Golden State Warriors",
+      "home_score": "99",
+      "away_score": "98",
+      "status": "final",
+      "commence_time": "2025-12-05T00:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Washington Wizards",
+      "away_team": "Boston Celtics",
+      "home_score": "101",
+      "away_score": "146",
+      "status": "final",
+      "commence_time": "2025-12-05T00:11:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Brooklyn Nets",
+      "away_team": "Utah Jazz",
+      "home_score": "110",
+      "away_score": "123",
+      "status": "final",
+      "commence_time": "2025-12-05T00:41:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Toronto Raptors",
+      "away_team": "Los Angeles Lakers",
+      "home_score": "120",
+      "away_score": "123",
+      "status": "final",
+      "commence_time": "2025-12-05T00:42:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "New Orleans Pelicans",
+      "away_team": "Minnesota Timberwolves",
+      "home_score": "116",
+      "away_score": "125",
+      "status": "final",
+      "commence_time": "2025-12-05T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Boston Celtics",
+      "away_team": "Los Angeles Lakers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Orlando Magic",
+      "away_team": "Miami Heat",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Atlanta Hawks",
+      "away_team": "Denver Nuggets",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Toronto Raptors",
+      "away_team": "Charlotte Hornets",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Cleveland Cavaliers",
+      "away_team": "San Antonio Spurs",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Detroit Pistons",
+      "away_team": "Portland Trail Blazers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "New York Knicks",
+      "away_team": "Utah Jazz",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Chicago Bulls",
+      "away_team": "Indiana Pacers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Houston Rockets",
+      "away_team": "Phoenix Suns",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Memphis Grizzlies",
+      "away_team": "Los Angeles Clippers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Milwaukee Bucks",
+      "away_team": "Philadelphia 76ers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Oklahoma City Thunder",
+      "away_team": "Dallas Mavericks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T02:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Orlando Magic",
+      "away_team": "Miami Heat",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-09T23:00:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Toronto Raptors",
+      "away_team": "New York Knicks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-10T01:30:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Oklahoma City Thunder",
+      "away_team": "Phoenix Suns",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-11T00:30:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Los Angeles Lakers",
+      "away_team": "San Antonio Spurs",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-11T03:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Detroit Lions",
+      "away_team": "Dallas Cowboys",
+      "home_score": "44",
+      "away_score": "30",
+      "status": "final",
+      "commence_time": "2025-12-05T01:15:38Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Atlanta Falcons",
+      "away_team": "Seattle Seahawks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Baltimore Ravens",
+      "away_team": "Pittsburgh Steelers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Buffalo Bills",
+      "away_team": "Cincinnati Bengals",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Cleveland Browns",
+      "away_team": "Tennessee Titans",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Jacksonville Jaguars",
+      "away_team": "Indianapolis Colts",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "New York Jets",
+      "away_team": "Miami Dolphins",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Minnesota Vikings",
+      "away_team": "Washington Commanders",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Tampa Bay Buccaneers",
+      "away_team": "New Orleans Saints",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Las Vegas Raiders",
+      "away_team": "Denver Broncos",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T21:05:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Arizona Cardinals",
+      "away_team": "Los Angeles Rams",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Green Bay Packers",
+      "away_team": "Chicago Bears",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Kansas City Chiefs",
+      "away_team": "Houston Texans",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-08T01:20:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Los Angeles Chargers",
+      "away_team": "Philadelphia Eagles",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-09T01:15:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Tampa Bay Buccaneers",
+      "away_team": "Atlanta Falcons",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-12T01:15:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Houston Texans",
+      "away_team": "Arizona Cardinals",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Cincinnati Bengals",
+      "away_team": "Baltimore Ravens",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "New England Patriots",
+      "away_team": "Buffalo Bills",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Chicago Bears",
+      "away_team": "Cleveland Browns",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Jacksonville Jaguars",
+      "away_team": "New York Jets",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Kansas City Chiefs",
+      "away_team": "Los Angeles Chargers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Philadelphia Eagles",
+      "away_team": "Las Vegas Raiders",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "New York Giants",
+      "away_team": "Washington Commanders",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T18:00:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "New Orleans Saints",
+      "away_team": "Carolina Panthers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Denver Broncos",
+      "away_team": "Green Bay Packers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Los Angeles Rams",
+      "away_team": "Detroit Lions",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Seattle Seahawks",
+      "away_team": "Indianapolis Colts",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "San Francisco 49ers",
+      "away_team": "Tennessee Titans",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T21:25:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Dallas Cowboys",
+      "away_team": "Minnesota Vikings",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-15T01:20:00Z"
+    },
+    {
+      "sport": "NFL",
+      "home_team": "Pittsburgh Steelers",
+      "away_team": "Miami Dolphins",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-16T01:15:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Boston Bruins",
+      "away_team": "St Louis Blues",
+      "home_score": "5",
+      "away_score": "2",
+      "status": "final",
+      "commence_time": "2025-12-05T00:08:19Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Carolina Hurricanes",
+      "away_team": "Toronto Maple Leafs",
+      "home_score": "1",
+      "away_score": "5",
+      "status": "final",
+      "commence_time": "2025-12-05T00:08:23Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Ottawa Senators",
+      "away_team": "New York Rangers",
+      "home_score": "2",
+      "away_score": "4",
+      "status": "final",
+      "commence_time": "2025-12-05T00:08:49Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Florida Panthers",
+      "away_team": "Nashville Predators",
+      "home_score": "1",
+      "away_score": "2",
+      "status": "final",
+      "commence_time": "2025-12-05T00:08:55Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "New York Islanders",
+      "away_team": "Colorado Avalanche",
+      "home_score": "6",
+      "away_score": "3",
+      "status": "final",
+      "commence_time": "2025-12-05T00:12:17Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Tampa Bay Lightning",
+      "away_team": "Pittsburgh Penguins",
+      "home_score": "3",
+      "away_score": "4",
+      "status": "final",
+      "commence_time": "2025-12-05T00:13:08Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Columbus Blue Jackets",
+      "away_team": "Detroit Red Wings",
+      "home_score": "6",
+      "away_score": "5",
+      "status": "final",
+      "commence_time": "2025-12-05T00:39:09Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Edmonton Oilers",
+      "away_team": "Seattle Kraken",
+      "home_score": "9",
+      "away_score": "4",
+      "status": "final",
+      "commence_time": "2025-12-05T02:09:16Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Calgary Flames",
+      "away_team": "Minnesota Wild",
+      "home_score": "4",
+      "away_score": "1",
+      "status": "final",
+      "commence_time": "2025-12-05T02:11:35Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Los Angeles Kings",
+      "away_team": "Chicago Blackhawks",
+      "home_score": "1",
+      "away_score": "2",
+      "status": "final",
+      "commence_time": "2025-12-05T03:09:44Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Winnipeg Jets",
+      "away_team": "Buffalo Sabres",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:10:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "New Jersey Devils",
+      "away_team": "Vegas Golden Knights",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T00:10:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Dallas Stars",
+      "away_team": "San Jose Sharks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T01:10:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Vancouver Canucks",
+      "away_team": "Utah Mammoth",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T02:10:00Z"
+    },
+    {
+      "sport": "NHL",
+      "home_team": "Anaheim Ducks",
+      "away_team": "Washington Capitals",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T03:10:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Manchester United",
+      "away_team": "West Ham United",
+      "home_score": "1",
+      "away_score": "1",
+      "status": "final",
+      "commence_time": "2025-12-04T20:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Aston Villa",
+      "away_team": "Arsenal",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T12:30:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Bournemouth",
+      "away_team": "Chelsea",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Tottenham Hotspur",
+      "away_team": "Brentford",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Newcastle United",
+      "away_team": "Burnley",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Everton",
+      "away_team": "Nottingham Forest",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Manchester City",
+      "away_team": "Sunderland",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Leeds United",
+      "away_team": "Liverpool",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T17:30:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Brighton and Hove Albion",
+      "away_team": "West Ham United",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T14:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Fulham",
+      "away_team": "Crystal Palace",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T16:30:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Wolverhampton Wanderers",
+      "away_team": "Manchester United",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-08T20:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Liverpool",
+      "away_team": "Brighton and Hove Albion",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-13T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Chelsea",
+      "away_team": "Everton",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-13T15:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Burnley",
+      "away_team": "Fulham",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-13T17:30:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Arsenal",
+      "away_team": "Wolverhampton Wanderers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-13T20:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "West Ham United",
+      "away_team": "Aston Villa",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T14:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Crystal Palace",
+      "away_team": "Manchester City",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T14:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Sunderland",
+      "away_team": "Newcastle United",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T14:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Nottingham Forest",
+      "away_team": "Tottenham Hotspur",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T14:00:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Brentford",
+      "away_team": "Leeds United",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-14T16:30:00Z"
+    },
+    {
+      "sport": "EPL",
+      "home_team": "Manchester United",
+      "away_team": "Bournemouth",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-15T20:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Abbas Khan",
+      "away_team": "Ahmed El Sisy",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Hamad Marhoon",
+      "away_team": "Walid Gounaine",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Yanis Ghemmouri",
+      "away_team": "Islam Reda",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Nawras Abzakh",
+      "away_team": "Islam Youssef",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Salah Eddine Hamli",
+      "away_team": "Mohammad Fahmi",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Malik Basahel",
+      "away_team": "Mahmoud Atef",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T15:55:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Mohammad Alaqraa",
+      "away_team": "Badreddine Diani",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T16:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Vanilto Antunes",
+      "away_team": "Lorenz Larkin",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T23:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Robelis Despaigne",
+      "away_team": "Sam Alvey",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-05T23:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Jack Foote",
+      "away_team": "Brennan Gait",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Charles Joyner",
+      "away_team": "Norbert Pietrzak",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Daniel Bainbridge",
+      "away_team": "Charlie Boulton",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "George Hardwick",
+      "away_team": "Daniel Konrad",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Geoff Pavey",
+      "away_team": "Farshad Nazarnia",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "George Staines",
+      "away_team": "Ioan Harris",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Josh Abraham",
+      "away_team": "Nicolas Barna",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Teddy Adlington-Stringer",
+      "away_team": "Leandro Camargo",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Shajidul Haque",
+      "away_team": "Nicolas Leblond",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T18:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean Jr. Clancy",
+      "away_team": "Melvin van Suijdam",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T19:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Muhammadjon Naimov",
+      "away_team": "Mairon Santos",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T23:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Mansur Abdul-Malik",
+      "away_team": "Antonio Trocoli",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-06T23:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Iwo Baraniewski",
+      "away_team": "Ibo Aslan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Edson Barboza",
+      "away_team": "Jalin Turner",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Marvin Vettori",
+      "away_team": "Brunno Ferreira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Nazim Sadykhov",
+      "away_team": "Fares Ziam",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T01:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Maycee Barber",
+      "away_team": "Karine Silva",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T01:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Terrance Mckinney",
+      "away_team": "Chris Duncan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T02:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Grant Dawson",
+      "away_team": "Manuel Torres",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T02:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Jan Blachowicz",
+      "away_team": "Bogdan Guskov",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T03:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Henry Cejudo",
+      "away_team": "Payton Talbott",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T03:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Brandon Moreno",
+      "away_team": "Tatsuro Taira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T04:15:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alexandre Pantoja",
+      "away_team": "Joshua Van",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T04:45:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Merab Dvalishvili",
+      "away_team": "Petr Yan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T05:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Arman Tsarukyan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:58:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alex Pereira",
+      "away_team": "Israel Adesanya",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Jon Jones",
+      "away_team": "Alex Pereira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Tom Aspinall",
+      "away_team": "Alex Pereira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Alex Volkanovski",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Max Holloway",
+      "away_team": "Alex Volkanovski",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alexa Grasso",
+      "away_team": "Erin Blanchfield",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alexa Grasso",
+      "away_team": "Rose Namajunas",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Tom Aspinall",
+      "away_team": "Alexander Volkov",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alexandre Pantoja",
+      "away_team": "Brandon Moreno",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alexandre Pantoja",
+      "away_team": "Manel Kape",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Kayla Harrison",
+      "away_team": "Amanda Nunes",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Arman Tsarukyan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Belal Muhammad",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Belal Muhammad",
+      "away_team": "Shavkat Rakhmonov",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Charles Oliveira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean O'Malley",
+      "away_team": "Cory Sandhagen",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Tom Aspinall",
+      "away_team": "Curtis Blaydes",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Valentina Shevchenko",
+      "away_team": "Dakota Ditcheva",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Daniel Hooker",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Michael Chandler",
+      "away_team": "Daniel Hooker",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Diego Lopes",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Dricus Du Plessis",
+      "away_team": "Israel Adesanya",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Valentina Shevchenko",
+      "away_team": "Erin Blanchfield",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Ilia Topuria",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Justin Gaethje",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Paddy Pimblett",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Khamzat Chimaev",
+      "away_team": "Israel Adesanya",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean Strickland",
+      "away_team": "Israel Adesanya",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Jon Jones",
+      "away_team": "Tom Aspinall",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Leon Edwards",
+      "away_team": "Kamaru Usman",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Shavkat Rakhmonov",
+      "away_team": "Kamaru Usman",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean Strickland",
+      "away_team": "Khamzat Chimaev",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Leon Edwards",
+      "away_team": "Shavkat Rakhmonov",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean O'Malley",
+      "away_team": "Petr Yan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Tom Aspinall",
+      "away_team": "Sergey Pavlovich",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Weili Zhang",
+      "away_team": "Yan Xiaonan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-31T22:59:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Khamzat Chimaev",
+      "away_team": "Michael Page",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-01T00:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Khamzat Chimaev",
+      "away_team": "Caio Borralho",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-01T03:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Khamzat Chimaev",
+      "away_team": "Nassourdine Imavov",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-01T03:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Arnold Allen",
+      "away_team": "Jean Silva",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-25T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Waldo Cortes-Acosta",
+      "away_team": "Derrick Lewis",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-25T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Sean O'Malley",
+      "away_team": "Song Yadong",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-25T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Kayla Harrison",
+      "away_team": "Amanda Nunes",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-25T02:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Justin Gaethje",
+      "away_team": "Paddy Pimblett",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-01-25T05:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alex Volkanovski",
+      "away_team": "Diego Lopes",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-02-01T05:30:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Charles Oliveira",
+      "away_team": "Max Holloway",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-03-29T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Ilia Topuria",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-02T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alex Pereira",
+      "away_team": "Carlos Ulberg",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-14T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alex Pereira",
+      "away_team": "Jiri Prochazka",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-14T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Alex Pereira",
+      "away_team": "Jon Jones",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-14T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Magomed Ankalaev",
+      "away_team": "Carlos Ulberg",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-14T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Valentina Shevchenko",
+      "away_team": "Natalia Silva",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-27T14:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Tom Aspinall",
+      "away_team": "Ciryl Gane",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-28T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Michael Morales",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-28T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Weili Zhang",
+      "away_team": "Mackenzie Dern",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-06-28T02:00:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Ilia Topuria",
+      "away_team": "Arman Tsarukyan",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-08-02T03:10:00Z"
+    },
+    {
+      "sport": "UFC",
+      "home_team": "Islam Makhachev",
+      "away_team": "Kamaru Usman",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2027-07-02T02:00:00Z"
+    }
+  ],
   "scores": [
     {
       "league": "NBA",
-      "event": "Miami Heat @ Dallas Mavericks",
-      "score": "108-118",
-      "status": "final"
-    },
-    {
-      "league": "NBA",
       "event": "Golden State Warriors @ Philadelphia 76ers",
-      "score": "53-71",
-      "status": "live"
+      "score": "99-98",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Boston Celtics @ Washington Wizards",
-      "score": "81-70",
-      "status": "live"
+      "score": "101-146",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Utah Jazz @ Brooklyn Nets",
-      "score": "47-51",
-      "status": "live"
+      "score": "110-123",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Los Angeles Lakers @ Toronto Raptors",
-      "score": "61-49",
-      "status": "live"
+      "score": "120-123",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Minnesota Timberwolves @ New Orleans Pelicans",
-      "score": "29-26",
-      "status": "live"
+      "score": "116-125",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Los Angeles Lakers @ Boston Celtics",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Miami Heat @ Orlando Magic",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Denver Nuggets @ Atlanta Hawks",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Charlotte Hornets @ Toronto Raptors",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "San Antonio Spurs @ Cleveland Cavaliers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Portland Trail Blazers @ Detroit Pistons",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Utah Jazz @ New York Knicks",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Indiana Pacers @ Chicago Bulls",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Phoenix Suns @ Houston Rockets",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Los Angeles Clippers @ Memphis Grizzlies",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Philadelphia 76ers @ Milwaukee Bucks",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Dallas Mavericks @ Oklahoma City Thunder",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Miami Heat @ Orlando Magic",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "New York Knicks @ Toronto Raptors",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "Phoenix Suns @ Oklahoma City Thunder",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NBA",
       "event": "San Antonio Spurs @ Los Angeles Lakers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Dallas Cowboys @ Detroit Lions",
-      "score": "3-3",
-      "status": "live"
+      "score": "44-30",
+      "status": "Final"
     },
     {
       "league": "NFL",
       "event": "Seattle Seahawks @ Atlanta Falcons",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Pittsburgh Steelers @ Baltimore Ravens",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Cincinnati Bengals @ Buffalo Bills",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Tennessee Titans @ Cleveland Browns",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Indianapolis Colts @ Jacksonville Jaguars",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Miami Dolphins @ New York Jets",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Washington Commanders @ Minnesota Vikings",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "New Orleans Saints @ Tampa Bay Buccaneers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Denver Broncos @ Las Vegas Raiders",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Los Angeles Rams @ Arizona Cardinals",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Chicago Bears @ Green Bay Packers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Houston Texans @ Kansas City Chiefs",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Philadelphia Eagles @ Los Angeles Chargers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Atlanta Falcons @ Tampa Bay Buccaneers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Arizona Cardinals @ Houston Texans",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Baltimore Ravens @ Cincinnati Bengals",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Buffalo Bills @ New England Patriots",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Cleveland Browns @ Chicago Bears",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "New York Jets @ Jacksonville Jaguars",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Los Angeles Chargers @ Kansas City Chiefs",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Las Vegas Raiders @ Philadelphia Eagles",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Washington Commanders @ New York Giants",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Carolina Panthers @ New Orleans Saints",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Green Bay Packers @ Denver Broncos",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "NFL",
+      "event": "Detroit Lions @ Los Angeles Rams",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Indianapolis Colts @ Seattle Seahawks",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Tennessee Titans @ San Francisco 49ers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "NFL",
+      "event": "Minnesota Vikings @ Dallas Cowboys",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "NFL",
       "event": "Miami Dolphins @ Pittsburgh Steelers",
       "score": "",
-      "status": "scheduled"
-    },
-    {
-      "league": "NHL",
-      "event": "Washington Capitals @ San Jose Sharks",
-      "score": "7-1",
-      "status": "final"
-    },
-    {
-      "league": "NHL",
-      "event": "Utah Mammoth @ Anaheim Ducks",
-      "score": "7-0",
-      "status": "final"
+      "status": "Not started"
     },
     {
       "league": "NHL",
       "event": "St Louis Blues @ Boston Bruins",
-      "score": "1-4",
-      "status": "live"
+      "score": "5-2",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Toronto Maple Leafs @ Carolina Hurricanes",
-      "score": "4-1",
-      "status": "live"
+      "score": "1-5",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "New York Rangers @ Ottawa Senators",
-      "score": "3-1",
-      "status": "live"
+      "score": "2-4",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Nashville Predators @ Florida Panthers",
-      "score": "0-1",
-      "status": "live"
+      "score": "1-2",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Colorado Avalanche @ New York Islanders",
-      "score": "2-4",
-      "status": "live"
+      "score": "6-3",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Pittsburgh Penguins @ Tampa Bay Lightning",
-      "score": "3-0",
-      "status": "live"
+      "score": "3-4",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Detroit Red Wings @ Columbus Blue Jackets",
-      "score": "0-1",
-      "status": "live"
-    },
-    {
-      "league": "NHL",
-      "event": "Minnesota Wild @ Calgary Flames",
-      "score": "",
-      "status": "scheduled"
+      "score": "6-5",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Seattle Kraken @ Edmonton Oilers",
-      "score": "",
-      "status": "scheduled"
+      "score": "9-4",
+      "status": "Final"
+    },
+    {
+      "league": "NHL",
+      "event": "Minnesota Wild @ Calgary Flames",
+      "score": "4-1",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Chicago Blackhawks @ Los Angeles Kings",
-      "score": "",
-      "status": "scheduled"
+      "score": "1-2",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Buffalo Sabres @ Winnipeg Jets",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NHL",
       "event": "Vegas Golden Knights @ New Jersey Devils",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NHL",
       "event": "San Jose Sharks @ Dallas Stars",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NHL",
       "event": "Utah Mammoth @ Vancouver Canucks",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "NHL",
       "event": "Washington Capitals @ Anaheim Ducks",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "West Ham United @ Manchester United",
       "score": "1-1",
-      "status": "final"
+      "status": "Final"
     },
     {
       "league": "EPL",
       "event": "Arsenal @ Aston Villa",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Chelsea @ Bournemouth",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Brentford @ Tottenham Hotspur",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Burnley @ Newcastle United",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Nottingham Forest @ Everton",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Sunderland @ Manchester City",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Liverpool @ Leeds United",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "West Ham United @ Brighton and Hove Albion",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Crystal Palace @ Fulham",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Manchester United @ Wolverhampton Wanderers",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Brighton and Hove Albion @ Liverpool",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Everton @ Chelsea",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Fulham @ Burnley",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Wolverhampton Wanderers @ Arsenal",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Aston Villa @ West Ham United",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Manchester City @ Crystal Palace",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Newcastle United @ Sunderland",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Tottenham Hotspur @ Nottingham Forest",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Leeds United @ Brentford",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "EPL",
       "event": "Bournemouth @ Manchester United",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Ahmed El Sisy @ Abbas Khan",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Walid Gounaine @ Hamad Marhoon",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Islam Reda @ Yanis Ghemmouri",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Islam Youssef @ Nawras Abzakh",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Mohammad Fahmi @ Salah Eddine Hamli",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Mahmoud Atef @ Malik Basahel",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Badreddine Diani @ Mohammad Alaqraa",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Lorenz Larkin @ Vanilto Antunes",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Sam Alvey @ Robelis Despaigne",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Brennan Gait @ Jack Foote",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Norbert Pietrzak @ Charles Joyner",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Charlie Boulton @ Daniel Bainbridge",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Daniel Konrad @ George Hardwick",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Farshad Nazarnia @ Geoff Pavey",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Ioan Harris @ George Staines",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Nicolas Barna @ Josh Abraham",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Leandro Camargo @ Teddy Adlington-Stringer",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Nicolas Leblond @ Shajidul Haque",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Melvin van Suijdam @ Sean Jr. Clancy",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Mairon Santos @ Muhammadjon Naimov",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Antonio Trocoli @ Mansur Abdul-Malik",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Ibo Aslan @ Iwo Baraniewski",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Jalin Turner @ Edson Barboza",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Brunno Ferreira @ Marvin Vettori",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Fares Ziam @ Nazim Sadykhov",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Karine Silva @ Maycee Barber",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Chris Duncan @ Terrance Mckinney",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Manuel Torres @ Grant Dawson",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Bogdan Guskov @ Jan Blachowicz",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Payton Talbott @ Henry Cejudo",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Tatsuro Taira @ Brandon Moreno",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Joshua Van @ Alexandre Pantoja",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Petr Yan @ Merab Dvalishvili",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Arman Tsarukyan @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Israel Adesanya @ Alex Pereira",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Alex Pereira @ Jon Jones",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Alex Pereira @ Tom Aspinall",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Alex Volkanovski @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Alex Volkanovski @ Max Holloway",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Erin Blanchfield @ Alexa Grasso",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Rose Namajunas @ Alexa Grasso",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Alexander Volkov @ Tom Aspinall",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Brandon Moreno @ Alexandre Pantoja",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Manel Kape @ Alexandre Pantoja",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Amanda Nunes @ Kayla Harrison",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Arman Tsarukyan @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Belal Muhammad @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Shavkat Rakhmonov @ Belal Muhammad",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Charles Oliveira @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Cory Sandhagen @ Sean O'Malley",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Curtis Blaydes @ Tom Aspinall",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Dakota Ditcheva @ Valentina Shevchenko",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Daniel Hooker @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Daniel Hooker @ Michael Chandler",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Diego Lopes @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Israel Adesanya @ Dricus Du Plessis",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Erin Blanchfield @ Valentina Shevchenko",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Ilia Topuria @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Justin Gaethje @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Paddy Pimblett @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Israel Adesanya @ Khamzat Chimaev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Israel Adesanya @ Sean Strickland",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Tom Aspinall @ Jon Jones",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Kamaru Usman @ Leon Edwards",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Kamaru Usman @ Shavkat Rakhmonov",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Khamzat Chimaev @ Sean Strickland",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Shavkat Rakhmonov @ Leon Edwards",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Petr Yan @ Sean O'Malley",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Sergey Pavlovich @ Tom Aspinall",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Yan Xiaonan @ Weili Zhang",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Michael Page @ Khamzat Chimaev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Caio Borralho @ Khamzat Chimaev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Nassourdine Imavov @ Khamzat Chimaev",
       "score": "",
-      "status": "scheduled"
-    },
-    {
-      "league": "UFC",
-      "event": "Amanda Nunes @ Kayla Harrison",
-      "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Jean Silva @ Arnold Allen",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Derrick Lewis @ Waldo Cortes-Acosta",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Song Yadong @ Sean O'Malley",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Amanda Nunes @ Kayla Harrison",
+      "score": "",
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Paddy Pimblett @ Justin Gaethje",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Diego Lopes @ Alex Volkanovski",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Max Holloway @ Charles Oliveira",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Ilia Topuria @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Carlos Ulberg @ Alex Pereira",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Jiri Prochazka @ Alex Pereira",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Jon Jones @ Alex Pereira",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Carlos Ulberg @ Magomed Ankalaev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Natalia Silva @ Valentina Shevchenko",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Ciryl Gane @ Tom Aspinall",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Michael Morales @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Mackenzie Dern @ Weili Zhang",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Arman Tsarukyan @ Ilia Topuria",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     },
     {
       "league": "UFC",
       "event": "Kamaru Usman @ Islam Makhachev",
       "score": "",
-      "status": "scheduled"
+      "status": "Not started"
     }
   ]
 }
