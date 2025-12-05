@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-05T00:29:40.447235+00:00",
+  "generated_at": "2025-12-05T00:32:50.325167+00:00",
   "bankroll": 200.0,
   "open_bets": 7,
   "pending_bets": 43,
@@ -19,7 +19,7 @@
     "by_bet_type": {}
   },
   "pick_cards": {
-    "UFC": [
+    "mma_mixed_martial_arts": [
       {
         "sport": "UFC",
         "event_id": "bccb138921ad20f72ec00cfb798509dd",
@@ -366,7 +366,7 @@
         "profit": null
       }
     ],
-    "NHL": [
+    "icehockey_nhl": [
       {
         "sport": "NHL",
         "event_id": "61cadddf193a017fd29e7e8c150412fb",
@@ -593,7 +593,7 @@
         "profit": null
       }
     ],
-    "NBA": [
+    "basketball_nba": [
       {
         "sport": "NBA",
         "event_id": "0ef228d015b4f211bab07a3c269105ab",
@@ -655,7 +655,7 @@
         "profit": null
       }
     ],
-    "NFL": [
+    "americanfootball_nfl": [
       {
         "sport": "NFL",
         "event_id": "4727a6cfcd3d604dbfcb898c5a4d40a6",
@@ -687,7 +687,7 @@
         "profit": null
       }
     ],
-    "EPL": [
+    "soccer_epl": [
       {
         "sport": "EPL",
         "event_id": "6bdd456f3fcc2cfb6d2f5a45fa7562ce",

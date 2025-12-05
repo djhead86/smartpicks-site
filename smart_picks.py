@@ -819,7 +819,7 @@ def build_data_json(
     for b in bets:
         if b.status not in ("pending", "open"):
             continue
-        sport_label = b.sport
+        sport_label = b.sport_key  # USE API KEYS IN PICK_CARDS
         arr = pick_cards.setdefault(sport_label, [])
         arr.append({
             "sport": b.sport,
