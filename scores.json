@@ -1,158 +1,176 @@
 {
-  "last_updated": "2025-12-05T23:52:00.734427Z",
+  "last_updated": "2025-12-06T05:42:45.655244Z",
   "games": [
     {
       "sport": "NBA",
-      "home_team": "Philadelphia 76ers",
-      "away_team": "Golden State Warriors",
-      "home_score": "99",
-      "away_score": "98",
+      "home_team": "Orlando Magic",
+      "away_team": "Miami Heat",
+      "home_score": "106",
+      "away_score": "105",
       "status": "final",
-      "commence_time": "2025-12-05T00:10:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Washington Wizards",
-      "away_team": "Boston Celtics",
-      "home_score": "101",
-      "away_score": "146",
-      "status": "final",
-      "commence_time": "2025-12-05T00:11:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Brooklyn Nets",
-      "away_team": "Utah Jazz",
-      "home_score": "110",
-      "away_score": "123",
-      "status": "final",
-      "commence_time": "2025-12-05T00:41:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Toronto Raptors",
-      "away_team": "Los Angeles Lakers",
-      "home_score": "120",
-      "away_score": "123",
-      "status": "final",
-      "commence_time": "2025-12-05T00:42:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "New Orleans Pelicans",
-      "away_team": "Minnesota Timberwolves",
-      "home_score": "116",
-      "away_score": "125",
-      "status": "final",
-      "commence_time": "2025-12-05T01:10:00Z"
+      "commence_time": "2025-12-06T00:12:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Boston Celtics",
       "away_team": "Los Angeles Lakers",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:10:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Orlando Magic",
-      "away_team": "Miami Heat",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:10:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Atlanta Hawks",
-      "away_team": "Denver Nuggets",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:40:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Toronto Raptors",
-      "away_team": "Charlotte Hornets",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:40:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Cleveland Cavaliers",
-      "away_team": "San Antonio Spurs",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:40:00Z"
+      "home_score": "126",
+      "away_score": "105",
+      "status": "final",
+      "commence_time": "2025-12-06T00:13:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Detroit Pistons",
       "away_team": "Portland Trail Blazers",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
+      "home_score": "122",
+      "away_score": "116",
+      "status": "final",
       "commence_time": "2025-12-06T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Atlanta Hawks",
+      "away_team": "Denver Nuggets",
+      "home_score": "133",
+      "away_score": "134",
+      "status": "final",
+      "commence_time": "2025-12-06T00:41:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Toronto Raptors",
+      "away_team": "Charlotte Hornets",
+      "home_score": "86",
+      "away_score": "111",
+      "status": "final",
+      "commence_time": "2025-12-06T00:41:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Cleveland Cavaliers",
+      "away_team": "San Antonio Spurs",
+      "home_score": "130",
+      "away_score": "117",
+      "status": "final",
+      "commence_time": "2025-12-06T00:41:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "New York Knicks",
       "away_team": "Utah Jazz",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:40:00Z"
+      "home_score": "146",
+      "away_score": "112",
+      "status": "final",
+      "commence_time": "2025-12-06T00:42:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Chicago Bulls",
       "away_team": "Indiana Pacers",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
+      "home_score": "105",
+      "away_score": "120",
+      "status": "final",
       "commence_time": "2025-12-06T01:10:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Houston Rockets",
       "away_team": "Phoenix Suns",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T01:10:00Z"
-    },
-    {
-      "sport": "NBA",
-      "home_team": "Memphis Grizzlies",
-      "away_team": "Los Angeles Clippers",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T01:10:00Z"
+      "home_score": "117",
+      "away_score": "98",
+      "status": "final",
+      "commence_time": "2025-12-06T01:11:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Milwaukee Bucks",
       "away_team": "Philadelphia 76ers",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T01:10:00Z"
+      "home_score": "101",
+      "away_score": "116",
+      "status": "final",
+      "commence_time": "2025-12-06T01:11:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Memphis Grizzlies",
+      "away_team": "Los Angeles Clippers",
+      "home_score": "107",
+      "away_score": "98",
+      "status": "final",
+      "commence_time": "2025-12-06T01:12:00Z"
     },
     {
       "sport": "NBA",
       "home_team": "Oklahoma City Thunder",
       "away_team": "Dallas Mavericks",
+      "home_score": "132",
+      "away_score": "111",
+      "status": "final",
+      "commence_time": "2025-12-06T02:43:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Brooklyn Nets",
+      "away_team": "New Orleans Pelicans",
       "home_score": null,
       "away_score": null,
       "status": "scheduled",
-      "commence_time": "2025-12-06T02:40:00Z"
+      "commence_time": "2025-12-06T22:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Washington Wizards",
+      "away_team": "Atlanta Hawks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Cleveland Cavaliers",
+      "away_team": "Golden State Warriors",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Detroit Pistons",
+      "away_team": "Milwaukee Bucks",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T00:40:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Minnesota Timberwolves",
+      "away_team": "Los Angeles Clippers",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Miami Heat",
+      "away_team": "Sacramento Kings",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T01:10:00Z"
+    },
+    {
+      "sport": "NBA",
+      "home_team": "Dallas Mavericks",
+      "away_team": "Houston Rockets",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2025-12-07T01:40:00Z"
     },
     {
       "sport": "NBA",
@@ -189,15 +207,6 @@
       "away_score": null,
       "status": "scheduled",
       "commence_time": "2025-12-11T03:00:00Z"
-    },
-    {
-      "sport": "NFL",
-      "home_team": "Detroit Lions",
-      "away_team": "Dallas Cowboys",
-      "home_score": "44",
-      "away_score": "30",
-      "status": "final",
-      "commence_time": "2025-12-05T01:15:38Z"
     },
     {
       "sport": "NFL",
@@ -462,138 +471,48 @@
     },
     {
       "sport": "NHL",
-      "home_team": "Boston Bruins",
-      "away_team": "St Louis Blues",
-      "home_score": "5",
-      "away_score": "2",
-      "status": "final",
-      "commence_time": "2025-12-05T00:08:19Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Carolina Hurricanes",
-      "away_team": "Toronto Maple Leafs",
-      "home_score": "1",
-      "away_score": "5",
-      "status": "final",
-      "commence_time": "2025-12-05T00:08:23Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Ottawa Senators",
-      "away_team": "New York Rangers",
-      "home_score": "2",
-      "away_score": "4",
-      "status": "final",
-      "commence_time": "2025-12-05T00:08:49Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Florida Panthers",
-      "away_team": "Nashville Predators",
-      "home_score": "1",
-      "away_score": "2",
-      "status": "final",
-      "commence_time": "2025-12-05T00:08:55Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "New York Islanders",
-      "away_team": "Colorado Avalanche",
-      "home_score": "6",
+      "home_team": "New Jersey Devils",
+      "away_team": "Vegas Golden Knights",
+      "home_score": "0",
       "away_score": "3",
       "status": "final",
-      "commence_time": "2025-12-05T00:12:17Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Tampa Bay Lightning",
-      "away_team": "Pittsburgh Penguins",
-      "home_score": "3",
-      "away_score": "4",
-      "status": "final",
-      "commence_time": "2025-12-05T00:13:08Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Columbus Blue Jackets",
-      "away_team": "Detroit Red Wings",
-      "home_score": "6",
-      "away_score": "5",
-      "status": "final",
-      "commence_time": "2025-12-05T00:39:09Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Edmonton Oilers",
-      "away_team": "Seattle Kraken",
-      "home_score": "9",
-      "away_score": "4",
-      "status": "final",
-      "commence_time": "2025-12-05T02:09:16Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Calgary Flames",
-      "away_team": "Minnesota Wild",
-      "home_score": "4",
-      "away_score": "1",
-      "status": "final",
-      "commence_time": "2025-12-05T02:11:35Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "Los Angeles Kings",
-      "away_team": "Chicago Blackhawks",
-      "home_score": "1",
-      "away_score": "2",
-      "status": "final",
-      "commence_time": "2025-12-05T03:09:44Z"
+      "commence_time": "2025-12-06T00:08:42Z"
     },
     {
       "sport": "NHL",
       "home_team": "Winnipeg Jets",
       "away_team": "Buffalo Sabres",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:10:00Z"
-    },
-    {
-      "sport": "NHL",
-      "home_team": "New Jersey Devils",
-      "away_team": "Vegas Golden Knights",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T00:10:00Z"
+      "home_score": "4",
+      "away_score": "1",
+      "status": "final",
+      "commence_time": "2025-12-06T00:08:50Z"
     },
     {
       "sport": "NHL",
       "home_team": "Dallas Stars",
       "away_team": "San Jose Sharks",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T01:10:00Z"
+      "home_score": "4",
+      "away_score": "1",
+      "status": "final",
+      "commence_time": "2025-12-06T01:08:35Z"
     },
     {
       "sport": "NHL",
       "home_team": "Vancouver Canucks",
       "away_team": "Utah Mammoth",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T02:10:00Z"
+      "home_score": "1",
+      "away_score": "4",
+      "status": "final",
+      "commence_time": "2025-12-06T02:08:52Z"
     },
     {
       "sport": "NHL",
       "home_team": "Anaheim Ducks",
       "away_team": "Washington Capitals",
-      "home_score": null,
-      "away_score": null,
-      "status": "scheduled",
-      "commence_time": "2025-12-06T03:10:00Z"
+      "home_score": "3",
+      "away_score": "3",
+      "status": "live",
+      "commence_time": "2025-12-06T03:08:18Z"
     },
     {
       "sport": "NHL",
@@ -1614,6 +1533,15 @@
     },
     {
       "sport": "UFC",
+      "home_team": "Max Holloway",
+      "away_team": "Charles Oliveira",
+      "home_score": null,
+      "away_score": null,
+      "status": "scheduled",
+      "commence_time": "2026-03-08T04:30:00Z"
+    },
+    {
+      "sport": "UFC",
       "home_team": "Charles Oliveira",
       "away_team": "Max Holloway",
       "home_score": null,
@@ -1724,103 +1652,115 @@
   "scores": [
     {
       "league": "NBA",
-      "event": "Golden State Warriors @ Philadelphia 76ers",
-      "score": "99-98",
-      "status": "Final"
-    },
-    {
-      "league": "NBA",
-      "event": "Boston Celtics @ Washington Wizards",
-      "score": "101-146",
-      "status": "Final"
-    },
-    {
-      "league": "NBA",
-      "event": "Utah Jazz @ Brooklyn Nets",
-      "score": "110-123",
-      "status": "Final"
-    },
-    {
-      "league": "NBA",
-      "event": "Los Angeles Lakers @ Toronto Raptors",
-      "score": "120-123",
-      "status": "Final"
-    },
-    {
-      "league": "NBA",
-      "event": "Minnesota Timberwolves @ New Orleans Pelicans",
-      "score": "116-125",
+      "event": "Miami Heat @ Orlando Magic",
+      "score": "106-105",
       "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Los Angeles Lakers @ Boston Celtics",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NBA",
-      "event": "Miami Heat @ Orlando Magic",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NBA",
-      "event": "Denver Nuggets @ Atlanta Hawks",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NBA",
-      "event": "Charlotte Hornets @ Toronto Raptors",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NBA",
-      "event": "San Antonio Spurs @ Cleveland Cavaliers",
-      "score": "",
-      "status": "Not started"
+      "score": "126-105",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Portland Trail Blazers @ Detroit Pistons",
-      "score": "",
-      "status": "Not started"
+      "score": "122-116",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "Denver Nuggets @ Atlanta Hawks",
+      "score": "133-134",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "Charlotte Hornets @ Toronto Raptors",
+      "score": "86-111",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "San Antonio Spurs @ Cleveland Cavaliers",
+      "score": "130-117",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Utah Jazz @ New York Knicks",
-      "score": "",
-      "status": "Not started"
+      "score": "146-112",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Indiana Pacers @ Chicago Bulls",
-      "score": "",
-      "status": "Not started"
+      "score": "105-120",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Phoenix Suns @ Houston Rockets",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NBA",
-      "event": "Los Angeles Clippers @ Memphis Grizzlies",
-      "score": "",
-      "status": "Not started"
+      "score": "117-98",
+      "status": "Final"
     },
     {
       "league": "NBA",
       "event": "Philadelphia 76ers @ Milwaukee Bucks",
+      "score": "101-116",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "Los Angeles Clippers @ Memphis Grizzlies",
+      "score": "107-98",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "Dallas Mavericks @ Oklahoma City Thunder",
+      "score": "132-111",
+      "status": "Final"
+    },
+    {
+      "league": "NBA",
+      "event": "New Orleans Pelicans @ Brooklyn Nets",
       "score": "",
       "status": "Not started"
     },
     {
       "league": "NBA",
-      "event": "Dallas Mavericks @ Oklahoma City Thunder",
+      "event": "Atlanta Hawks @ Washington Wizards",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Golden State Warriors @ Cleveland Cavaliers",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Milwaukee Bucks @ Detroit Pistons",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Los Angeles Clippers @ Minnesota Timberwolves",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Sacramento Kings @ Miami Heat",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "NBA",
+      "event": "Houston Rockets @ Dallas Mavericks",
       "score": "",
       "status": "Not started"
     },
@@ -1847,12 +1787,6 @@
       "event": "San Antonio Spurs @ Los Angeles Lakers",
       "score": "",
       "status": "Not started"
-    },
-    {
-      "league": "NFL",
-      "event": "Dallas Cowboys @ Detroit Lions",
-      "score": "44-30",
-      "status": "Final"
     },
     {
       "league": "NFL",
@@ -2030,93 +1964,33 @@
     },
     {
       "league": "NHL",
-      "event": "St Louis Blues @ Boston Bruins",
-      "score": "5-2",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Toronto Maple Leafs @ Carolina Hurricanes",
-      "score": "1-5",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "New York Rangers @ Ottawa Senators",
-      "score": "2-4",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Nashville Predators @ Florida Panthers",
-      "score": "1-2",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Colorado Avalanche @ New York Islanders",
-      "score": "6-3",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Pittsburgh Penguins @ Tampa Bay Lightning",
-      "score": "3-4",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Detroit Red Wings @ Columbus Blue Jackets",
-      "score": "6-5",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Seattle Kraken @ Edmonton Oilers",
-      "score": "9-4",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Minnesota Wild @ Calgary Flames",
-      "score": "4-1",
-      "status": "Final"
-    },
-    {
-      "league": "NHL",
-      "event": "Chicago Blackhawks @ Los Angeles Kings",
-      "score": "1-2",
+      "event": "Vegas Golden Knights @ New Jersey Devils",
+      "score": "0-3",
       "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Buffalo Sabres @ Winnipeg Jets",
-      "score": "",
-      "status": "Not started"
-    },
-    {
-      "league": "NHL",
-      "event": "Vegas Golden Knights @ New Jersey Devils",
-      "score": "",
-      "status": "Not started"
+      "score": "4-1",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "San Jose Sharks @ Dallas Stars",
-      "score": "",
-      "status": "Not started"
+      "score": "4-1",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Utah Mammoth @ Vancouver Canucks",
-      "score": "",
-      "status": "Not started"
+      "score": "1-4",
+      "status": "Final"
     },
     {
       "league": "NHL",
       "event": "Washington Capitals @ Anaheim Ducks",
-      "score": "",
-      "status": "Not started"
+      "score": "3-3",
+      "status": "Live"
     },
     {
       "league": "NHL",
@@ -2793,6 +2667,12 @@
     {
       "league": "UFC",
       "event": "Diego Lopes @ Alex Volkanovski",
+      "score": "",
+      "status": "Not started"
+    },
+    {
+      "league": "UFC",
+      "event": "Charles Oliveira @ Max Holloway",
       "score": "",
       "status": "Not started"
     },
